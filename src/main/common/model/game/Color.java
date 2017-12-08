@@ -7,5 +7,20 @@ public enum Color {
     RED,
     PINK,
     GREEN,
-    NONE,
+    NONE;
+
+    private Color opposite;
+
+    static {
+        AZURE.opposite = BLUE;
+        PINK.opposite = RED;
+        YELLOW.opposite = GREEN;
+        BLUE.opposite = AZURE;
+        RED.opposite = PINK;
+        GREEN.opposite = YELLOW;
+    }
+
+    public Color getOpposite() {
+        return opposite;
+    }
 }
