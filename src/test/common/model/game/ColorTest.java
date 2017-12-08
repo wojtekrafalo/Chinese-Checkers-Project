@@ -6,6 +6,11 @@ import static org.junit.Assert.*;
 
 public class ColorTest {
     @Test
+    public void randomColor() throws Exception {
+        assertEquals(Color.AZURE, Color.randomColor());
+    }
+
+    @Test
     public void getOpposite() throws Exception {
         assertEquals(Color.AZURE, Color.BLUE.getOpposite());
         assertEquals(Color.BLUE, Color.BLUE.getOpposite().getOpposite());

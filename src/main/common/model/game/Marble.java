@@ -1,5 +1,9 @@
 package common.model.game;
 
+import javafx.util.Pair;
+
+import java.util.ArrayList;
+
 public class Marble {
     private int x;
 
@@ -9,12 +13,16 @@ public class Marble {
 
     private Color territory;
 
+    private ArrayList<Pair<Integer, Integer>> neighbours;
+
     Marble(int x, int y, Color color, Color territory){
         this.setX(x);
         this.setY(y);
         this.setColor(color);
         this.setTerritory(territory);
+        this.neighbours = new ArrayList<>();
     }
+
 
     public int getX() {
         return x;
@@ -46,5 +54,13 @@ public class Marble {
 
     public void setTerritory(Color territory) {
         this.territory = territory;
+    }
+
+    public ArrayList<Pair<Integer, Integer>> getNeighbours() {
+        return neighbours;
+    }
+
+    public void addNeighbour(int x, int y) {
+        this.neighbours.add(new Pair<>(x, y));
     }
 }

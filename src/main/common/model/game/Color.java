@@ -23,4 +23,10 @@ public enum Color {
     public Color getOpposite() {
         return opposite;
     }
+
+    public static Color randomColor(){
+
+        return Color.values()[(int)(Math.random()*Color.values().length)];
+
+    }
 }
