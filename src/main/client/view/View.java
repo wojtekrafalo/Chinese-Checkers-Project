@@ -15,7 +15,7 @@ public class View {
 
     public View() {
 //        super("ViewWindow");
-        firstWindow.setVisible(true);
+  //      firstWindow.setVisible(true);
     }
 
     public void addListener(ActionListener listener){
@@ -37,7 +37,7 @@ public class View {
     }
 
     public void startView (Stage primaryStage) throws Exception {
-        Parent rootFirst = FXMLLoader.load(getClass().getResource("/client/view/test.fxml"));
+        Parent rootFirst = FXMLLoader.load(getClass().getResource("/client/view/first.fxml"));
 //        Parent rootMain  = FXMLLoader.load(getClass().getResource("/client/view/Main.fxml"));
 //        Parent rootGame  = FXMLLoader.load(getClass().getResource("/client/view/GameWindow.fxml"));
 

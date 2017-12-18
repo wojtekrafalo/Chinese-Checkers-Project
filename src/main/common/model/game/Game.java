@@ -53,9 +53,12 @@ public class Game {
         setNeighbours(size);
         setTerritories();
         setMarbles();
-        startingPlayer();
+        //startingPlayer();
     }
 
+    /**
+     * @param size
+     */
     private void setNeighbours(int size) {
         for (int i = 0; i < size; i++){
             for (int j = i; j < size; j++){
@@ -103,6 +106,7 @@ public class Game {
      * @param color color of player what makes move.
      */
     public void makeMove(int prevX, int prevY, int nextX, int nextY, Color color) {
+        //TODO validate turn and jumps
         if (validateCords(nextX, nextY)) {
             if (colorMatches(prevX, prevY, color)) {
                 if (isInOppositeTerritory(prevX, prevY, color)) {
@@ -154,9 +158,8 @@ public class Game {
 
 
     /**
-     * @return board at current game
+     *
      */
-
     private void setTerritories() {
         for (int i = 0; i < 4; i++) {
             for (int j = 4; j < i + 5; j++) {
@@ -182,6 +185,9 @@ public class Game {
         }
     }
 
+    /**
+     *
+     */
     private void setMarbles() {
         switch (nrPlayers){
             case 2:
@@ -251,12 +257,23 @@ public class Game {
                 break;
         }
     }
+
+    /**
+     *
+     */
     private void startingPlayer(){
         while (turn == Color.NONE){
             turn = Color.randomColor();
         }
     }
 
+    /**
+     * @param prevX
+     * @param prevY
+     * @param nextX
+     * @param nextY
+     * @return
+     */
     private boolean canMakeMove(int prevX, int prevY, int nextX, int nextY) {
         if (board[nextX][nextY].getColor() == Color.NONE) {
             Pair<Integer, Integer> coords = new Pair<>(nextX, nextY);
@@ -269,14 +286,25 @@ public class Game {
         return false;
     }
 
+    /**
+     * @param x
+     * @param y
+     * @return
+     */
     private boolean validateCords(int x, int y){
         return board[x][y] != null;
     }
 
+    /**
+     * @return
+     */
     public Marble[][] getBoard() {
         return board;
     }
 
+    /**
+     * @return
+     */
     public Color getTurn() {
         return turn;
     }

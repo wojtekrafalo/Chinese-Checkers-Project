@@ -5,6 +5,7 @@ import client.view.View;
 import client.view.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import javax.swing.*;
@@ -13,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Controller {
+    public AnchorPane anchorPane1;
     @FXML
     private TextField nickName;
     private View theView;
