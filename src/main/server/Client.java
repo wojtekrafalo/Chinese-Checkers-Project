@@ -25,7 +25,7 @@ class Client extends Thread {
     private int clientID;
 
     Client(Socket socket) {
-        //this.clientID = Server.getNextClientID();
+        this.clientID = Server.getNextClientID();
         this.socket = socket;
         this.isOnline = true;
         System.out.println("Connection with new client established. Client ID: " + clientID);
@@ -46,7 +46,7 @@ class Client extends Thread {
     }
 
     private void listen() throws IOException, ClassNotFoundException {
-        while (isOnline /*&& Server.isRunning()*/) {
+        while (isOnline && Server.isRunning()) {
             //Read command from input
             Command command = (Command) input.readObject();
             //Print command on server console

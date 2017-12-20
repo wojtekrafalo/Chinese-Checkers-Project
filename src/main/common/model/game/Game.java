@@ -38,9 +38,11 @@ public class Game {
      * @param nrPlayers Number of players in game
      * @param size size of board
      */
-    Game(final int nrPlayers, final int size) {
+    public Game(final int nrPlayers, final int size) {
         this.board = new Marble[size][size];
         this.nrPlayers = nrPlayers;
+
+        //todo: Optimalize this (board is symmetric) and work out setting Territories in constructor
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (j < OFFSETS[i] || j >= OFFSETS[i] + WIDTHS[i]) {
@@ -106,7 +108,7 @@ public class Game {
      * @param color color of player what makes move.
      */
     public void makeMove(int prevX, int prevY, int nextX, int nextY, Color color) {
-        //TODO validate turn and jumps
+        //TODO validate turn and jumps refactor makeMove (one function to make move, second to validate)
         if (validateCords(nextX, nextY)) {
             if (colorMatches(prevX, prevY, color)) {
                 if (isInOppositeTerritory(prevX, prevY, color)) {
