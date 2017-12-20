@@ -17,6 +17,7 @@ public class ClientTest extends Application {
         launch(args);
     }
 
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 //        theView.startView(primaryStage);

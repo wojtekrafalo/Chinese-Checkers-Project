@@ -7,8 +7,9 @@ import java.util.List;
 public class Model {
     List<Game> listOfGames = new ArrayList<>();
     private int numberOfPlayers;
-    //arrays of field of stones
+//    arrays of field of stones
 
+//
     public void setNumberOfPlayers (int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
     }

@@ -31,6 +31,7 @@ public class MainWindow extends JFrame {
         this.add(splitPane);
     }
 
+
     void addListener(ActionListener listener, ListSelectionListener listListener){
         rightPanel.addActionListener(listener);
         list.addListSelectionListener(listListener);

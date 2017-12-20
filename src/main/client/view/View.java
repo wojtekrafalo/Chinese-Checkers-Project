@@ -40,6 +40,7 @@ public class View {
         mainWindow.setVisible(true);
     }
 
+
     public FirstWindow getFirstWindow () {
         return firstWindow;
     }
