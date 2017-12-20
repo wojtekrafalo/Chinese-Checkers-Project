@@ -8,57 +8,45 @@ import javafx.stage.Stage;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import javax.swing.*;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.MouseInputListener;
 
 public class View {
     private FirstWindow firstWindow = new FirstWindow();
     private MainWindow mainWindow   = new MainWindow();
+    private GameWindow gameWindow   = new GameWindow();
 
     public View() {
 //        super("ViewWindow");
         firstWindow.setVisible(true);
     }
 
-    public void addListener(ActionListener listener){
+    public void addListener(ActionListener listener, ListSelectionListener listListener, MouseInputListener mouseListener){
         firstWindow.addListener(listener);
-        mainWindow.addListener(listener);
+        mainWindow.addListener(listener, listListener);
+        gameWindow.addListener(listener, mouseListener);
     }
 
     public void hideShow1 () {
-//        primaryStage.hide();
-//        mainStage.show();
+        firstWindow.setVisible(false);
+        mainWindow.setVisible(true);
+    }
+    public void hideShow2 () {
+        mainWindow.setVisible(false);
+        gameWindow.setVisible(true);
+    }
+    public void hideShow3 () {
+        gameWindow.setVisible(false);
+        mainWindow.setVisible(true);
     }
 
     public FirstWindow getFirstWindow () {
         return firstWindow;
     }
-
     public MainWindow getMainWindow () {
         return mainWindow;
     }
-
-    public void startView (Stage primaryStage) throws Exception {
-        Parent rootFirst = FXMLLoader.load(getClass().getResource("/client/view/test.fxml"));
-//        Parent rootMain  = FXMLLoader.load(getClass().getResource("/client/view/Main.fxml"));
-//        Parent rootGame  = FXMLLoader.load(getClass().getResource("/client/view/GameWindow.fxml"));
-
-        Scene sceneFirst = new Scene(rootFirst,370,170);
-//        Scene sceneMain = new Scene(rootMain,370,170);
-//        Scene sceneGame = new Scene(rootGame,370,170);
-
-        Stage mainStage = new Stage();
-        Stage gameStage = new Stage();
-
-        primaryStage.setScene(sceneFirst);
-        primaryStage.setResizable(false);
-        primaryStage.setTitle("Write your nickname");
-        primaryStage.show();
-
-//        mainStage.setScene(sceneMain);
-        mainStage.setResizable(false);
-        mainStage.setTitle("Main Menu");
-
-//        gameStage.setScene(sceneGame);
-        gameStage.setResizable(false);
-        gameStage.setTitle("Game");
+    public GameWindow getGameWindow () {
+        return gameWindow;
     }
 }
