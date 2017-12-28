@@ -38,7 +38,7 @@ public class Game {
      * @param nrPlayers Number of players in game
      * @param size size of board
      */
-    Game(final int nrPlayers, final int size) {
+    public Game(final int nrPlayers, final int size) {
         this.board = new Marble[size][size];
         this.nrPlayers = nrPlayers;
         for (int i = 0; i < size; i++) {

@@ -1,11 +1,15 @@
 package client.controller;
+
 import client.model.Model;
 import client.view.FirstWindow;
 import client.view.View;
 import client.view.*;
+import common.model.game.Game;
+import common.model.game.Marble;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import server.Session;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -15,6 +19,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 
 public class Controller {
@@ -26,36 +31,59 @@ public class Controller {
         this.theView = theView;
         this.theModel = theModel;
         this.theView.addListener(new MenuListener(), new SelectionListener(), new MouseListener());
+
     }
 
     class MenuListener implements ActionListener{
         public void actionPerformed(ActionEvent e) {
             String nick = "";
             FirstWindow first = theView.getFirstWindow();
-            MainWindow menu = theView.getMainWindow();
-            GameWindow game = theView.getGameWindow();
+//            MainWindow menu = theView.getMainWindow();
+            NewGameWindow newGame = theView.getNewGameWindow();
+            JoinGameWindow joinGame = theView.getJoinGameWindow();
+            GameWindow gameWindow = theView.getGameWindow();
 
             if (e.getSource().equals(first.getOK())) {
                 nick = first.getNickName();
                 System.out.println("\n"+nick);
                 theView.hideShow1();
             }
-            theModel.addPlayer(nick);
-//                theView.setCalcSolution(theModel.getCalculationValue());
-            if (e.getSource().equals(menu.getRightPanel().getOK())){            //instead of using switch-case construction here, I will create Object of Factory, which would use correct class to handle properties of specific game
-                int number=2;
-                if (menu.getRightPanel().getPlayer2().isSelected()) number=2;
-                if (menu.getRightPanel().getPlayer3().isSelected()) number=3;
-                if (menu.getRightPanel().getPlayer4().isSelected()) number=4;
-                if (menu.getRightPanel().getPlayer6().isSelected()) number=6;
-                theModel.setNumberOfPlayers(number);
-                System.out.println(number + "PLAYERS");
+            theModel.addPlayer(nick);                               //also adding specific player, not only sending a String nick
+//            if (e.getSource().equals(menu.getRightPanel().getOK())){            //instead of using switch-case construction here, I will create Object of Factory, which would use correct class to handle properties of specific game
+//                int number=2;
+//                if (menu.getRightPanel().getPlayer2().isSelected()) number=2;
+//                if (menu.getRightPanel().getPlayer3().isSelected()) number=3;
+//                if (menu.getRightPanel().getPlayer4().isSelected()) number=4;
+//                if (menu.getRightPanel().getPlayer6().isSelected()) number=6;
+//                theModel.setNumberOfPlayers(number);
+//                System.out.println(number + "PLAYERS");
+//                theView.hideShow2();
+//            }
 
+            if (e.getSource().equals(newGame.getOK())) {                    //CREATE NEW GAME, send it to model
                 theView.hideShow2();
+                theModel.createNewGame();
+            }
+            if (e.getSource().equals(joinGame.getOK())) {                    //JOIN TO NEW GAME, send it to model
+                Session chosen = joinGame.getSelectedGame();
+                theView.hideShow2();
+                theModel.joinToGame(chosen);
             }
 
-            if (e.getSource().equals(game.getMenuInfo())) {
-                displayInfo();
+            if (e.getSource().equals(newGame.getMenuJoin()) || e.getSource().equals(joinGame.getMenuNew())) {
+                theView.hideShowChange();
+            }
+
+            if (e.getSource().equals(newGame.getMenuInfo())) {
+                newGame.displayInfo();
+            }
+
+            if (e.getSource().equals(joinGame.getMenuInfo())) {
+                joinGame.displayInfo();
+            }
+
+            if (e.getSource().equals(gameWindow.getMenuInfo())) {
+                gameWindow.displayInfo();
             }
         }
     }
@@ -67,23 +95,49 @@ public class Controller {
             int first = e.getFirstIndex();
             int last = e.getLastIndex();
 
-//            System.out.println(e.getSource());
             System.out.println(first + " " + last);
-//            System.out.println(theView.getMainWindow().getData()[last]);
         }
     }
 
     class MouseListener implements MouseInputListener{
+        GamePanel gamePanel = theView.getGameWindow().getGamePanel();
+        Marble firstMarble = null;
+        Marble secondMarble= null;
+        Game game = theModel.getGame();
+
         @Override
         public void mouseClicked(MouseEvent e) {
             int x = e.getX();
             int y = e.getY();
 
+            if (e.getButton() == MouseEvent.BUTTON1) {              //check if you Clicked at some Shape
+                if (firstMarble == null) {
+                    for (int i=0; i<game.getBoard().length; i++) {
+                        for (int j=0; j<game.getBoard().length; j++) {
+                            Marble marble = game.getBoard()[i][j];
+                            if (GamePanel.contains(marble, e.getX(), e.getY())) firstMarble = marble;
+                        }
+                    }
+                }
+                else {
+                    for (int i=0; i<game.getBoard().length; i++) {
+                        for (int j=0; j<game.getBoard().length; j++) {
+                            Marble marble = game.getBoard()[i][j];
+                            if (GamePanel.contains(marble, e.getX(), e.getY())) secondMarble = marble;
+                        }
+                    }
+                    game.makeMove(firstMarble.getX(), firstMarble.getY(), secondMarble.getX(), secondMarble.getY(), firstMarble.getColor());
+                    gamePanel.repaint();
+
+                    firstMarble = null;
+                    secondMarble= null;
+                }
+
+            }
         }
 
         @Override
         public void mousePressed(MouseEvent e) {
-
         }
 
         @Override
@@ -110,9 +164,15 @@ public class Controller {
         public void mouseMoved(MouseEvent e) {
 
         }
-    }
 
-    private void displayInfo(){
-        JOptionPane.showMessageDialog(theView.getGameWindow(), infoMessage);
+        private void printTable () {
+            for (int i=0; i<17; i++) {
+                for (int j=0; j<17; j++) {
+                    System.out.print(game.getBoard()[i][j] + " ");
+                }
+                System.out.println();
+            }
+            System.out.println();System.out.println();
+        }
     }
 }
