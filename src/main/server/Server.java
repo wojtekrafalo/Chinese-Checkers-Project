@@ -1,8 +1,5 @@
 package server;
 
-import client.clientClass.ClientClass;
-import common.model.game.Game;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -30,10 +27,10 @@ public class Server {
     private Server(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
         this.port = port;
-        //server = this;
         nextClientID = 0;
         running = true;
         sessionsList = new ArrayList<>();
+        clientsList = new ArrayList<>();
         listeningThread = new Thread(this::listen);
         listeningThread.start();
     }
@@ -54,8 +51,8 @@ public class Server {
             try {
                 Socket socket = serverSocket.accept();
                 Client thread = new Client(socket);
-
                 thread.start();
+                clientsList.add(thread);
             } catch (IOException e){
                 Thread.currentThread().interrupt();
             }
@@ -64,6 +61,10 @@ public class Server {
 
     public int getPort() {
         return port;
+    }
+
+    public static List<Client> getClientsList() {
+        return clientsList;
     }
 
     public static List<Session> getSessionsList() {

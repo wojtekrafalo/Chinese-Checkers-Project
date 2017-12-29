@@ -17,7 +17,6 @@ public class GameTest {
     public void testGame(){
         assertNull(game.getBoard()[0][6]);
         assertEquals(Color.BLUE,game.getBoard()[16][12].getTerritory());
-
         assertEquals(Color.BLUE,game.getBoard()[13][9].getColor());
         assertEquals(Color.NONE,game.getBoard()[12][9].getColor());
         game.makeMove(13,9,12,9, Color.BLUE);

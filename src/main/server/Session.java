@@ -56,6 +56,7 @@ public class Session {
 
     void move(int prevX, int prevY, int nextX, int nextY, Color color, Client movingPlayer ){
         //todo move
+
     }
 
     void pass(Client client){
@@ -64,6 +65,10 @@ public class Session {
 
     Client getHost() {
         return host;
+    }
+
+    public int getNrPlayers() {
+        return nrPlayers;
     }
 
     //todo determine winner and continue class

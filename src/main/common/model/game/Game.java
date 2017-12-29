@@ -7,6 +7,8 @@ import javafx.util.Pair;
  */
 public class Game {
 
+    //TODO refactor it to some design pattern
+
     /**
      * Game board representation.
      */
@@ -44,11 +46,13 @@ public class Game {
 
         //todo: Optimalize this (board is symmetric) and work out setting Territories in constructor
         for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+            for (int j = i; j < size; j++) {
                 if (j < OFFSETS[i] || j >= OFFSETS[i] + WIDTHS[i]) {
                     board[i][j] = null;
+                    board[j][i] = null;
                 } else {
                     board[i][j] = new Marble(i, j, Color.NONE, Color.NONE);
+                    board[j][i] = new Marble(j, i, Color.NONE, Color.NONE);
                 }
             }
         }

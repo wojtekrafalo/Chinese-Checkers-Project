@@ -3,6 +3,7 @@ package common.model.game;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Marble {
     private int x;
@@ -13,7 +14,7 @@ public class Marble {
 
     private Color territory;
 
-    private ArrayList<Pair<Integer, Integer>> neighbours;
+    private List<Pair<Integer, Integer>> neighbours;
 
     Marble(int x, int y, Color color, Color territory){
         this.setX(x);
@@ -56,7 +57,7 @@ public class Marble {
         this.territory = territory;
     }
 
-    public ArrayList<Pair<Integer, Integer>> getNeighbours() {
+    public List<Pair<Integer, Integer>> getNeighbours() {
         return neighbours;
     }
 

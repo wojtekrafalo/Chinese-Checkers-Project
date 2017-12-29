@@ -2,29 +2,38 @@ package common.model.connection;
 
 public enum Instruction {
 
-    ERROR(),
+    ERROR(1),
 
-    CREATE_GAME(),
+    CREATE_GAME(2),
 
-    JOIN_GAME(),
+    JOIN_GAME(1),
 
-    REQUIRE_SESSIONS(),
+    REQUIRE_SESSIONS(0),
 
-    MAKE_MOVE(),
+    MAKE_MOVE(6),
 
     LEAVE_GAME(),
 
-    PASS(),
+    PASS(1),
 
-    CLIENT_ENDS(),
-
-    STOP_WAITING(),
+    CLIENT_ENDS(0),
 
     START_GAME(),
 
+    CREATED(),
+
+    JOINED(),
+
+    CANT_MOVE(),
+
     MOVE_MADE(),
 
-    WRONG_NUM_OF_PARAMS();
+    SEND_SESSIONS(1),
+
+    SESSION_UNAVAILABLE(0),
+
+    WRONG_NUM_OF_PARAMS(0);
+
 
 
 
