@@ -8,7 +8,8 @@ import javax.swing.event.ListSelectionListener;
 public class NewGameWindow extends JFrame {
     private static String infoMessage = "INFO\n" +
             "INFO";
-    private static final int WIDTH = 300, HEIGHT = 600;
+    private static String errorMessage = "Please, give correct data";
+    private static final int WIDTH = 400, HEIGHT = 600;
 //    private JLabel panel = new JLabel();
     private CheckersPanel rightPanel = new CheckersPanel();                     //instead of initializing CheckersPanel here, I will create Builder in Constructor and then create correct right panel by idea of AbstractFactory pattern
 
@@ -25,7 +26,7 @@ public class NewGameWindow extends JFrame {
 
         myMenu.add(menu1);
         this.setMenuBar(myMenu);
-        setResizable(false);
+        setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(WIDTH, HEIGHT);
         this.add(rightPanel);
@@ -38,7 +39,7 @@ public class NewGameWindow extends JFrame {
         menuExit.addActionListener(listener);
     }
 
-    void displayErrorMessage(String errorMessage){
+    public void displayErrorMessage(){
         JOptionPane.showMessageDialog(this, errorMessage);
     }
     //it can be used for example, when there is not any more places in chosen game
@@ -57,9 +58,11 @@ public class NewGameWindow extends JFrame {
     public MenuItem getMenuExit () {
         return menuExit;
     }
+    public CheckersPanel getRightPanel () {
+        return rightPanel;
+    }
 
     public void displayInfo(){
         JOptionPane.showMessageDialog(this, infoMessage);
     }
-
 }

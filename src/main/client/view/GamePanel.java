@@ -9,19 +9,31 @@ import java.awt.*;
 import static com.sun.javafx.geom.Point2D.distance;
 import static java.lang.StrictMath.sqrt;
 
+/**
+ * This PanelClass is used to draw whole game Component including background and all Marbles
+ */
 public class GamePanel extends JPanel {
-
     /**
-     * R - promien of circle
-     * H - height between middles of circles
-     * tabAdd - table, which shows, how many fields you must add to coords of circles in current row
+     * There we have final variables. R is radius of circle at Component and H is actually only for comfortable using height between neighbour circles.
      */
     private static final double R = 16, H = 3*R*sqrt(3)/2;
-    private static final int[] tabAdd = {2, 1, 1, 0, 0, -1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -6, -6};
 
+    /**
+     * Table of numbers which you must add to every row of Marbles in board, to get coords in hexagonal board.
+     */
+    private static final int[] tabAdd = {2, 1, 1, 0, 0, -1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -6, -6};
+    /**
+     * Size of board. It means length of star
+     */
     private static int size = 4;
     private Game game;
 
+    /**
+     * @param defWIDTH default WIDTH of Panel
+     * @param defHEIGHT default HEIGHT of Panel
+     * @param game Game, which would be painted at Panel
+     * @param size Size of board
+     */
     public GamePanel (int defWIDTH, int defHEIGHT, Game game, int size){
         setBounds(0, 0, defWIDTH, defHEIGHT);
         setLayout(null);
@@ -31,6 +43,9 @@ public class GamePanel extends JPanel {
         this.size = size;
     }
 
+    /**
+     * @param g
+     */
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
@@ -55,19 +70,12 @@ public class GamePanel extends JPanel {
         }
     }
 
-    public static Point changeMarbleCoordsToPanelCoords (int x, int y) {
-        x++; y++;
-        double Y = (y-1) * H + R;
-        double X;
 
-        if (y%2 == 0) X = (3*x + 2.5)*R;
-        else X = (3*x + 1)*R;
 
-        if (size%2==1) X=X+R;
-
-        return new Point((int)X, (int)Y);
-    }
-
+    /**
+     * Changes Table Coords, which are saved at board table at Game class, to Panel Coords of circles. It returns 2D Point on Panel
+     * @param marble marble, which coords you want to change
+     */
     public static Point changeTableCoordsToPanelCoords (Marble marble) {                //do poprawy
         int y = marble.getY();
         int x = marble.getX() + tabAdd[y];
@@ -84,6 +92,10 @@ public class GamePanel extends JPanel {
         return new Point((int)X, (int)Y);
     }
 
+    /**
+     * Changes Panel Coords of Circle to Table Coords of marbles. It returns Point on Table
+     * @param point 2D point, which coords you want to change
+     */
     public static Point changePanelCoordsToTableCoords (Point point) {
         double X = point.getX();
         double Y = point.getY();
@@ -99,11 +111,19 @@ public class GamePanel extends JPanel {
         return new Point((int)Math.round(X) - tabAdd[y], y);
     }
 
+    /**
+     * Changes Enum Color from Game class to awt Color
+     * @param marble marble, which Color you want to change
+     */
     private static java.awt.Color switchColor (Marble marble) {
         common.model.game.Color color = marble.getColor();
         return (switchColor(color));
     }
 
+    /**
+     * Changes Enum Color from Game class to awt Color
+     * @param color color, which you want to change
+     */
     private static java.awt.Color switchColor (common.model.game.Color color) {
         switch (color) {
             case AZURE: return Color.CYAN;
@@ -117,6 +137,12 @@ public class GamePanel extends JPanel {
         }
     }
 
+    /**
+     * Returns, if 2D point is contained by marble at Panel
+     * @param marble
+     * @param xPoint x Coord of point
+     * @param yPoint y Coord of point
+     */
     public static boolean contains (Marble marble, int xPoint, int yPoint) {
         if (marble == null) return false;
         Point panelPoint = changeTableCoordsToPanelCoords(marble);

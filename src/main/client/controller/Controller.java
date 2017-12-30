@@ -31,7 +31,6 @@ public class Controller {
         this.theView = theView;
         this.theModel = theModel;
         this.theView.addListener(new MenuListener(), new SelectionListener(), new MouseListener());
-
     }
 
     class MenuListener implements ActionListener{
@@ -61,8 +60,21 @@ public class Controller {
 //            }
 
             if (e.getSource().equals(newGame.getOK())) {                    //CREATE NEW GAME, send it to model
-                theView.hideShow2();
-                theModel.createNewGame();
+                int numberOfPlayers = 2, numberOfBoots = 0;
+                if (newGame.getRightPanel().getPlayer2().isSelected()) numberOfPlayers = 2;
+                else if (newGame.getRightPanel().getPlayer3().isSelected()) numberOfPlayers = 3;
+                else if (newGame.getRightPanel().getPlayer4().isSelected()) numberOfPlayers = 4;
+                else if (newGame.getRightPanel().getPlayer6().isSelected()) numberOfPlayers = 6;
+                try {
+                    numberOfBoots = Integer.parseInt(newGame.getRightPanel().getNumberOfBoots());
+                    if (numberOfBoots <= numberOfPlayers) {
+                        theView.hideShow2();
+                        theModel.createNewGame(numberOfPlayers, numberOfBoots);
+                    }
+                    else theView.getNewGameWindow().displayErrorMessage();
+                } catch (NumberFormatException exe) {
+                    theView.getNewGameWindow().displayErrorMessage();
+                }
             }
             if (e.getSource().equals(joinGame.getOK())) {                    //JOIN TO NEW GAME, send it to model
                 Session chosen = joinGame.getSelectedGame();
@@ -73,15 +85,12 @@ public class Controller {
             if (e.getSource().equals(newGame.getMenuJoin()) || e.getSource().equals(joinGame.getMenuNew())) {
                 theView.hideShowChange();
             }
-
             if (e.getSource().equals(newGame.getMenuInfo())) {
                 newGame.displayInfo();
             }
-
             if (e.getSource().equals(joinGame.getMenuInfo())) {
                 joinGame.displayInfo();
             }
-
             if (e.getSource().equals(gameWindow.getMenuInfo())) {
                 gameWindow.displayInfo();
             }
@@ -115,55 +124,40 @@ public class Controller {
                     for (int i=0; i<game.getBoard().length; i++) {
                         for (int j=0; j<game.getBoard().length; j++) {
                             Marble marble = game.getBoard()[i][j];
-                            if (GamePanel.contains(marble, e.getX(), e.getY())) firstMarble = marble;
+                            if (GamePanel.contains(marble, e.getX(), e.getY()) && marble.getColor() != common.model.game.Color.NONE) firstMarble = marble;
                         }
                     }
-                }
-                else {
+                } else {
                     for (int i=0; i<game.getBoard().length; i++) {
                         for (int j=0; j<game.getBoard().length; j++) {
                             Marble marble = game.getBoard()[i][j];
                             if (GamePanel.contains(marble, e.getX(), e.getY())) secondMarble = marble;
                         }
                     }
-                    game.makeMove(firstMarble.getX(), firstMarble.getY(), secondMarble.getX(), secondMarble.getY(), firstMarble.getColor());
-                    gamePanel.repaint();
+                    if (firstMarble != null && secondMarble != null) game.makeMove(firstMarble.getX(), firstMarble.getY(), secondMarble.getX(), secondMarble.getY(), firstMarble.getColor());
 
+                    gamePanel.repaint();
                     firstMarble = null;
                     secondMarble= null;
                 }
-
+            } else if (e.getButton() == MouseEvent.BUTTON3) {
+                firstMarble = null;
+                secondMarble = null;
             }
         }
 
         @Override
-        public void mousePressed(MouseEvent e) {
-        }
-
+        public void mousePressed(MouseEvent e) {}
         @Override
-        public void mouseReleased(MouseEvent e) {
-
-        }
-
+        public void mouseReleased(MouseEvent e) {}
         @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
+        public void mouseEntered(MouseEvent e) {}
         @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
-
+        public void mouseExited(MouseEvent e) {}
         @Override
-        public void mouseDragged(MouseEvent e) {
-
-        }
-
+        public void mouseDragged(MouseEvent e) {}
         @Override
-        public void mouseMoved(MouseEvent e) {
-
-        }
+        public void mouseMoved(MouseEvent e) {}
 
         private void printTable () {
             for (int i=0; i<17; i++) {
