@@ -13,10 +13,9 @@ import server.Session;
 
 public class ClientTest {
     public static void main(String[] args) {
-        Game game = new Game (2,17);
-        Session session = new Session();
-        Model theModel = new Model(game);
-        View theView = new View(game);
-        Controller theController = new Controller(theView, theModel);
+//        Game game = new Game (2,17);
+        Controller theController = new Controller();
+//        Model theModel = new Model(game);
+//        View theView = new View(game);
     }
 }

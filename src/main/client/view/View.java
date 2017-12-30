@@ -18,35 +18,37 @@ public class View {
                              NEW_WIDTH = 300, NEW_HEIGHT = 600;
 
     private FirstWindow firstWindow = new FirstWindow();
-//    private MainWindow mainWindow   = new MainWindow();
     private GameWindow gameWindow;
-    private NewGameWindow newGameWindow  = new NewGameWindow();
-    private JoinGameWindow joinGameWindow  = new JoinGameWindow();
+    private NewGameWindow newGameWindow = new NewGameWindow();
+    private JoinGameWindow joinGameWindow = new JoinGameWindow();
 
+    public View() {
+        firstWindow.setVisible(true);
+    }
     public View(Game game) {
         firstWindow.setVisible(true);
-//        mainWindow.setVisible(true);
-//        gameWindow.setVisible(true);
-//        newGameWindow.setVisible(true);
-//        joinGameWindow.setVisible(true);
         gameWindow   = new GameWindow(DEF_WIDTH, DEF_HEIGHT, game);
     }
 
-    public void addListener(ActionListener listener, ListSelectionListener listListener, MouseInputListener mouseListener){
+    public void initializeGameWindow (Game game) {
+        gameWindow = new GameWindow(DEF_WIDTH, DEF_HEIGHT, game);
+    }
+
+    public void addListener(ActionListener listener, ListSelectionListener listListener){
         firstWindow.addListener(listener);
-//        mainWindow.addListener(listener, listListener);
-        gameWindow.addListener(listener, mouseListener);
         newGameWindow.addListener(listener);
         joinGameWindow.addListener(listener, listListener);
     }
 
+    public void addGameWindowListener(ActionListener listener, MouseInputListener mouseListener, Game game){
+        gameWindow.addListener(listener, mouseListener);
+    }
+
     public void hideShow1 () {
         firstWindow.setVisible(false);
-//        mainWindow.setVisible(true);
         newGameWindow.setVisible(true);
     }
     public void hideShow2 () {
-//        mainWindow.setVisible(false);
         newGameWindow.setVisible(false);
         joinGameWindow.setVisible(false);
         gameWindow.setVisible(true);
@@ -57,17 +59,12 @@ public class View {
     }
     public void hideShow3 () {
         gameWindow.setVisible(false);
-//        mainWindow.setVisible(true);
         joinGameWindow.setVisible(true);
     }
-
 
     public FirstWindow getFirstWindow () {
         return firstWindow;
     }
-//    public MainWindow getMainWindow () {
-//        return mainWindow;
-//    }
     public NewGameWindow getNewGameWindow() {
         return newGameWindow;
     }

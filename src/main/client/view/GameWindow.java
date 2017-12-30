@@ -18,7 +18,8 @@ public class GameWindow extends JFrame {
     private MenuBar myMenu = new MenuBar();
     private Menu menu1 = new Menu("Menu");
     private MenuItem menuInfo = new MenuItem("INFO"), menuReset=new MenuItem("RESET"), menuSurrender=new MenuItem("SURRENDER");
-
+    public GameWindow () {
+    }
 
     GameWindow (int WIDTH, int HEIGHT, Game game) {
         super("Chinese_Checkers");

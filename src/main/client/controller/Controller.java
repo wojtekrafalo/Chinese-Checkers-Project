@@ -19,8 +19,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-
 
 public class Controller {
     private View theView;
@@ -30,34 +28,37 @@ public class Controller {
     public Controller(View theView, Model theModel) {
         this.theView = theView;
         this.theModel = theModel;
-        this.theView.addListener(new MenuListener(), new SelectionListener(), new MouseListener());
+        this.theView.addListener(new MenuListener(), new SelectionListener());
+    }
+    public Controller() {
+        this.theView = new View();
+        this.theView.addListener(new MenuListener(), new SelectionListener());
     }
 
-    class MenuListener implements ActionListener{
+    class MenuGameWindowListener implements ActionListener {
+        GameWindow gameWindow = theView.getGameWindow();
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource().equals(gameWindow.getMenuInfo())) {
+                gameWindow.displayInfo();
+            }
+        }
+    }
+
+    class MenuListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String nick = "";
             FirstWindow first = theView.getFirstWindow();
-//            MainWindow menu = theView.getMainWindow();
             NewGameWindow newGame = theView.getNewGameWindow();
             JoinGameWindow joinGame = theView.getJoinGameWindow();
-            GameWindow gameWindow = theView.getGameWindow();
 
             if (e.getSource().equals(first.getOK())) {
                 nick = first.getNickName();
                 System.out.println("\n"+nick);
                 theView.hideShow1();
+                theModel = new Model(nick);                               //also adding specific player, not only sending a String nick
             }
-            theModel.addPlayer(nick);                               //also adding specific player, not only sending a String nick
-//            if (e.getSource().equals(menu.getRightPanel().getOK())){            //instead of using switch-case construction here, I will create Object of Factory, which would use correct class to handle properties of specific game
-//                int number=2;
-//                if (menu.getRightPanel().getPlayer2().isSelected()) number=2;
-//                if (menu.getRightPanel().getPlayer3().isSelected()) number=3;
-//                if (menu.getRightPanel().getPlayer4().isSelected()) number=4;
-//                if (menu.getRightPanel().getPlayer6().isSelected()) number=6;
-//                theModel.setNumberOfPlayers(number);
-//                System.out.println(number + "PLAYERS");
-//                theView.hideShow2();
-//            }
 
             if (e.getSource().equals(newGame.getOK())) {                    //CREATE NEW GAME, send it to model
                 int numberOfPlayers = 2, numberOfBoots = 0;
@@ -68,8 +69,10 @@ public class Controller {
                 try {
                     numberOfBoots = Integer.parseInt(newGame.getRightPanel().getNumberOfBoots());
                     if (numberOfBoots <= numberOfPlayers) {
-                        theView.hideShow2();
                         theModel.createNewGame(numberOfPlayers, numberOfBoots);
+                        theView.initializeGameWindow(theModel.getGame());
+                        theView.addGameWindowListener(new MenuGameWindowListener(), new MouseListener(), theModel.getGame());
+                        theView.hideShow2();
                     }
                     else theView.getNewGameWindow().displayErrorMessage();
                 } catch (NumberFormatException exe) {
@@ -90,9 +93,6 @@ public class Controller {
             }
             if (e.getSource().equals(joinGame.getMenuInfo())) {
                 joinGame.displayInfo();
-            }
-            if (e.getSource().equals(gameWindow.getMenuInfo())) {
-                gameWindow.displayInfo();
             }
         }
     }
@@ -158,15 +158,5 @@ public class Controller {
         public void mouseDragged(MouseEvent e) {}
         @Override
         public void mouseMoved(MouseEvent e) {}
-
-        private void printTable () {
-            for (int i=0; i<17; i++) {
-                for (int j=0; j<17; j++) {
-                    System.out.print(game.getBoard()[i][j] + " ");
-                }
-                System.out.println();
-            }
-            System.out.println();System.out.println();
-        }
     }
 }
