@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
+
 public class FirstWindow extends JFrame {
     private JLabel additionLabel = new JLabel("Please, insert your nickname");
     private JTextField nickName = new JTextField(30);

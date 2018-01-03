@@ -3,22 +3,19 @@ package ClientTest;
 import client.controller.Controller;
 import client.model.Model;
 import client.view.View;
+import common.model.game.Game;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import server.Session;
 
-public class ClientTest extends Application {
-    View theView = new View();
-    Model theModel = new Model();
-    Controller theController = new Controller(theView, theModel);
+public class ClientTest {
     public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        theView.startView(primaryStage);
+//        Game game = new Game (2,17);
+        Controller theController = new Controller();
+//        Model theModel = new Model(game);
+//        View theView = new View(game);
     }
 }

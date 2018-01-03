@@ -1,5 +1,6 @@
 package client.view;
 
+import common.model.game.Game;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -8,57 +9,69 @@ import javafx.stage.Stage;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import javax.swing.*;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.MouseInputListener;
 
 public class View {
+    private static final int DEF_WIDTH = 600, DEF_HEIGHT = 600,
+                             FIRST_WIDTH= 600, FIRST_HEIGHT=200,
+                             NEW_WIDTH = 300, NEW_HEIGHT = 600;
+
     private FirstWindow firstWindow = new FirstWindow();
-    private MainWindow mainWindow   = new MainWindow();
+    private GameWindow gameWindow;
+    private NewGameWindow newGameWindow = new NewGameWindow();
+    private JoinGameWindow joinGameWindow = new JoinGameWindow();
 
     public View() {
-//        super("ViewWindow");
-  //      firstWindow.setVisible(true);
+        firstWindow.setVisible(true);
+    }
+    public View(Game game) {
+        firstWindow.setVisible(true);
+        gameWindow   = new GameWindow(DEF_WIDTH, DEF_HEIGHT, game);
     }
 
-    public void addListener(ActionListener listener){
+    public void initializeGameWindow (Game game) {
+        gameWindow = new GameWindow(DEF_WIDTH, DEF_HEIGHT, game);
+    }
+
+    public void addListener(ActionListener listener, ListSelectionListener listListener){
         firstWindow.addListener(listener);
-        mainWindow.addListener(listener);
+        newGameWindow.addListener(listener);
+        joinGameWindow.addListener(listener, listListener);
+    }
+
+    public void addGameWindowListener(ActionListener listener, MouseInputListener mouseListener, Game game){
+        gameWindow.addListener(listener, mouseListener);
     }
 
     public void hideShow1 () {
-//        primaryStage.hide();
-//        mainStage.show();
+        firstWindow.setVisible(false);
+        newGameWindow.setVisible(true);
+    }
+    public void hideShow2 () {
+        newGameWindow.setVisible(false);
+        joinGameWindow.setVisible(false);
+        gameWindow.setVisible(true);
+    }
+    public void hideShowChange () {
+        newGameWindow.setVisible(!newGameWindow.isVisible());
+        joinGameWindow.setVisible(!joinGameWindow.isVisible());
+    }
+    public void hideShow3 () {
+        gameWindow.setVisible(false);
+        joinGameWindow.setVisible(true);
     }
 
     public FirstWindow getFirstWindow () {
         return firstWindow;
     }
-
-    public MainWindow getMainWindow () {
-        return mainWindow;
+    public NewGameWindow getNewGameWindow() {
+        return newGameWindow;
     }
-
-    public void startView (Stage primaryStage) throws Exception {
-        Parent rootFirst = FXMLLoader.load(getClass().getResource("/client/view/first.fxml"));
-//        Parent rootMain  = FXMLLoader.load(getClass().getResource("/client/view/Main.fxml"));
-//        Parent rootGame  = FXMLLoader.load(getClass().getResource("/client/view/GameWindow.fxml"));
-
-        Scene sceneFirst = new Scene(rootFirst,370,170);
-//        Scene sceneMain = new Scene(rootMain,370,170);
-//        Scene sceneGame = new Scene(rootGame,370,170);
-
-        Stage mainStage = new Stage();
-        Stage gameStage = new Stage();
-
-        primaryStage.setScene(sceneFirst);
-        primaryStage.setResizable(false);
-        primaryStage.setTitle("Write your nickname");
-        primaryStage.show();
-
-//        mainStage.setScene(sceneMain);
-        mainStage.setResizable(false);
-        mainStage.setTitle("Main Menu");
-
-//        gameStage.setScene(sceneGame);
-        gameStage.setResizable(false);
-        gameStage.setTitle("Game");
+    public JoinGameWindow getJoinGameWindow() {
+        return joinGameWindow;
+    }
+    public GameWindow getGameWindow () {
+        return gameWindow;
     }
 }

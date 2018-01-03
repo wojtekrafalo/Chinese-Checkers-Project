@@ -36,6 +36,8 @@ public class Game {
     private final static int[] OFFSETS =
             {4, 4, 4, 4, 0, 1, 2, 3, 4, 4, 4, 4, 4, 9, 10, 11, 12};
 
+    private final static int[][] EXTREMEPOINTS =
+            {{0,4}, {4,0}, {4,12}, {12,4}, {12,16}, {16,12}};
     /**
      * @param nrPlayers Number of players in game
      * @param size size of board
@@ -315,4 +317,13 @@ public class Game {
         return turn;
     }
 
+    public Marble getExtremePoint (Color color) {
+        Marble marble = null;
+        for (int[] e : EXTREMEPOINTS) {
+            if (board[e[0]][e[1]].getColor() == color) {
+                marble = board[e[0]][e[1]];
+            }
+        }
+        return marble;
+    }
 }

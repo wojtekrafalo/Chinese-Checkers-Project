@@ -1,22 +1,46 @@
 package client.model;
 import common.model.game.*;
+import server.Server;
+import server.Session;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
-    List<Game> listOfGames = new ArrayList<>();
+//    List<Game> listOfGames = new ArrayList<>();
+    private List<Boot> listOfBoots = new ArrayList<>();
+    private Game game;
+    private int numberOfPlayers;
+    private int numberOfBoots;
+    private Session session;
 
-    private int calculationValue;
 
-    public void addTwoNumbers(int firstNumber, int secondNumber){
-        calculationValue = firstNumber + secondNumber;
+    public Model (String nick) {
     }
-    public int getCalculationValue(){
-        return calculationValue;
+    public Model (Game game) {
+        this.game = game;
     }
 
-    public void addPlayer(String nick) {
+    public void createNewGame(int numberOfPlayers, int NumberOfBoots) {
+        this.numberOfPlayers = numberOfPlayers;
+        this.numberOfBoots = numberOfBoots;
+        while (numberOfBoots > 0) {
+            listOfBoots.add(new Boot());
+        }
+        game = new Game (numberOfPlayers, 17);
+//        this.listOfGames.add(game);
+    }
 
+    public void joinToGame(Session chosenSession) {
+        setSession(chosenSession);
+    }
+    public Game getGame () {
+        return game;
+    }
+//    public void setNumberOfPlayers (int numberOfPlayers) {
+//        this.numberOfPlayers = numberOfPlayers;
+//    }
+    public void setSession (Session session) {
+        this.session = session;
     }
 }
