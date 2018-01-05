@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+//dsafseasfcx
 public class Model {
     private List<Boot> listOfBoots = new ArrayList<>();
     private Game game;

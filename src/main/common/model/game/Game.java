@@ -38,6 +38,7 @@ public class Game {
 
     private final static int[][] EXTREMEPOINTS =
             {{0,4}, {4,0}, {4,12}, {12,4}, {12,16}, {16,12}};
+
     /**
      * @param nrPlayers Number of players in game
      * @param size size of board
