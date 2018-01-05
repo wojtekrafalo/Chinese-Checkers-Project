@@ -87,15 +87,22 @@ public class Boot {
             i++;
         }
 
-        for (int k=0;k<17;k++) {
-            for (int l=0;l<17;l++) {
-                if (game.getBoard()[k][l] != null)
-                System.out.print(game.getBoard()[k][l].getColor() + " ");
-                else System.out.print("null ");
-            }
-            System.out.println("");
-        }
+//        for (int k=0;k<17;k++) {
+//            for (int l=0;l<17;l++) {
+//                if (game.getBoard()[k][l] != null)
+//                System.out.print(game.getBoard()[k][l].getColor() + " ");
+//                else System.out.print("null ");
+//            }
+//            System.out.println("");
+//        }
 
         return isMadeMove;
+    }
+
+    public Game getGame () {
+        return game;
+    }
+    public Color getColor () {
+        return color;
     }
 }

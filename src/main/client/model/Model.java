@@ -3,44 +3,36 @@ import common.model.game.*;
 import server.Server;
 import server.Session;
 
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
-//    List<Game> listOfGames = new ArrayList<>();
     private List<Boot> listOfBoots = new ArrayList<>();
     private Game game;
     private int numberOfPlayers;
     private int numberOfBoots;
-    private Session session;
-
-
+    private Socket socket;
+    private List<Session> sessions;
     public Model (String nick) {
-    }
-    public Model (Game game) {
-        this.game = game;
+//        ServerHandle serverHandle = new ServerHandle(socket, this);
     }
 
-    public void createNewGame(int numberOfPlayers, int NumberOfBoots) {
-        this.numberOfPlayers = numberOfPlayers;
-        this.numberOfBoots = numberOfBoots;
+    public void createNewGame(String nrPlayers, String size , String nrOfBoots) {
+//        this.numberOfPlayers = numberOfPlayers;
+        this.numberOfBoots = Integer.parseInt(nrOfBoots);
+        this.game = new Game(Integer.parseInt(nrPlayers), Integer.parseInt(size));
+
         while (numberOfBoots > 0) {
-            listOfBoots.add(new Boot());
+            listOfBoots.add(new Boot(game, Color.randomColor()));
         }
-        game = new Game (numberOfPlayers, 17);
-//        this.listOfGames.add(game);
     }
 
-    public void joinToGame(Session chosenSession) {
-        setSession(chosenSession);
-    }
     public Game getGame () {
         return game;
     }
-//    public void setNumberOfPlayers (int numberOfPlayers) {
-//        this.numberOfPlayers = numberOfPlayers;
-//    }
-    public void setSession (Session session) {
-        this.session = session;
+
+    public void setSessions(String sessions) {
+//        this.sessions = sessions;
     }
 }

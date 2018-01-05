@@ -6,9 +6,11 @@ import client.view.View;
 import client.view.*;
 import common.model.game.Game;
 import common.model.game.Marble;
+import common.utils.Converter;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import server.Server;
 import server.Session;
 
 import javax.swing.*;
@@ -31,8 +33,15 @@ public class Controller {
         this.theView.addListener(new MenuListener(), new SelectionListener());
     }
     public Controller() {
+    }
+
+    public void start() {
         this.theView = new View();
         this.theView.addListener(new MenuListener(), new SelectionListener());
+    }
+
+    public void addPlayer(String color, String ID) {
+//        theModel.setPlayer(Converter.parseColor(color));
     }
 
     class MenuGameWindowListener implements ActionListener {
@@ -56,6 +65,7 @@ public class Controller {
             if (e.getSource().equals(first.getOK())) {
                 nick = first.getNickName();
                 System.out.println("\n"+nick);
+//                Server server = Server.getServer(5001);
                 theView.hideShow1();
                 theModel = new Model(nick);                               //also adding specific player, not only sending a String nick
             }
@@ -69,7 +79,7 @@ public class Controller {
                 try {
                     numberOfBoots = Integer.parseInt(newGame.getRightPanel().getNumberOfBoots());
                     if (numberOfBoots <= numberOfPlayers) {
-                        theModel.createNewGame(numberOfPlayers, numberOfBoots);
+//                        theModel.createNewGame(numberOfPlayers, numberOfBoots);
                         theView.initializeGameWindow(theModel.getGame());
                         theView.addGameWindowListener(new MenuGameWindowListener(), new MouseListener(), theModel.getGame());
                         theView.hideShow2();
@@ -79,11 +89,11 @@ public class Controller {
                     theView.getNewGameWindow().displayErrorMessage();
                 }
             }
-            if (e.getSource().equals(joinGame.getOK())) {                    //JOIN TO NEW GAME, send it to model
-                Session chosen = joinGame.getSelectedGame();
-                theView.hideShow2();
-                theModel.joinToGame(chosen);
-            }
+//            if (e.getSource().equals(joinGame.getOK())) {                    //JOIN TO NEW GAME, send it to model
+//                Session chosen = joinGame.getSelectedGame();
+//                theView.hideShow2();
+//                theModel.joinToGame(chosen);
+//            }
 
             if (e.getSource().equals(newGame.getMenuJoin()) || e.getSource().equals(joinGame.getMenuNew())) {
                 theView.hideShowChange();
@@ -116,9 +126,6 @@ public class Controller {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            int x = e.getX();
-            int y = e.getY();
-
             if (e.getButton() == MouseEvent.BUTTON1) {              //check if you Clicked at some Shape
                 if (firstMarble == null) {
                     for (int i=0; i<game.getBoard().length; i++) {
@@ -158,5 +165,9 @@ public class Controller {
         public void mouseDragged(MouseEvent e) {}
         @Override
         public void mouseMoved(MouseEvent e) {}
+    }
+
+    public void repaint() {
+        theView.getGameWindow().getGamePanel().repaint();
     }
 }

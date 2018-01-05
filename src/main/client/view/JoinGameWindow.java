@@ -77,9 +77,9 @@ public class JoinGameWindow extends JFrame {
         return menuNew;
     }
 
-    public Session getSelectedGame() {                          //send selected field of List
-        return new Session();
-    }
+//    public Session getSelectedGame() {                          //send selected field of List
+//        return new Session();
+//    }
     public void displayInfo(){
         JOptionPane.showMessageDialog(this, infoMessage);
     }

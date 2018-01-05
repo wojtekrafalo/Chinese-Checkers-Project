@@ -8,6 +8,8 @@ public enum Instruction {
 
     JOIN_GAME(1),
 
+    SESSION_CHOSEN(1),
+
     REQUIRE_SESSIONS(0),
 
     MAKE_MOVE(6),
@@ -20,13 +22,13 @@ public enum Instruction {
 
     START_GAME(),
 
-    CREATED(),
+    CREATED(2),
 
-    JOINED(),
+    JOINED(1),
 
     CANT_MOVE(),
 
-    MOVE_MADE(),
+    MOVE_MADE(4),
 
     SEND_SESSIONS(1),
 
