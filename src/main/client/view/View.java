@@ -19,10 +19,13 @@ public class View {
 
     private FirstWindow firstWindow = new FirstWindow();
     private GameWindow gameWindow;
-    private NewGameWindow newGameWindow = new NewGameWindow();
-    private JoinGameWindow joinGameWindow = new JoinGameWindow();
+    private NewGameWindow newGameWindow;
+    private JoinGameWindow joinGameWindow;
 
     public View() {
+        System.out.println("theView created");
+        newGameWindow = new NewGameWindow();
+        joinGameWindow = new JoinGameWindow();
         firstWindow.setVisible(true);
     }
     public View(Game game) {
@@ -34,10 +37,10 @@ public class View {
         gameWindow = new GameWindow(DEF_WIDTH, DEF_HEIGHT, game);
     }
 
-    public void addListener(ActionListener listener, ListSelectionListener listListener){
+    public void addListener(ActionListener listener, ListSelectionListener listListener, MouseInputListener mouseListener){
         firstWindow.addListener(listener);
         newGameWindow.addListener(listener);
-        joinGameWindow.addListener(listener, listListener);
+        joinGameWindow.addListener(listener, listListener, mouseListener);
     }
 
     public void addGameWindowListener(ActionListener listener, MouseInputListener mouseListener, Game game){

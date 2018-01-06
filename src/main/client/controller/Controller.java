@@ -21,23 +21,26 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class Controller {
     private View theView;
     private Model theModel;
     private String infoMessage = "This is Chinese Checkers Game\n" +
             "Add some instructions";
-    public Controller(View theView, Model theModel) {
-        this.theView = theView;
-        this.theModel = theModel;
-        this.theView.addListener(new MenuListener(), new SelectionListener());
-    }
+//    public Controller(View theView, Model theModel) {
+//        this.theView = theView;
+//        this.theModel = theModel;
+//        this.theView.addListener(new MenuListener(), new SelectionListener(), new MouseListListener());
+//    }
     public Controller() {
+        System.out.println("theController created");
+        this.theView = new View();
+        this.theView.addListener(new MenuListener(), new SelectionListener(), new MouseListListener());
     }
 
     public void start() {
-        this.theView = new View();
-        this.theView.addListener(new MenuListener(), new SelectionListener());
+
     }
 
     public void addPlayer(String color, String ID) {
@@ -67,7 +70,7 @@ public class Controller {
                 System.out.println("\n"+nick);
 //                Server server = Server.getServer(5001);
                 theView.hideShow1();
-                theModel = new Model(nick);                               //also adding specific player, not only sending a String nick
+                theModel = new Model(nick, null);                               //also adding specific player, not only sending a String nick
             }
 
             if (e.getSource().equals(newGame.getOK())) {                    //CREATE NEW GAME, send it to model
@@ -118,6 +121,31 @@ public class Controller {
         }
     }
 
+    class MouseListListener implements MouseInputListener{
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (theView.getJoinGameWindow().getList() != null) {
+                int index = theView.getJoinGameWindow().getList().locationToIndex(e.getPoint());
+                System.out.println("Double clicked on Item " + index);
+                theView.getJoinGameWindow().setInfoAboutSession(index);
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {}
+        @Override
+        public void mouseReleased(MouseEvent e) {}
+        @Override
+        public void mouseEntered(MouseEvent e) {}
+        @Override
+        public void mouseExited(MouseEvent e) {}
+        @Override
+        public void mouseDragged(MouseEvent e) {}
+        @Override
+        public void mouseMoved(MouseEvent e) {}
+    }
+
+
     class MouseListener implements MouseInputListener{
         GamePanel gamePanel = theView.getGameWindow().getGamePanel();
         Marble firstMarble = null;
@@ -151,6 +179,7 @@ public class Controller {
                 firstMarble = null;
                 secondMarble = null;
             }
+
         }
 
         @Override
@@ -169,5 +198,9 @@ public class Controller {
 
     public void repaint() {
         theView.getGameWindow().getGamePanel().repaint();
+    }
+
+    public void setSessions(ArrayList<String> sessions) {
+        theView.getJoinGameWindow().setData(sessions);
     }
 }

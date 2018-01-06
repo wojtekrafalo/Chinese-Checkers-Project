@@ -19,6 +19,7 @@ public class NewGameWindow extends JFrame {
 
     NewGameWindow () {
         super("Create New Game");
+        System.out.println("NewGameWindow created");
         menu1.add(menuInfo);
         menu1.addSeparator();
         menu1.add(menuJoin);

@@ -22,11 +22,7 @@ public class ServerHandle extends Thread{
 
     private ObjectOutputStream output;
 
-    private Session session;
-
     private Socket socket;
-
-    private int port;
 
     private boolean isOnline;
 
@@ -44,11 +40,11 @@ public class ServerHandle extends Thread{
 
     private Controller controller;
 
-    ServerHandle(Socket socket, Model model, Controller contorller) {
+    ServerHandle(Socket socket, Model model, Controller controller) {
 //        this.clientID = Server.getNextClientID();
         this.socket = socket;
         this.model = model;
-        this.controller = contorller;
+        this.controller = controller;
         this.isOnline = true;
 
         System.out.println("Connection between Game and Server established.");
@@ -93,6 +89,15 @@ public class ServerHandle extends Thread{
                         write(new Command(Instruction.START_GAME));
                         break;
 
+                    case NICK_INSERTED:
+                        this.model = new Model(command.getParameters().get(0), this);
+
+                        System.out.println("New nick added.");
+
+                        write(new Command(Instruction.NICK_ADD));
+                        write(new Command(Instruction.START_GAME));
+                        break;
+
                     case START_GAME:
                         controller.start();
                         System.out.println("Game started");
@@ -108,7 +113,7 @@ public class ServerHandle extends Thread{
                         break;
 
                     case SEND_SESSIONS:
-                        model.setSessions(command.getParameters().get(0));
+//                        controller.setSessions(command.getParameters().get(0));
                         break;
 
                     case SESSION_CHOSEN:

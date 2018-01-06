@@ -6,6 +6,10 @@ public enum Instruction {
 
     CREATE_GAME(2),
 
+    BOOT_ADD(2),
+
+    BOOT_ADDED(2),
+
     JOIN_GAME(1),
 
     SESSION_CHOSEN(1),
@@ -27,6 +31,10 @@ public enum Instruction {
     JOINED(1),
 
     CANT_MOVE(),
+
+    NICK_INSERTED(1),
+
+    NICK_ADD(1),
 
     MOVE_MADE(4),
 

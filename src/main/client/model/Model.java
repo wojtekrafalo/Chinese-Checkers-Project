@@ -14,9 +14,11 @@ public class Model {
     private int numberOfPlayers;
     private int numberOfBoots;
     private Socket socket;
+    private ServerHandle serverHandle;
     private List<Session> sessions;
-    public Model (String nick) {
-//        ServerHandle serverHandle = new ServerHandle(socket, this);
+
+    public Model (String nick, ServerHandle serverHandle) {
+        this.serverHandle = serverHandle;
     }
 
     public void createNewGame(String nrPlayers, String size , String nrOfBoots) {
