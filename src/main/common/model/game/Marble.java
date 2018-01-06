@@ -14,7 +14,9 @@ public class Marble {
 
     private Color territory;
 
-    private List<Pair<Integer, Integer>> neighbours;
+    private List<Pair<Pair<Integer,Integer>,Direction>> neighbours;
+
+    private List<Pair<Pair<Integer,Integer>,Direction>> jumps;
 
     Marble(int x, int y, Color color, Color territory){
         this.setX(x);
@@ -57,11 +59,11 @@ public class Marble {
         this.territory = territory;
     }
 
-    public List<Pair<Integer, Integer>> getNeighbours() {
+    public List<Pair<Pair<Integer,Integer>,Direction>> getNeighbours() {
         return neighbours;
     }
 
-    public void addNeighbour(int x, int y) {
-        this.neighbours.add(new Pair<>(x, y));
+    public void addNeighbour(int x, int y, Direction direction) {
+        this.neighbours.add(new Pair<>(new Pair<>(x, y),direction));
     }
 }

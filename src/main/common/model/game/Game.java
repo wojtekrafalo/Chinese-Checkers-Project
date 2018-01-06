@@ -6,9 +6,6 @@ import javafx.util.Pair;
  * Class responsible for creating and playing the game. It contains game board
  */
 public class Game {
-
-    //TODO refactor it to some design pattern
-
     /**
      * Game board representation.
      */
@@ -47,7 +44,6 @@ public class Game {
         this.board = new Marble[size][size];
         this.nrPlayers = nrPlayers;
 
-        //todo: Optimalize this (board is symmetric) and work out setting Territories in constructor
         for (int i = 0; i < size; i++) {
             for (int j = i; j < size; j++) {
                 if (j < OFFSETS[i] || j >= OFFSETS[i] + WIDTHS[i]) {
@@ -62,7 +58,6 @@ public class Game {
         setNeighbours(size);
         setTerritories();
         setMarbles();
-        //startingPlayer();
     }
 
     /**
@@ -71,35 +66,64 @@ public class Game {
     private void setNeighbours(int size) {
         for (int i = 0; i < size; i++){
             for (int j = i; j < size; j++){
-                if(board[i][j] != null){
+                if (j == i) {
+                    if (board[i][j] != null) {
 
-                    if (i - 1 >= 0){
-                        if (j - 1 >= 0 && board[i - 1][j - 1] != null) {
-                            board[i][j].addNeighbour(i - 1, j - 1);
-                            board[j][i].addNeighbour(j - 1, i - 1);
+                        if (i - 1 >= 0) {
+                            if (j - 1 >= 0 && board[i - 1][j - 1] != null) {
+                                board[i][j].addNeighbour(i - 1, j - 1,Direction.NORTH_WEST);
+                            }
+                            if (board[i - 1][j] != null) {
+                                board[i][j].addNeighbour(i - 1, j,Direction.NORTH);
+                            }
                         }
-                        if (board[i - 1][j] != null) {
-                            board[i][j].addNeighbour(i - 1, j);
-                            board[j][i].addNeighbour(j, i - 1);
+                        if (j - 1 >= 0 && board[i][j - 1] != null) {
+                            board[i][j].addNeighbour(i, j - 1,Direction.WEST);
+                        }
+                        if (i + 1 < size) {
+                            if (j + 1 < size && board[i + 1][j + 1] != null) {
+                                board[i][j].addNeighbour(i + 1, j + 1,Direction.SOUTH_EAST);
+                            }
+                            if (board[i + 1][j] != null) {
+                                board[i][j].addNeighbour(i + 1, j,Direction.SOUTH);
+                            }
+                        }
+                        if (j + 1 < size && board[i][j + 1] != null) {
+                            board[i][j].addNeighbour(i, j + 1,Direction.EAST);
                         }
                     }
-                    if (j - 1 >= 0 && board[i][j - 1] != null){
-                        board[i][j].addNeighbour(i,j - 1);
-                        board[j][i].addNeighbour(j - 1, i);
-                    }
-                    if (i + 1 < size){
-                        if (j + 1 < size && board[i + 1][j + 1] != null){
-                            board[i][j].addNeighbour(i + 1, j + 1);
-                            board[j][i].addNeighbour(j + 1, i + 1);
+                }
+                else {
+                    if (board[i][j] != null) {
+
+                        if (i - 1 >= 0) {
+                            if (j - 1 >= 0 && board[i - 1][j - 1] != null) {
+                                board[i][j].addNeighbour(i - 1, j - 1,Direction.NORTH_WEST);
+                                board[j][i].addNeighbour(j - 1, i - 1,Direction.NORTH_WEST);
+                            }
+                            if (board[i - 1][j] != null) {
+                                board[i][j].addNeighbour(i - 1, j,Direction.NORTH);
+                                board[j][i].addNeighbour(j, i - 1,Direction.WEST);
+                            }
                         }
-                        if (board[i + 1][j] != null){
-                            board[i][j].addNeighbour(i + 1, j);
-                            board[j][i].addNeighbour(j , i + 1);
+                        if (j - 1 >= 0 && board[i][j - 1] != null) {
+                            board[i][j].addNeighbour(i, j - 1,Direction.WEST);
+                            board[j][i].addNeighbour(j - 1, i,Direction.NORTH);
                         }
-                    }
-                    if (j + 1 < size && board[i][j + 1] != null){
-                        board[i][j].addNeighbour(i,j + 1);
-                        board[j][i].addNeighbour(j + 1, i);
+                        if (i + 1 < size) {
+                            if (j + 1 < size && board[i + 1][j + 1] != null) {
+                                board[i][j].addNeighbour(i + 1, j + 1,Direction.SOUTH_EAST);
+                                board[j][i].addNeighbour(j + 1, i + 1,Direction.SOUTH_EAST);
+                            }
+                            if (board[i + 1][j] != null) {
+                                board[i][j].addNeighbour(i + 1, j,Direction.SOUTH);
+                                board[j][i].addNeighbour(j, i + 1, Direction.EAST);
+                            }
+                        }
+                        if (j + 1 < size && board[i][j + 1] != null) {
+                            board[i][j].addNeighbour(i, j + 1,Direction.EAST);
+                            board[j][i].addNeighbour(j + 1, i,Direction.SOUTH);
+                        }
                     }
                 }
             }
@@ -198,7 +222,7 @@ public class Game {
      *
      */
     private void setMarbles() {
-        switch (nrPlayers){
+        switch (this.nrPlayers){
             case 2:
                 for (int i = 0; i < 4; i++) {
                     for (int j = 4; j < i + 5; j++) {
@@ -267,14 +291,6 @@ public class Game {
         }
     }
 
-    /**
-     *
-     */
-    private void startingPlayer(){
-        while (turn == Color.NONE){
-            turn = Color.randomColor();
-        }
-    }
 
     /**
      * @param prevX
@@ -286,8 +302,8 @@ public class Game {
     private boolean canMakeMove(int prevX, int prevY, int nextX, int nextY) {
         if (board[nextX][nextY].getColor() == Color.NONE) {
             Pair<Integer, Integer> coords = new Pair<>(nextX, nextY);
-            for (Pair<Integer, Integer> pair : board[prevX][prevY].getNeighbours()) {
-                if (coords.equals(pair)) {
+            for (Pair<Pair<Integer,Integer>,Direction> neighbour : board[prevX][prevY].getNeighbours()) {
+                if (coords.equals(neighbour.getKey())) {
                     return true;
                 }
             }
@@ -318,6 +334,10 @@ public class Game {
         return turn;
     }
 
+    public Color setTurn() {
+        return turn;
+    }
+
     public Marble getExtremePoint (Color color) {
         Marble marble = null;
         for (int[] e : EXTREMEPOINTS) {
@@ -326,5 +346,9 @@ public class Game {
             }
         }
         return marble;
+    }
+
+    public boolean canMove(int prevX, int prevY, int nextX, int nextY, Color color) {
+        return false;
     }
 }
