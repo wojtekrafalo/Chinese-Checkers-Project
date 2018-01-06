@@ -3,7 +3,8 @@ package common.model.game;
 import java.util.ArrayList;
 import java.awt.Point;
 
-import static com.sun.javafx.geom.Vec2d.distance;
+import static java.awt.geom.Point2D.distance;
+
 
 public class Boot {
     private Game game;

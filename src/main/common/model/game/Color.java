@@ -1,5 +1,7 @@
 package common.model.game;
 
+import java.util.List;
+
 public enum Color {
     AZURE,
     BLUE,
@@ -24,9 +26,8 @@ public enum Color {
         return opposite;
     }
 
-    public static Color randomColor(){
+    public static Color randomColor(List<Color> colors){
 
-        return Color.values()[(int)(Math.random()*Color.values().length)];
-
+       return colors.get((int) (Math.random() * colors.size()));
     }
 }

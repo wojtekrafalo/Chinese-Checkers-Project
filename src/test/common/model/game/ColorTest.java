@@ -1,14 +1,16 @@
 package common.model.game;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
-//import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
+
 
 public class ColorTest {
     @Test
     public void testRandomColor() throws Exception {
-        assertEquals(Color.AZURE, Color.randomColor());
+        assertEquals(Color.AZURE, Color.randomColor(Arrays.asList(Color.AZURE,Color.BLUE)));
     }
 
     @Test

@@ -20,6 +20,8 @@ public enum Instruction {
 
     LEAVE_GAME(),
 
+    PLAYER_JOINED(),
+
     PASS(1),
 
     CLIENT_ENDS(0),
@@ -42,7 +44,9 @@ public enum Instruction {
 
     SESSION_UNAVAILABLE(0),
 
-    WRONG_NUM_OF_PARAMS(0);
+    WRONG_NUM_OF_PARAMS(0),
+
+    WRONG_NUM_OF_PLAYERS(0);
 
 
 

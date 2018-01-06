@@ -2,6 +2,7 @@ package server;
 
 import common.model.connection.Command;
 import common.model.connection.Instruction;
+import common.model.game.Color;
 import common.utils.Converter;
 
 import java.io.*;
@@ -22,6 +23,8 @@ class Client extends Thread {
     private String nickname;
 
     private boolean isOnline;
+
+    private Color color;
 
     private int clientID;
 
@@ -52,7 +55,7 @@ class Client extends Thread {
             System.out.println(command.getName().toString() +
                     "\nwith params: " + command.getParameters().toString() +
                     "\nfrom: " + this.clientID);
-            if (command.getName().getNrParams() != command.getParameters().size() && command.getParameters().size() != -1) {
+            if (command.getName().getNrParams() != command.getParameters().size()) {
                 System.out.println("But parameters were wrong!");
                 write(new Command(Instruction.WRONG_NUM_OF_PARAMS));
             } else {
@@ -115,7 +118,7 @@ class Client extends Thread {
                                 Integer.parseInt(command.getParameters().get(1)),
                                 Integer.parseInt(command.getParameters().get(2)),
                                 Integer.parseInt(command.getParameters().get(3)),
-                                Converter.parseColor(command.getParameters().get(4)),
+                                //Converter.parseColor(command.getParameters().get(4)),
                                 this
                         );
                         break;
@@ -163,6 +166,10 @@ class Client extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     public int getClientID() {

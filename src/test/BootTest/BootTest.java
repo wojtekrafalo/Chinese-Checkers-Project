@@ -9,11 +9,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.sun.javafx.geom.Point2D.distance;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 public class BootTest {
     Game game;
     Boot boot;
