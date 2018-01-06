@@ -24,6 +24,7 @@ public class Marble {
         this.setColor(color);
         this.setTerritory(territory);
         this.neighbours = new ArrayList<>();
+        this.jumps = new ArrayList<>();
     }
 
 
@@ -63,7 +64,15 @@ public class Marble {
         return neighbours;
     }
 
+    public List<Pair<Pair<Integer, Integer>, Direction>> getJumps() {
+        return jumps;
+    }
+
     public void addNeighbour(int x, int y, Direction direction) {
         this.neighbours.add(new Pair<>(new Pair<>(x, y),direction));
+    }
+
+    public void addJump(int x, int y, Direction direction) {
+        this.jumps.add(new Pair<>(new Pair<>(x, y),direction));
     }
 }
