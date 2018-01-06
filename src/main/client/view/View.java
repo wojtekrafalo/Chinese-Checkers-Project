@@ -43,7 +43,6 @@ public class View {
         joinGameWindow.addListener(listener, listListener, mouseListener);
     }
 
-
     public void addGameWindowListener(ActionListener listener, MouseInputListener mouseListener, Game game){
         gameWindow.addListener(listener, mouseListener);
     }

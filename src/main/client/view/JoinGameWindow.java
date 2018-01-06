@@ -32,7 +32,6 @@ public class JoinGameWindow extends JFrame {
 
     private String[] data = {"session", "host1", "3", "3", "172.168.0.0", "session2", "host2", "32", "32", "172.168.0.02", "session3", "host3", "33", "33", "172.168.0.03", };
 
-
     JoinGameWindow(){
         super("Join to existing Game");
 

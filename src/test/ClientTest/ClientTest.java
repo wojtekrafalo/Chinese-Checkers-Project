@@ -33,6 +33,5 @@ public class ClientTest {
         sessions.add("33");
         sessions.add("172.168.0.03");
         theController.setSessions(sessions);
-
     }
 }
