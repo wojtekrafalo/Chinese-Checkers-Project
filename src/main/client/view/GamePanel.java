@@ -43,6 +43,7 @@ public class GamePanel extends JPanel {
         this.size = size;
     }
 
+
     /**
      * @param g
      */

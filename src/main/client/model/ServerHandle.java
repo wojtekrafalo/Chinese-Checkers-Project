@@ -128,6 +128,7 @@ public class ServerHandle extends Thread{
         Thread.currentThread().interrupt();
     }
 
+
     void write(Command command) {
         try {
             output.writeObject(command);
