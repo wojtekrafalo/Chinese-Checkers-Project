@@ -128,6 +128,7 @@ public class ServerHandle extends Thread{
                         write(new Command(Instruction.START_GAME));
                         break;
 
+
                     case NICK_INSERTED:
                         this.model = new Model(command.getParameters().get(0), this);
                         controller.start(this.model);

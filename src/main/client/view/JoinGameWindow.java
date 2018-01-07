@@ -145,6 +145,7 @@ public class JoinGameWindow extends JFrame {
         return chosenSession;
     }
 
+
     public String[] getData() {                          //send selected field of List
         return data;
     }

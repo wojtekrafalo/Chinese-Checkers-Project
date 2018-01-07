@@ -117,6 +117,7 @@ public class Controller {
 //                theModel.joinToGame(chosen);
             }
 
+
             if (e.getSource().equals(newGame.getMenuJoin()) || e.getSource().equals(joinGame.getMenuNew())) {
                 theView.hideShowChange();
             }
