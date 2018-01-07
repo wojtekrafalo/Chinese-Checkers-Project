@@ -6,14 +6,21 @@ import java.awt.event.ActionListener;
 
 public class CheckersPanel extends JPanel {
     private static final int WIDTH = 600, HEIGHT = 600;
+
     private JButton OK = new JButton("OK");
+
     private JRadioButton player2= new JRadioButton("two players"), player3= new JRadioButton("three players"), player4= new JRadioButton("four players"), player6= new JRadioButton("six players");
     private ButtonGroup group;
+
     private JLabel titleLabel1 = new JLabel("Choose a number of players");
     private JLabel titleLabel2 = new JLabel("Give a number of boots");
     private JLabel playerLabel = new JLabel();
     private JLabel bootLabel = new JLabel();
+    private JLabel sessionLabel = new JLabel();
+
     private JTextField bootTextField = new JTextField("0");
+    private JTextField nameOfSession = new JTextField("");
+
     CheckersPanel() {
 //        this.setLayout(new GridLayout(5,0));
         this.setLayout(null);
@@ -25,7 +32,9 @@ public class CheckersPanel extends JPanel {
         player4.setBounds(WIDTH/6, HEIGHT/6 + 150,150,50);
         player6.setBounds(WIDTH/6, HEIGHT/6 + 200,150,50);
         bootTextField.setBounds((int)(WIDTH/2) - 50, (int)(HEIGHT/6 + 60), 100, 30);
-        OK.setBounds((int)(WIDTH/6), (int)(HEIGHT/6 + 250), 70,50);
+        sessionLabel.setBounds((int)(WIDTH/6), (int)(HEIGHT/6 + 250), 70,50);
+        nameOfSession.setBounds((int)(WIDTH/6) + 70, (int)(HEIGHT/6 + 250), 70,50);
+        OK.setBounds((int)(WIDTH/6), (int)(HEIGHT/6 + 300), 70,50);
         player2.setSelected(true);
 
         group = new ButtonGroup();
@@ -45,6 +54,7 @@ public class CheckersPanel extends JPanel {
 
         bootLabel.add(titleLabel2);
         bootLabel.add(bootTextField);
+
         this.add(playerLabel);
         this.add(OK);
         this.add(player2);
@@ -53,7 +63,10 @@ public class CheckersPanel extends JPanel {
         this.add(player6);
         this.add(titleLabel2);
         this.add(bootTextField);
+        this.add(sessionLabel);
+        this.add(nameOfSession);
     }
+
     public void addActionListener(ActionListener listener) {
         player2.addActionListener(listener);
         player3.addActionListener(listener);
@@ -79,5 +92,8 @@ public class CheckersPanel extends JPanel {
     }
     public String getNumberOfBoots () {
         return bootTextField.getText();
+    }
+    public String getNameOfSession () {
+        return nameOfSession.getText();
     }
 }
