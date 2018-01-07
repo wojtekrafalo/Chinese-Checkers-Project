@@ -1,9 +1,12 @@
 package client.controller;
 
 import client.model.Model;
+import client.model.ServerHandle;
 import client.view.FirstWindow;
 import client.view.View;
 import client.view.*;
+import common.model.connection.Command;
+import common.model.connection.Instruction;
 import common.model.game.Game;
 import common.model.game.Marble;
 import common.utils.Converter;
@@ -21,26 +24,34 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Controller {
     private View theView;
     private Model theModel;
+    private ServerHandle serverHandle;
+
     private String infoMessage = "This is Chinese Checkers Game\n" +
             "Add some instructions";
+
 //    public Controller(View theView, Model theModel) {
 //        this.theView = theView;
 //        this.theModel = theModel;
 //        this.theView.addListener(new MenuListener(), new SelectionListener(), new MouseListListener());
 //    }
-    public Controller() {
+    public Controller() throws IOException{
         System.out.println("theController created");
+
+        this.serverHandle = new ServerHandle("0.0.0.0", 5001);
+        this.serverHandle.setController(this);
+
         this.theView = new View();
         this.theView.addListener(new MenuListener(), new SelectionListener(), new MouseListListener());
     }
 
-    public void start() {
-
+    public void start(Model model) {
+        this.theModel = model;
     }
 
     public void addPlayer(String color, String ID) {
@@ -68,9 +79,11 @@ public class Controller {
             if (e.getSource().equals(first.getOK())) {
                 nick = first.getNickName();
                 System.out.println("\n"+nick);
-//                Server server = Server.getServer(5001);
+
                 theView.hideShow1();
-                theModel = new Model(nick, null);                               //also adding specific player, not only sending a String nick
+                theModel = new Model(nick, serverHandle);                               //also adding specific player, not only sending a String nick
+                serverHandle.setModel(theModel);
+                serverHandle.write(new Command(Instruction.NICK_INSERTED));
             }
 
             if (e.getSource().equals(newGame.getOK())) {                    //CREATE NEW GAME, send it to model
@@ -126,7 +139,7 @@ public class Controller {
         public void mouseClicked(MouseEvent e) {
             if (theView.getJoinGameWindow().getList() != null) {
                 int index = theView.getJoinGameWindow().getList().locationToIndex(e.getPoint());
-                System.out.println("Double clicked on Item " + index);
+                System.out.println("Clicked on Item " + index);
                 theView.getJoinGameWindow().setInfoAboutSession(index);
             }
         }

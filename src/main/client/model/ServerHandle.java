@@ -18,11 +18,17 @@ import java.util.List;
 
 public class ServerHandle extends Thread{
 
+    private static volatile ServerHandle serverHandle;
+
     private ObjectInputStream input;
 
     private ObjectOutputStream output;
 
     private Socket socket;
+
+    private static String host;
+
+    private static int port;
 
     private boolean isOnline;
 
@@ -40,11 +46,15 @@ public class ServerHandle extends Thread{
 
     private Controller controller;
 
-    ServerHandle(Socket socket, Model model, Controller controller) {
-//        this.clientID = Server.getNextClientID();
-        this.socket = socket;
-        this.model = model;
-        this.controller = controller;
+    public ServerHandle(String host, int port) throws IOException {
+        ServerHandle.host = host;
+        ServerHandle.port = port;
+
+        this.socket = new Socket(host, port);
+        System.out.println("next step");
+
+//        this.model = model;
+//        this.controller = controller;
         this.isOnline = true;
 
         System.out.println("Connection between Game and Server established.");
@@ -63,6 +73,32 @@ public class ServerHandle extends Thread{
                 System.out.println("(in listen thread) Lost connection with Server.");
             }
         }).start();
+    }
+
+    public void send(int port) throws IOException {
+        ServerHandle.setHost("0.0.0.0");
+        //Default port
+        ServerHandle.setPort(5001);
+
+        if (serverHandle == null) {
+            synchronized (ServerHandle.class) {
+                if (serverHandle == null) {
+                    ServerHandle.serverHandle = new ServerHandle(host,port);
+                }
+            }
+        }
+        this.write(new Command(Instruction.NICK_INSERTED));
+    }
+
+    public static ServerHandle getServerHandle() throws IOException {
+        ServerHandle.setHost("0.0.0.0");
+        //Default port
+        ServerHandle.setPort(5001);
+        //Singleton
+        if (serverHandle == null) {
+            serverHandle = new ServerHandle(host, port);
+        }
+        return serverHandle;
     }
 
     private void listen() throws IOException, ClassNotFoundException {
@@ -91,6 +127,7 @@ public class ServerHandle extends Thread{
 
                     case NICK_INSERTED:
                         this.model = new Model(command.getParameters().get(0), this);
+                        controller.start(this.model);
 
                         System.out.println("New nick added.");
 
@@ -99,7 +136,6 @@ public class ServerHandle extends Thread{
                         break;
 
                     case START_GAME:
-                        controller.start();
                         System.out.println("Game started");
                         break;
 
@@ -128,11 +164,27 @@ public class ServerHandle extends Thread{
         Thread.currentThread().interrupt();
     }
 
-    void write(Command command) {
+    public void write(Command command) {
         try {
             output.writeObject(command);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setModel(Model theModel) {
+        this.model = theModel;
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
+    public static void setHost (String host) {
+        ServerHandle.host = host;
+    }
+
+    public static void setPort (int port) {
+        ServerHandle.port = port;
     }
 }

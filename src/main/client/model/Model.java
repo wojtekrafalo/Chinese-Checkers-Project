@@ -7,7 +7,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-//dsafseasfcx
 public class Model {
     private List<Boot> listOfBoots = new ArrayList<>();
     private Game game;
@@ -27,7 +26,7 @@ public class Model {
         this.game = new Game(Integer.parseInt(nrPlayers), Integer.parseInt(size));
 
         while (numberOfBoots > 0) {
-            listOfBoots.add(new Boot(game, Color.randomColor()));
+//            listOfBoots.add(new Boot(game, Color.randomColor()));
         }
     }
 
