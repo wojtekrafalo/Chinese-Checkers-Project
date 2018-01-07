@@ -18,21 +18,27 @@ public class Session {
 
     private List<Client> players;
 
+    // private List<Boot> bots;
+
     private Game game;
+
+    private boolean started;
 
     private Color turn;
 
     private List<Color> colors;
+    private List<Color> colorsTemporary;
 
     Session(String name, String nrPlayers, Client host) {
         players = new ArrayList<>();
         this.name = name;
         this.nrPlayers = Integer.parseInt(nrPlayers);
         this.host = host;
+        this.started = false;
         players.add(host);
         setColors();
-
-        //host color = colors[0]
+        host.setColor(colors.get(0));
+        host.write(new Command(Instruction.CREATED));
     }
 
     private void setColors() {
@@ -64,6 +70,7 @@ public class Session {
             default:
                 host.write(new Command(Instruction.WRONG_NUM_OF_PLAYERS));
         }
+        this.colorsTemporary = colors;
     }
 
     String getSessionName() {
@@ -71,17 +78,24 @@ public class Session {
     }
 
     public void setTurn() {
-        //TODO set turn
+        int index = colors.indexOf(turn);
+        if (index == nrPlayers - 1) {
+            turn = colors.get(0);
+        }
+        else {
+            turn = colors.get(index + 1);
+        }
     }
 
     void join(Client client) {
         if (this.players.size() < this.nrPlayers) {
             List<Client> receivers = this.players;
             this.players.add(client);
+            client.setColor(colors.get(players.size() - 1));
             for (Client receiver : receivers) {
-                receiver.write(new Command(Instruction.PLAYER_JOINED)); //color[size - 1]
+                receiver.write(new Command(Instruction.PLAYER_JOINED));
             }
-            client.write(new Command(Instruction.JOINED)); //color[size - 1]
+            client.write(new Command(Instruction.JOINED));
             if (this.players.size() == this.nrPlayers) {
               start();
             }
@@ -93,11 +107,30 @@ public class Session {
     }
 
     void leave(Client client){
+        if (client == host){
+            players.remove(client);
+            host = players.get(0);
+            if(started){
+                //remove marbles, delete color
+
+            }
+            else{
+                colors.remove(client.getColor());
+                //return color to available list
+            }
+            for (Client clients : players) {
+                clients.write(new Command(Instruction.HOST_LEAVE));
+            }
+        }
+        // todo client isnt host same as host, but without changing host
 
     }
 
     private void start() {
         this.game = new Game(nrPlayers,17);
+        this.started = true;
+        turn = Color.randomColor(colors);
+        game.setTurn(turn);
         for (Client receiver : players) {
             receiver.write(new Command(Instruction.START_GAME));
         }
@@ -108,6 +141,13 @@ public class Session {
             if(game.canMove(prevX,prevY,nextX,nextY,movingPlayer.getColor())) {
                 game.makeMove(prevX,prevY,nextX,nextY, movingPlayer.getColor());
                 setTurn();
+                game.setTurn(turn);
+                for (Client client : players) {
+                    client.write(new Command(Instruction.MOVE_MADE));
+                }
+            }
+            else if (game.canJump(prevX,prevY,nextX,nextY,movingPlayer.getColor())) {
+                game.makeMove(prevX,prevY,nextX,nextY, movingPlayer.getColor());
                 for (Client client : players) {
                     client.write(new Command(Instruction.MOVE_MADE));
                 }
@@ -119,7 +159,11 @@ public class Session {
     }
 
     void pass(Client client) {
-
+        setTurn();
+        game.setTurn(turn);
+        for (Client clients : players) {
+            clients.write(new Command(Instruction.PASS));
+        }
     }
 
     Client getHost() {

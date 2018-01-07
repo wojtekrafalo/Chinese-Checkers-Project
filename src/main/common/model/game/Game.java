@@ -439,8 +439,8 @@ public class Game {
         return turn;
     }
 
-    public Color setTurn() {
-        return turn;
+    public void setTurn(Color turn) {
+        this.turn = turn;
     }
 
     public Marble getExtremePoint (Color color) {

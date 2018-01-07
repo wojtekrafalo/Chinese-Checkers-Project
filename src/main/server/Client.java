@@ -61,6 +61,9 @@ class Client extends Thread {
             } else {
 
                 switch (command.getName()) {
+                    case NICK_INSERTED:
+                        nickname = command.getParameters().get(0);
+                        break;
 
                     case CREATE_GAME:
                         if (this.session != null) {
@@ -109,7 +112,8 @@ class Client extends Thread {
                         break;
 
                     case LEAVE_GAME:
-                        //TODO leaving game, delete marbles, etc
+                        this.session.leave(this);
+                        this.write(new Command(Instruction.LEAVED));
                         break;
 
                     case MAKE_MOVE:
@@ -118,7 +122,6 @@ class Client extends Thread {
                                 Integer.parseInt(command.getParameters().get(1)),
                                 Integer.parseInt(command.getParameters().get(2)),
                                 Integer.parseInt(command.getParameters().get(3)),
-                                //Converter.parseColor(command.getParameters().get(4)),
                                 this
                         );
                         break;
@@ -166,6 +169,10 @@ class Client extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public Color getColor() {

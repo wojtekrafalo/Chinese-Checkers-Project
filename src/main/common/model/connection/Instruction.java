@@ -18,7 +18,7 @@ public enum Instruction {
 
     MAKE_MOVE(6),
 
-    LEAVE_GAME(),
+    LEAVE_GAME(2),
 
     PLAYER_JOINED(),
 
@@ -46,11 +46,11 @@ public enum Instruction {
 
     WRONG_NUM_OF_PARAMS(0),
 
-    WRONG_NUM_OF_PLAYERS(0);
+    WRONG_NUM_OF_PLAYERS(0),
 
+    LEAVED(0),
 
-
-
+    HOST_LEAVE(1);
 
     private int nrParams;
 
