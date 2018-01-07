@@ -50,7 +50,15 @@ public enum Instruction {
 
     LEAVED(0),
 
-    HOST_LEAVE(1);
+    HOST_LEAVED(1),
+
+    WIN(),
+
+    PLAYER_LEAVED(),
+
+    HOST_LEAVED_IN_GAME(1),
+
+    PLAYER_LEAVED_IN_GAME(1);
 
     private int nrParams;
 

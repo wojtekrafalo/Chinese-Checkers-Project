@@ -21,6 +21,8 @@ public class Game {
      */
     private int nrPlayers;
 
+    private int size;
+
     /**
      * Widths of each row
      */
@@ -43,6 +45,7 @@ public class Game {
     public Game(final int nrPlayers, final int size) {
         this.board = new Marble[size][size];
         this.nrPlayers = nrPlayers;
+        this.size = size;
 
         for (int i = 0; i < size; i++) {
             for (int j = i; j < size; j++) {
@@ -55,16 +58,16 @@ public class Game {
                 }
             }
         }
-        setNeighbours(size);
-        setJumps(size);
+        setNeighbours();
+        setJumps();
         setTerritories();
         setMarbles();
     }
 
     /**
-     * @param size Size of the board
+     *
      */
-    private void setNeighbours(int size) {
+    private void setNeighbours() {
         for (int i = 0; i < size; i++){
             for (int j = i; j < size; j++){
                 if (j == i) {
@@ -132,9 +135,9 @@ public class Game {
     }
 
     /**
-     * @param size Size of the board
+     *
      */
-    private void setJumps(int size) {
+    private void setJumps() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (board[i][j] != null) {
@@ -430,6 +433,23 @@ public class Game {
      */
     public Marble[][] getBoard() {
         return board;
+    }
+
+    public void deleteMarbles(Color color){
+        for (int i = 0; i < size; i ++){
+            for ( int j = 0; j < size; j++){
+                if(board[i][j] != null){
+                    if(board[i][j].getColor() == color){
+                        board[i][j].setColor(Color.NONE);
+                    }
+                }
+            }
+        }
+
+    }
+
+    public boolean isWinner(Color color){
+        return true;
     }
 
     /**

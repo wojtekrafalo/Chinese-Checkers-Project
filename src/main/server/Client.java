@@ -99,7 +99,6 @@ class Client extends Thread {
                                     exists = true;
                                     this.write(new Command(Instruction.JOINED));
                                 }
-
                             }
                         }
                         if (!exists) {

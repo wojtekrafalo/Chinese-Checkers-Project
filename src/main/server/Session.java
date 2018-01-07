@@ -2,11 +2,14 @@ package server;
 
 import common.model.connection.Command;
 import common.model.connection.Instruction;
+import common.model.game.Boot;
 import common.model.game.Color;
 import common.model.game.Game;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static sun.jvm.hotspot.runtime.PerfMemory.start;
 
 public class Session {
 
@@ -18,7 +21,7 @@ public class Session {
 
     private List<Client> players;
 
-    // private List<Boot> bots;
+    private List<Boot> bots;
 
     private Game game;
 
@@ -110,20 +113,64 @@ public class Session {
         if (client == host){
             players.remove(client);
             host = players.get(0);
-            if(started){
-                //remove marbles, delete color
+            if (!started) {
+                if(players.isEmpty()){
+                    Server.getSessionsList().remove(this);
+                    for(Boot boot: bots){
+                        bots.remove(boot);
+                        boot = null;
+                    }
+                }else {
+                    colorsTemporary.remove(client.getColor());
+                    colorsTemporary.add(client.getColor());
+                    for (Client clients : players) {
+                        clients.write(new Command(Instruction.HOST_LEAVED));
+                    }
+                }
+            } else {
+                if(bots.size() + players.size() == 1){
+                    for(Client client1 : players){
+                        client1.write(new Command(Instruction.WIN));
+                    }
+                    endGame();
 
-            }
-            else{
-                colors.remove(client.getColor());
-                //return color to available list
-            }
-            for (Client clients : players) {
-                clients.write(new Command(Instruction.HOST_LEAVE));
+                }else if(players.isEmpty()){
+                    for(Boot boot: bots){
+                        boot = null;
+                    }
+                    endGame();
+                }else {
+                    if(turn==client.getColor()){
+                        setTurn();
+                    }
+                    game.deleteMarbles(client.getColor());
+                    colors.remove(client.getColor());
+                    for (Client clients : players) {
+                        clients.write(new Command(Instruction.HOST_LEAVED_IN_GAME));
+                    }
+                }
             }
         }
-        // todo client isnt host same as host, but without changing host
-
+        else {
+            players.remove(client);
+            if(started){
+                if(turn==client.getColor()){
+                    setTurn();
+                }
+                game.deleteMarbles(client.getColor());
+                colors.remove(client.getColor());
+                for (Client clients : players) {
+                    clients.write(new Command(Instruction.PLAYER_LEAVED_IN_GAME));
+                }
+            }
+            else{
+                colorsTemporary.remove(client.getColor());
+                colorsTemporary.add(client.getColor());
+                for (Client clients : players) {
+                    clients.write(new Command(Instruction.PLAYER_LEAVED));
+                }
+            }
+        }
     }
 
     private void start() {
@@ -166,8 +213,16 @@ public class Session {
         }
     }
 
+    private void endGame() {
+
+    }
+
     Client getHost() {
         return host;
+    }
+
+    public Color getTurn() {
+        return turn;
     }
 
     public int getNrPlayers() {
