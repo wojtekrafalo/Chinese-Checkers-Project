@@ -102,6 +102,7 @@ public class ServerHandle extends Thread{
     }
 
     private void listen() throws IOException, ClassNotFoundException {
+        System.out.println("listen().");
         while (isOnline) {
             Command command = (Command) input.readObject();
             System.out.println(command.getName().toString() +
@@ -120,6 +121,8 @@ public class ServerHandle extends Thread{
                                 command.getParameters().get(1),
                                 command.getParameters().get(2)
                         );
+
+                        controller.createGameView();
 
                         System.out.println("New game created");
                         write(new Command(Instruction.START_GAME));

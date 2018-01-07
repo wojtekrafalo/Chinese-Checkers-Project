@@ -30,6 +30,7 @@ public class JoinGameWindow extends JFrame {
     private Menu menu1 = new Menu("Menu");
     private MenuItem menuInfo = new MenuItem("INFO"), menuNew=new MenuItem("CREATE A NEW GAME"), menuExit=new MenuItem("EXIT");
 
+    private int chosenSession=0;
     private String[] data = {"session", "host1", "3", "3", "172.168.0.0", "session2", "host2", "32", "32", "172.168.0.02", "session3", "host3", "33", "33", "172.168.0.03", };
 
     JoinGameWindow(){
@@ -87,6 +88,7 @@ public class JoinGameWindow extends JFrame {
         JOptionPane.showMessageDialog(this, errorMessage);
     }
     //it can be used for example, when there is not any more places in chosen game
+
     public JPanel getRightPanel () {
         return rightPanel;
     }
@@ -111,6 +113,7 @@ public class JoinGameWindow extends JFrame {
         infoAboutPlayers.setText("Number of players:          " + data[i*5 + 2]);
         infoAboutHumans.setText("Number of Humans:        " + data[i*5 + 3]);
         infoAboutID.setText("Host's ID:                            " + data[i*5 + 4]);
+        chosenSession = i;
     }
 
     public void setData (ArrayList<String> data) {
@@ -138,9 +141,14 @@ public class JoinGameWindow extends JFrame {
         this.list.setListData(displayData);
     }
 
-//    public Session getSelectedGame() {                          //send selected field of List
-//        return new Session();
-//    }
+    public int getSelectedNumber() {                          //send selected field of List
+        return chosenSession;
+    }
+
+    public String[] getData() {                          //send selected field of List
+        return data;
+    }
+
     public void displayInfo(){
         JOptionPane.showMessageDialog(this, infoMessage);
     }

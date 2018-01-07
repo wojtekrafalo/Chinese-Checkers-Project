@@ -43,9 +43,6 @@ public class Controller {
     public Controller() throws IOException{
         System.out.println("theController created");
 
-        this.serverHandle = new ServerHandle("0.0.0.0", 5001);
-        this.serverHandle.setController(this);
-
         this.theView = new View();
         this.theView.addListener(new MenuListener(), new SelectionListener(), new MouseListListener());
     }
@@ -82,34 +79,43 @@ public class Controller {
 
                 theView.hideShow1();
                 theModel = new Model(nick, serverHandle);                               //also adding specific player, not only sending a String nick
-                serverHandle.setModel(theModel);
-                serverHandle.write(new Command(Instruction.NICK_INSERTED));
+
+                try {
+                    initializeServerHandler();
+                } catch (IOException ex) {}
             }
 
             if (e.getSource().equals(newGame.getOK())) {                    //CREATE NEW GAME, send it to model
-                int numberOfPlayers = 2, numberOfBoots = 0;
+                int numberOfPlayers = 2, numberOfBoots;
+
                 if (newGame.getRightPanel().getPlayer2().isSelected()) numberOfPlayers = 2;
                 else if (newGame.getRightPanel().getPlayer3().isSelected()) numberOfPlayers = 3;
                 else if (newGame.getRightPanel().getPlayer4().isSelected()) numberOfPlayers = 4;
                 else if (newGame.getRightPanel().getPlayer6().isSelected()) numberOfPlayers = 6;
+
                 try {
                     numberOfBoots = Integer.parseInt(newGame.getRightPanel().getNumberOfBoots());
                     if (numberOfBoots <= numberOfPlayers) {
-//                        theModel.createNewGame(numberOfPlayers, numberOfBoots);
-                        theView.initializeGameWindow(theModel.getGame());
-                        theView.addGameWindowListener(new MenuGameWindowListener(), new MouseListener(), theModel.getGame());
-                        theView.hideShow2();
+                        serverHandle.write(new Command(Instruction.CREATE_GAME));
                     }
                     else theView.getNewGameWindow().displayErrorMessage();
                 } catch (NumberFormatException exe) {
                     theView.getNewGameWindow().displayErrorMessage();
                 }
             }
-//            if (e.getSource().equals(joinGame.getOK())) {                    //JOIN TO NEW GAME, send it to model
-//                Session chosen = joinGame.getSelectedGame();
-//                theView.hideShow2();
+
+            if (e.getSource().equals(joinGame.getOK())) {                    //JOIN TO NEW GAME, send it to model
+                int selected = joinGame.getSelectedNumber();
+                String[] data = joinGame.getData();
+                String[] sessionData = new String[5];
+                for (int i=0; i<5; i++) {
+                    sessionData[i] = data[selected*5 + i];
+                }
+                theView.hideShow2();
+
+                serverHandle.write(new Command(Instruction.SESSION_CHOSEN));
 //                theModel.joinToGame(chosen);
-//            }
+            }
 
             if (e.getSource().equals(newGame.getMenuJoin()) || e.getSource().equals(joinGame.getMenuNew())) {
                 theView.hideShowChange();
@@ -121,6 +127,18 @@ public class Controller {
                 joinGame.displayInfo();
             }
         }
+    }
+
+    public void createGameView() {
+        theView.initializeGameWindow(theModel.getGame());
+        theView.addGameWindowListener(new MenuGameWindowListener(), new MouseListener(), theModel.getGame());
+        theView.hideShow2();
+    }
+    private void initializeServerHandler() throws IOException{
+        serverHandle = new ServerHandle("0.0.0.0", 5001);
+        serverHandle.setController(this);
+        serverHandle.setModel(theModel);
+        serverHandle.write(new Command(Instruction.NICK_INSERTED));
     }
 
     class SelectionListener implements ListSelectionListener{
