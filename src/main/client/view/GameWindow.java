@@ -1,6 +1,7 @@
 package client.view;
 
 import common.model.game.Game;
+import common.model.game.LocalSession;
 import sun.awt.Graphics2Delegate;
 
 import javax.swing.*;
@@ -10,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class GameWindow extends JFrame {
+    private static int WIDTH = 600, HEIGHT = 600;
     private static String infoMessage = "INFO\n" +
             "INFO";
 
@@ -18,10 +20,8 @@ public class GameWindow extends JFrame {
     private MenuBar myMenu = new MenuBar();
     private Menu menu1 = new Menu("Menu");
     private MenuItem menuInfo = new MenuItem("INFO"), menuReset=new MenuItem("RESET"), menuSurrender=new MenuItem("SURRENDER");
-    public GameWindow () {
-    }
 
-    GameWindow (int WIDTH, int HEIGHT, Game game) {
+    public GameWindow () {
         super("Chinese_Checkers");
         menu1.add(menuInfo);
         menu1.addSeparator();
@@ -34,13 +34,15 @@ public class GameWindow extends JFrame {
 //        setResizable(false);
         setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gamePanel = new GamePanel(WIDTH, HEIGHT, game, 4);
-        gamePanel.setBounds(new Rectangle(60,60,WIDTH,HEIGHT));
         this.setBounds(60,60,WIDTH,HEIGHT);
-        add(gamePanel);
         pack();
     }
 
+    public void setLocalSession (Game localSession) {
+        gamePanel = new GamePanel(WIDTH, HEIGHT, localSession, 4);
+        gamePanel.setBounds(new Rectangle(60,60,WIDTH,HEIGHT));
+        add(gamePanel);
+    }
 
     public void addListener(ActionListener actionListener, MouseInputListener mouseListener) {
         menuInfo.addActionListener(actionListener);

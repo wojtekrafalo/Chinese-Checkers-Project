@@ -8,6 +8,7 @@ import client.view.*;
 import common.model.connection.Command;
 import common.model.connection.Instruction;
 import common.model.game.Game;
+import common.model.game.LocalSession;
 import common.model.game.Marble;
 import common.utils.Converter;
 import javafx.fxml.FXML;
@@ -30,16 +31,12 @@ import java.util.ArrayList;
 public class Controller {
     private View theView;
     private Model theModel;
+    private LocalSession localSession;
     private ServerHandle serverHandle;
 
     private String infoMessage = "This is Chinese Checkers Game\n" +
             "Add some instructions";
 
-//    public Controller(View theView, Model theModel) {
-//        this.theView = theView;
-//        this.theModel = theModel;
-//        this.theView.addListener(new MenuListener(), new SelectionListener(), new MouseListListener());
-//    }
     public Controller() throws IOException{
         System.out.println("theController created");
 
@@ -51,8 +48,8 @@ public class Controller {
         this.theModel = model;
     }
 
-    public void addPlayer(String color, String ID) {
-//        theModel.setPlayer(Converter.parseColor(color));
+    public void addPlayer(String nick, String color, String ID) {
+//        localSession.addPlayer(Converter.parseColor(color));
     }
 
     class MenuGameWindowListener implements ActionListener {
@@ -79,17 +76,18 @@ public class Controller {
                 System.out.println("\n"+nick);
 
                 theView.hideShow1();
-                theModel = new Model(nick, serverHandle);                               //also adding specific player, not only sending a String nick
 
                 try {
                     initializeServerHandler(nick);
                 } catch (IOException ex) {}
+
+                theModel = new Model(nick, serverHandle);
             }
 
             if (e.getSource().equals(newGame.getOK())) {                    //CREATE NEW GAME, send it to model
                 int numberOfPlayers = 2, numberOfBoots;
 
-                if (newGame.getRightPanel().getPlayer2().isSelected()) numberOfPlayers = 2;
+                     if (newGame.getRightPanel().getPlayer2().isSelected()) numberOfPlayers = 2;
                 else if (newGame.getRightPanel().getPlayer3().isSelected()) numberOfPlayers = 3;
                 else if (newGame.getRightPanel().getPlayer4().isSelected()) numberOfPlayers = 4;
                 else if (newGame.getRightPanel().getPlayer6().isSelected()) numberOfPlayers = 6;
@@ -97,7 +95,13 @@ public class Controller {
                 try {
                     numberOfBoots = Integer.parseInt(newGame.getRightPanel().getNumberOfBoots());
                     if (numberOfBoots <= numberOfPlayers) {
-                        serverHandle.write(new Command(Instruction.CREATE_GAME), newGame.getRightPanel().getNameOfSession(), Integer.toString(numberOfPlayers));
+                        serverHandle.write(new Command(
+                                Instruction.CREATE_GAME,
+                                newGame.getRightPanel().getNameOfSession(),
+                                String.valueOf(numberOfPlayers),
+                                String.valueOf(numberOfBoots)
+                        ));
+
                     }
                     else theView.getNewGameWindow().displayErrorMessage();
                 } catch (NumberFormatException exe) {
@@ -114,8 +118,7 @@ public class Controller {
                 }
                 theView.hideShow2();
 
-                serverHandle.write(new Command(Instruction.SESSION_CHOSEN));
-//                theModel.joinToGame(chosen);
+                serverHandle.write(new Command(Instruction.SESSION_CHOSEN, sessionData));
             }
 
 
@@ -138,13 +141,18 @@ public class Controller {
     }
 
     private void initializeServerHandler(String nick) throws IOException{
+        System.out.println("iNItialization of serverHadler");
         serverHandle = new ServerHandle("0.0.0.0", 5001);
         serverHandle.setController(this);
         serverHandle.setModel(theModel);
-        serverHandle.write(new Command(Instruction.NICK_INSERTED, nick));
+        serverHandle.send(new Command(Instruction.NICK_INSERTED, nick));
     }
 
-    class SelectionListener implements ListSelectionListener{
+    public void setLocalSession (LocalSession localSession) {
+        this.localSession = localSession;
+    }
+
+    class SelectionListener implements ListSelectionListener{                   //probably unnecessary
 
         @Override
         public void valueChanged(ListSelectionEvent e) {

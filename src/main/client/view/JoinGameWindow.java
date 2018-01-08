@@ -36,7 +36,6 @@ public class JoinGameWindow extends JFrame {
     JoinGameWindow(){
         super("Join to existing Game");
 
-        System.out.println("JoinGameWindow created");
         list = new JList();
         setData(data);
 
@@ -73,6 +72,7 @@ public class JoinGameWindow extends JFrame {
         this.setSize(WIDTH, HEIGHT);
 
         this.add(splitPane);
+        System.out.println("JoinGameWindow created");
     }
 
     void addListener(ActionListener listener, ListSelectionListener listListener, MouseInputListener mouseInputListener){

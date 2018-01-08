@@ -1,6 +1,7 @@
 package client.view;
 
 import common.model.game.Game;
+import common.model.game.LocalSession;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -27,14 +28,22 @@ public class View {
         newGameWindow = new NewGameWindow();
         joinGameWindow = new JoinGameWindow();
         firstWindow.setVisible(true);
-    }
-    public View(Game game) {
-        firstWindow.setVisible(true);
-        gameWindow   = new GameWindow(DEF_WIDTH, DEF_HEIGHT, game);
+        gameWindow = new GameWindow();
     }
 
+//    public View(Game game) {
+//        firstWindow.setVisible(true);
+//        gameWindow   = new GameWindow(DEF_WIDTH, DEF_HEIGHT, game);
+//    }
+
     public void initializeGameWindow (Game game) {
-        gameWindow = new GameWindow(DEF_WIDTH, DEF_HEIGHT, game);
+        gameWindow = new GameWindow();
+        gameWindow.setLocalSession(game);
+    }
+
+    public void initializeGameWindow (LocalSession localSession) {
+//        gameWindow = new GameWindow(DEF_WIDTH, DEF_HEIGHT, localSession);
+//        gameWindow.setLocalSession(localSession);
     }
 
     public void addListener(ActionListener listener, ListSelectionListener listListener, MouseInputListener mouseListener){

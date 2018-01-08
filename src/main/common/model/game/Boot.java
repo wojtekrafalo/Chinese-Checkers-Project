@@ -1,14 +1,18 @@
 package common.model.game;
 
+import server.Session;
+
 import java.util.ArrayList;
 import java.awt.Point;
 
 import static java.awt.geom.Point2D.distance;
 
 
-public class Boot {
+public class Boot extends Thread{
     private Game game;
     private Color color;
+    private boolean started = false;
+    private Session session;
     private Marble[] listOfMarbles = new Marble[10];
     private double[][] distance = new double[10][6];
 
@@ -18,7 +22,25 @@ public class Boot {
 //        for (int i=0; i<10; i++) System.out.println((listOfMarbles[i]!=null) + " " + listOfMarbles[i].getX() + " " + listOfMarbles[i].getY());
     }
 
+    public Boot (Game game, Session session) {
+        this.game = game;
+        this.session = session;
+//        for (int i=0; i<10; i++) System.out.println((listOfMarbles[i]!=null) + " " + listOfMarbles[i].getX() + " " + listOfMarbles[i].getY());
+    }
+
     public Boot() {
+    }
+
+    public void run() {
+        while (true) {
+            if (session.getTurn() == color)
+                makeMove();
+            else try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public boolean makeMove () {
@@ -74,29 +96,51 @@ public class Boot {
         boolean isMadeMove = false;
         int i=0, helpPrevX, helpPrevY;
         Marble marble;
-        while (!isMadeMove && i < 10) {
+        while (i < 10) {
             marble = listOfMarbles[i];
             helpPrevX = marble.getX();
             helpPrevY = marble.getY();
 
-            game.makeMove(helpPrevX,
-                          helpPrevY,
+            if (game.canMove(helpPrevX,
+                    helpPrevY,
                     helpPrevX + tabMove[whichMove[i]][0],
                     helpPrevY + tabMove[whichMove[i]][1],
-                          color);
+                    color))
+                game.makeMove(helpPrevX,
+                        helpPrevY,
+                        helpPrevX + tabMove[whichMove[i]][0],
+                        helpPrevY + tabMove[whichMove[i]][1],
+                        color);
             isMadeMove = (game.getBoard()[helpPrevX][helpPrevY].getColor() == Color.NONE && game.getBoard()[helpPrevX + tabMove[whichMove[i]][0]][helpPrevY + tabMove[whichMove[i]][1]].getColor() != Color.NONE);
             i++;
+            if (isMadeMove) break;
         }
+        if (!isMadeMove) {
+            i=0;
+            while (i < 10) {
+                marble = listOfMarbles[i];
+                helpPrevX = marble.getX();
+                helpPrevY = marble.getY();
 
-//        for (int k=0;k<17;k++) {
-//            for (int l=0;l<17;l++) {
-//                if (game.getBoard()[k][l] != null)
-//                System.out.print(game.getBoard()[k][l].getColor() + " ");
-//                else System.out.print("null ");
-//            }
-//            System.out.println("");
-//        }
+                for (int j=0; j<6; j++) {
+                    if (game.canMove(helpPrevX,
+                            helpPrevY,
+                            helpPrevX + tabMove[j][0],
+                            helpPrevY + tabMove[j][1],
+                            color))
+                    game.makeMove(helpPrevX,
+                            helpPrevY,
+                            helpPrevX + tabMove[j][0],
+                            helpPrevY + tabMove[j][1],
+                            color);
+                    isMadeMove = (game.getBoard()[helpPrevX][helpPrevY].getColor() == Color.NONE && game.getBoard()[helpPrevX + tabMove[j][0]][helpPrevY + tabMove[j][1]].getColor() != Color.NONE);
+                    if (isMadeMove) break;
+                }
 
+                i++;
+                if (isMadeMove) break;
+            }
+        }
         return isMadeMove;
     }
 

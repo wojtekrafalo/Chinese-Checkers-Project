@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 public class ClientClass {
     public static void main(String[] args) {
+        int pa = 8;
+        Integer integ = new Integer(pa);
+        System.out.println(integ);
         Controller theController;
         try {
             theController = new Controller();

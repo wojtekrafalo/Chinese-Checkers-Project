@@ -16,13 +16,14 @@ public class CheckersPanel extends JPanel {
     private JLabel titleLabel2 = new JLabel("Give a number of boots");
     private JLabel playerLabel = new JLabel();
     private JLabel bootLabel = new JLabel();
-    private JLabel sessionLabel = new JLabel();
+    private JLabel sessionLabel = new JLabel("Insert name of your game");
 
     private JTextField bootTextField = new JTextField("0");
     private JTextField nameOfSession = new JTextField("");
 
     CheckersPanel() {
 //        this.setLayout(new GridLayout(5,0));
+
         this.setLayout(null);
 
         titleLabel1.setBounds(0, 0,200,50);
@@ -32,9 +33,9 @@ public class CheckersPanel extends JPanel {
         player4.setBounds(WIDTH/6, HEIGHT/6 + 150,150,50);
         player6.setBounds(WIDTH/6, HEIGHT/6 + 200,150,50);
         bootTextField.setBounds((int)(WIDTH/2) - 50, (int)(HEIGHT/6 + 60), 100, 30);
-        sessionLabel.setBounds((int)(WIDTH/6), (int)(HEIGHT/6 + 250), 70,50);
-        nameOfSession.setBounds((int)(WIDTH/6) + 70, (int)(HEIGHT/6 + 250), 70,50);
-        OK.setBounds((int)(WIDTH/6), (int)(HEIGHT/6 + 300), 70,50);
+        sessionLabel.setBounds((int)(WIDTH/6)-50, (int)(HEIGHT/6 + 250), 150,30);
+        nameOfSession.setBounds((int)(WIDTH/2) - 50, (int)(HEIGHT/6 + 250), 100,30);
+        OK.setBounds((int)(WIDTH/6), (int)(HEIGHT/6 + 290), 70,50);
         player2.setSelected(true);
 
         group = new ButtonGroup();
@@ -65,6 +66,7 @@ public class CheckersPanel extends JPanel {
         this.add(bootTextField);
         this.add(sessionLabel);
         this.add(nameOfSession);
+        System.out.println("CheckersPanel created");
     }
 
     public void addActionListener(ActionListener listener) {

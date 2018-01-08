@@ -19,7 +19,6 @@ public class NewGameWindow extends JFrame {
 
     NewGameWindow () {
         super("Create New Game");
-        System.out.println("NewGameWindow created");
         menu1.add(menuInfo);
         menu1.addSeparator();
         menu1.add(menuJoin);
@@ -31,6 +30,7 @@ public class NewGameWindow extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(WIDTH, HEIGHT);
         this.add(rightPanel);
+        System.out.println("NewGameWindow created");
     }
 
     void addListener(ActionListener listener){

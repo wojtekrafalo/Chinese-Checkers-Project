@@ -4,6 +4,7 @@ package client.model;
 import client.controller.Controller;
 import common.model.connection.Command;
 import common.model.connection.Instruction;
+import common.model.game.LocalSession;
 import common.utils.Converter;
 import server.Server;
 import server.Session;
@@ -28,6 +29,10 @@ public class ServerHandle extends Thread{
 
     private static String host;
 
+    private String nick;
+
+    private int id = 9;
+
     private static int port;
 
     private boolean isOnline;
@@ -43,6 +48,8 @@ public class ServerHandle extends Thread{
     private Thread listeningThread;
 
     private Model model;
+
+    private LocalSession localSession;
 
     private Controller controller;
 
@@ -78,7 +85,7 @@ public class ServerHandle extends Thread{
         }).start();
     }
 
-    public void send(int port) throws IOException {
+    public void send(Command command) throws IOException {
         ServerHandle.setHost("0.0.0.0");
         //Default port
         ServerHandle.setPort(5001);
@@ -90,7 +97,7 @@ public class ServerHandle extends Thread{
                 }
             }
         }
-        this.write(new Command(Instruction.NICK_INSERTED));
+        this.write(command);
     }
 
     public static ServerHandle getServerHandle() throws IOException {
@@ -126,20 +133,21 @@ public class ServerHandle extends Thread{
                         );
 
                         controller.createGameView();
+                        LocalSession localSession = new LocalSession(command.getParameters().get(0), command.getParameters().get(1), command.getParameters().get(2), command.getParameters().get(3), nick, id);
 
                         System.out.println("New game created");
                         write(new Command(Instruction.START_GAME));
                         break;
 
-
                     case NICK_INSERTED:
                         this.model = new Model(command.getParameters().get(0), this);
                         controller.start(this.model);
 
+                        nick = command.getParameters().get(0);
                         System.out.println("New nick added.");
 
                         write(new Command(Instruction.NICK_ADD));
-                        write(new Command(Instruction.START_GAME));
+//                        write(new Command(Instruction.START_GAME));
                         break;
 
                     case START_GAME:
@@ -152,7 +160,7 @@ public class ServerHandle extends Thread{
                         break;
 
                     case JOINED:
-                        controller.addPlayer(command.getParameters().get(0), command.getParameters().get(1));
+                        controller.addPlayer(command.getParameters().get(0), command.getParameters().get(1), command.getParameters().get(2));
                         break;
 
                     case SEND_SESSIONS:
@@ -181,6 +189,10 @@ public class ServerHandle extends Thread{
 
     public void setModel(Model theModel) {
         this.model = theModel;
+    }
+
+    public void setLocalSession(LocalSession localSession) {
+        this.localSession = localSession;
     }
 
     public void setController(Controller controller) {
