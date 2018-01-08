@@ -60,14 +60,17 @@ public class ServerHandle extends Thread{
         System.out.println("Connection between Game and Server established.");
 
         try {
-            input = new ObjectInputStream(this.socket.getInputStream());
+            System.out.println("Connection .");
             output = new ObjectOutputStream(this.socket.getOutputStream());
+            System.out.println("Connection .c2");
+            input = new ObjectInputStream(this.socket.getInputStream());
         } catch (IOException e) {
             System.out.println("Lost connection with Server.");
             Thread.currentThread().interrupt();
         }
         new Thread(() -> {
             try {
+                System.out.println("Connection between  established.");
                 listen();
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("(in listen thread) Lost connection with Server.");
