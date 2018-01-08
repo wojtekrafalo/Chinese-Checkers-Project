@@ -18,9 +18,11 @@ public class Session {
 
     private int nrPlayers;
 
+    private int nrBoots;
+
     private List<Client> players;
 
-    private List<Boot> bots;
+    private List<Boot> boots;
 
     private Game game;
 
@@ -31,16 +33,22 @@ public class Session {
     private List<Color> colors;
     private List<Color> colorsTemporary;
 
-    Session(String name, String nrPlayers, Client host) {
+    Session(String name, String nrPlayers, String nrBoots, Client host) {
         players = new ArrayList<>();
+        boots = new ArrayList<>();
         this.name = name;
         this.nrPlayers = Integer.parseInt(nrPlayers);
+        this.nrBoots = Integer.parseInt(nrBoots);
         this.host = host;
         this.started = false;
         players.add(host);
         setColors();
         host.setColor(colors.get(0));
-        host.write(new Command(Instruction.CREATED));
+        host.write(new Command(Instruction.CREATED,name,nrPlayers,nrBoots,String.valueOf(host.getColor())));
+        System.out.println("New session created");
+        if((players.size() + this.nrBoots) == this.nrPlayers){
+            this.start();
+        }
     }
 
     private void setColors() {
@@ -90,7 +98,7 @@ public class Session {
     }
 
     void join(Client client) {
-        if (this.players.size() < this.nrPlayers) {
+        if (this.players.size() + nrBoots < this.nrPlayers) {
             List<Client> receivers = this.players;
             this.players.add(client);
             client.setColor(colors.get(players.size() - 1));
@@ -98,7 +106,7 @@ public class Session {
                 receiver.write(new Command(Instruction.PLAYER_JOINED));
             }
             client.write(new Command(Instruction.JOINED));
-            if (this.players.size() == this.nrPlayers) {
+            if (this.players.size() + nrBoots == this.nrPlayers) {
               start();
             }
         }
@@ -115,8 +123,8 @@ public class Session {
             if (!started) {
                 if(players.isEmpty()){
                     Server.getSessionsList().remove(this);
-                    for(Boot boot: bots){
-                        bots.remove(boot);
+                    for(Boot boot: boots){
+                        boots.remove(boot);
                         boot = null;
                     }
                 }else {
@@ -127,14 +135,15 @@ public class Session {
                     }
                 }
             } else {
-                if(bots.size() + players.size() == 1){
+                if(boots.size() + players.size() == 1){
                     for(Client client1 : players){
                         client1.write(new Command(Instruction.WIN));
                     }
                     endGame();
 
                 }else if(players.isEmpty()){
-                    for(Boot boot: bots){
+                    for(Boot boot: boots){
+                        boots.remove(boot);
                         boot = null;
                     }
                     endGame();
@@ -177,9 +186,14 @@ public class Session {
         this.started = true;
         turn = Color.randomColor(colors);
         game.setTurn(turn);
+        for ( int i = 0 ; i < nrBoots; i++){
+            Boot boot = new Boot(this.game, colors.get(players.size() + i));
+            boots.add(boot);
+        }
         for (Client receiver : players) {
             receiver.write(new Command(Instruction.START_GAME));
         }
+        System.out.println("Session: " + name + " - Game Started , Turn: " + turn);
     }
 
     void move(int prevX, int prevY, int nextX, int nextY,Client movingPlayer) {

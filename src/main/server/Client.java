@@ -63,6 +63,7 @@ class Client extends Thread {
                 switch (command.getName()) {
                     case NICK_INSERTED:
                         nickname = command.getParameters().get(0);
+                        write(new Command(Instruction.NICK_INSERTED,String.valueOf(clientID)));
                         break;
 
                     case CREATE_GAME:
@@ -80,11 +81,10 @@ class Client extends Thread {
                         this.session = new Session(
                                 command.getParameters().get(0),
                                 command.getParameters().get(1),
+                                command.getParameters().get(2),
                                 this
                         );
                         Server.getSessionsList().add(this.session);
-                        write(new Command(Instruction.CREATED));
-                        System.out.println("New session created");
                         break;
 
                     case JOIN_GAME:

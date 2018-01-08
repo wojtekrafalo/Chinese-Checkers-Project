@@ -4,7 +4,7 @@ public enum Instruction {
 
     ERROR(1),
 
-    CREATE_GAME(2),
+    CREATE_GAME(4),
 
     BOOT_ADD(2),
 
@@ -28,7 +28,7 @@ public enum Instruction {
 
     START_GAME(),
 
-    CREATED(2),
+    CREATED(3),
 
     JOINED(1),
 
