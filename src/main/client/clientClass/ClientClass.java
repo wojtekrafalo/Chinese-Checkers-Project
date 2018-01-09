@@ -6,6 +6,7 @@ import common.model.game.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 public class ClientClass {
     public static void main(String[] args) {
         int pa = 8;

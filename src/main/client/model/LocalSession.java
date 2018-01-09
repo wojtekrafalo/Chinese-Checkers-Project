@@ -34,6 +34,7 @@ public class LocalSession {
 
     private List<Pair<Pair<Integer, String>, Color>> players;
 
+
 //    private List<Color> colorsTemporary;
     public LocalSession(String name, String nrPlayers, String nrBoots, String nick, int id, String color, Game game) {
         this.name = name;

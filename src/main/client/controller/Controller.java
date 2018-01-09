@@ -233,6 +233,7 @@ public class Controller {
         public void mouseMoved(MouseEvent e) {}
     }
 
+
     public void repaint() {
         theView.getGameWindow().getGamePanel().repaint();
     }

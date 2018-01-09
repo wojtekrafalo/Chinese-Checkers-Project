@@ -159,6 +159,7 @@ public class ServerHandle extends Thread{
                             localSession1.addPlayer(Integer.parseInt(lista.get(i)), lista.get(i+1), Converter.parseColor(lista.get(i+2)));
                         }
 
+
                         this.model.setLocalSession(localSession1);
                         this.controller.setLocalSession(localSession1);
 //                        write(new Command(Instruction.PLAYER_JOINED, lista.get(lista.size()-3), lista.get(lista.size()-2), lista.get(lista.size()-1)));

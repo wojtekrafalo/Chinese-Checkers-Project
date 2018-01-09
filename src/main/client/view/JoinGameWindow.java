@@ -36,6 +36,7 @@ public class JoinGameWindow extends JFrame {
     private String[] data = {};
     private ArrayList<String> sessions;
 
+
     JoinGameWindow(){
         super("Join to existing Game");
 
