@@ -167,7 +167,7 @@ public class ServerHandle extends Thread{
                     case SEND_SESSIONS:
                         ArrayList<String> list = new ArrayList<String>(Arrays.asList(command.getParameters().get(0).split(",")));
                         this.model.setSessions(list);
-                        this.controller.getView().getJoinGameWindow().setData(list);
+                        if (list.size() % 6 ==0) this.controller.getView().getJoinGameWindow().setData(list);
                         break;
 
                     case SESSION_CHOSEN:

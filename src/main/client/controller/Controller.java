@@ -157,7 +157,7 @@ public class Controller {
     class MouseListListener implements MouseInputListener{
         @Override
         public void mouseClicked(MouseEvent e) {                                            //do poprawy, zeby nie wyrzucal wyjatku jak klikne puste pole
-            if (theView.getJoinGameWindow().getList() != null) {
+            if (theView.getJoinGameWindow().getData().length != 0) {
                 int index = theView.getJoinGameWindow().getList().locationToIndex(e.getPoint());
                 System.out.println("Clicked on Item " + index);
                 theView.getJoinGameWindow().setInfoAboutSession(index);
