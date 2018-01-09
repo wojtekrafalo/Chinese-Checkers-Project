@@ -157,10 +157,11 @@ public class Controller {
     class MouseListListener implements MouseInputListener{
         @Override
         public void mouseClicked(MouseEvent e) {                                            //do poprawy, zeby nie wyrzucal wyjatku jak klikne puste pole
-            if (theView.getJoinGameWindow().getData().length != 0) {
+            if (theView.getJoinGameWindow().getData() != null) {
                 int index = theView.getJoinGameWindow().getList().locationToIndex(e.getPoint());
                 System.out.println("Clicked on Item " + index);
                 theView.getJoinGameWindow().setInfoAboutSession(index);
+
             }
         }
 
@@ -202,7 +203,10 @@ public class Controller {
                             if (GamePanel.contains(marble, e.getX(), e.getY())) secondMarble = marble;
                         }
                     }
-                    if (firstMarble != null && secondMarble != null) game.makeMove(firstMarble.getX(), firstMarble.getY(), secondMarble.getX(), secondMarble.getY(), firstMarble.getColor());
+                    if (firstMarble != null && secondMarble != null) {
+                        serverHandle.write(new Command(Instruction.MAKE_MOVE, String.valueOf(firstMarble.getX()), String.valueOf(firstMarble.getY()), String.valueOf(secondMarble.getX()), String.valueOf(secondMarble.getY())));
+//                        game.makeMove(firstMarble.getX(), firstMarble.getY(), secondMarble.getX(), secondMarble.getY(), firstMarble.getColor());
+                    }
 
                     gamePanel.repaint();
                     firstMarble = null;

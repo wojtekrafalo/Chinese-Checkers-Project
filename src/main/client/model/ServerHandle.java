@@ -4,6 +4,7 @@ package client.model;
 import client.controller.Controller;
 import common.model.connection.Command;
 import common.model.connection.Instruction;
+import common.model.game.Game;
 import common.utils.Converter;
 
 import java.io.IOException;
@@ -110,17 +111,10 @@ public class ServerHandle extends Thread{
 
                     case CREATED:
                         System.out.println(this.model.getGame());
-                        this.model.createNewGame(
-                                command.getParameters().get(0),
-                                command.getParameters().get(1),
-                                command.getParameters().get(2),
-                                command.getParameters().get(3),
-                                nick,
-                                id,
-                                17
-                        );
 
-                        LocalSession localSession = new LocalSession(command.getParameters().get(0), command.getParameters().get(1), command.getParameters().get(2), nick, id, command.getParameters().get(3), this.model.getGame());
+                        Game game = new Game(Integer.parseInt(command.getParameters().get(1)), 17);
+
+                        LocalSession localSession = new LocalSession(command.getParameters().get(0), command.getParameters().get(1), command.getParameters().get(2), nick, id, command.getParameters().get(3), game);
                         localSession.addPlayer(id, nick, Converter.parseColor(command.getParameters().get(3)));
                         this.model.setLocalSession(localSession);
 

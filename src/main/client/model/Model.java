@@ -26,23 +26,27 @@ public class Model {
         this.serverHandle = serverHandle;
     }
 
-    public void createNewGame(String name, String nrPlayers, String nrBoots, String hostColor , String nick, int id, int size) {
-        this.nameOfSession = name;
-        this.numberOfPlayers = Integer.parseInt(nrPlayers);
-        this.numberOfBoots = Integer.parseInt(nrBoots);
-        this.hostColor = Converter.parseColor(hostColor);
-        this.hostNick = nick;
-        this.id = id;
-        this.size = size;
-        this.game = new Game(this.numberOfPlayers + this.numberOfBoots, size);
-
-        while (numberOfBoots > 0) {                                         //ewentually initializing boots
-//            listOfBoots.add(new Boot(game, Color.randomColor()));
-        }
-    }
+//    public void createNewGame(String name, String nrPlayers, String nrBoots, String hostColor , String nick, int id, int size) {
+//        this.nameOfSession = name;
+//        this.numberOfPlayers = Integer.parseInt(nrPlayers);
+//        this.numberOfBoots = Integer.parseInt(nrBoots);
+//        this.hostColor = Converter.parseColor(hostColor);
+//        this.hostNick = nick;
+//        this.id = id;
+//        this.size = size;
+//        this.game = new Game(this.numberOfPlayers + this.numberOfBoots, size);
+//
+//        while (numberOfBoots > 0) {                                         //ewentually initializing boots
+////            listOfBoots.add(new Boot(game, Color.randomColor()));
+//        }
+//    }
 
     public Game getGame () {
         return game;
+    }
+
+    public void setGame (Game game) {
+        this.game = game;
     }
 
     public void setSessions(List<String> sessions) {
