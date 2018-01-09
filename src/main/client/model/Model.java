@@ -19,7 +19,7 @@ public class Model {
     private Socket socket;
     private ServerHandle serverHandle;
     private LocalSession localSession;
-    private List<Session> sessions;
+    private List<String> sessions;
     private String nameOfSession;
     private String hostNick;
     private Color hostColor;
@@ -38,7 +38,7 @@ public class Model {
         this.size = size;
         this.game = new Game(this.numberOfPlayers + this.numberOfBoots, size);
 
-        while (numberOfBoots > 0) {
+        while (numberOfBoots > 0) {                                         //ewentually initializing boots
 //            listOfBoots.add(new Boot(game, Color.randomColor()));
         }
     }
@@ -47,8 +47,12 @@ public class Model {
         return game;
     }
 
-    public void setSessions(String sessions) {
-//        this.sessions = sessions;
+    public void setSessions(List<String> sessions) {
+        this.sessions = sessions;
+    }
+
+    public List<String>  getSessions() {
+        return sessions;
     }
 
     public LocalSession getLocalSession() {

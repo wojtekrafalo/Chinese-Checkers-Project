@@ -20,9 +20,11 @@ public class JoinGameWindow extends JFrame {
     private JPanel rightPanel = new JPanel();
     private JButton OK = new JButton("OK");
     private JButton refreshButton = new JButton("Refresh");
+
     private JLabel infoAboutSession = new JLabel();
     private JLabel infoAboutHost = new JLabel();
     private JLabel infoAboutPlayers = new JLabel();
+    private JLabel infoAboutBoots = new JLabel();
     private JLabel infoAboutHumans = new JLabel();
     private JLabel infoAboutID = new JLabel();
 
@@ -31,7 +33,8 @@ public class JoinGameWindow extends JFrame {
     private MenuItem menuInfo = new MenuItem("INFO"), menuNew=new MenuItem("CREATE A NEW GAME"), menuExit=new MenuItem("EXIT");
 
     private int chosenSession=0;
-    private String[] data = {"session", "host1", "3", "3", "172.168.0.0", "session2", "host2", "32", "32", "172.168.0.02", "session3", "host3", "33", "33", "172.168.0.03", };
+    private String[] data = {};
+    private ArrayList<String> sessions;
 
     JoinGameWindow(){
         super("Join to existing Game");
@@ -53,7 +56,9 @@ public class JoinGameWindow extends JFrame {
         rightPanel.add(infoAboutPlayers);
         infoAboutHumans.setBounds(0,150,300,50);
         rightPanel.add(infoAboutHumans);
-        infoAboutID.setBounds(0,200,300,50);
+        infoAboutBoots.setBounds(0,200,300,50);
+        rightPanel.add(infoAboutBoots);
+        infoAboutID.setBounds(0,250,300,50);
         rightPanel.add(infoAboutID);
         rightPanel.add(OK);
 //        we add all information about sessions to rightPanel
@@ -77,6 +82,7 @@ public class JoinGameWindow extends JFrame {
 
     void addListener(ActionListener listener, ListSelectionListener listListener, MouseInputListener mouseInputListener){
         OK.addActionListener(listener);
+        refreshButton.addActionListener(listener);
         list.addListSelectionListener(listListener);
         menuInfo.addActionListener(listener);
         menuNew.addActionListener(listener);
@@ -108,43 +114,40 @@ public class JoinGameWindow extends JFrame {
         return list;
     }
     public void setInfoAboutSession (int i) {
-        infoAboutSession.setText("Name:                                   " + data[i*5]);
-        infoAboutHost.setText("Host Name:                          " + data[i*5 + 1]);
-        infoAboutPlayers.setText("Number of players:          " + data[i*5 + 2]);
-        infoAboutHumans.setText("Number of Humans:        " + data[i*5 + 3]);
-        infoAboutID.setText("Host's ID:                            " + data[i*5 + 4]);
+        infoAboutSession.setText("Name:                                   " + sessions.get(i*6));
+        infoAboutHost.setText("Host Name:                          " + sessions.get(i*6 + 1));
+        infoAboutID.setText("Host's ID:                            " + sessions.get(i*6 + 2));
+        infoAboutPlayers.setText("Number of players:          " + sessions.get(i*6 + 3));
+        infoAboutBoots.setText("Number of Boots:        " + sessions.get(i*6 + 4));
+        infoAboutHumans.setText("Number of Humans:        " + sessions.get(i*6 + 5));
         chosenSession = i;
-    }
-
-    public void setData (ArrayList<String> data) {
-        this.data = new String[data.size()];
-        for(int i=0; i<data.size(); i++) {
-            this.data[i] = data.get(i);
-        }
-
-        String[] displayData = new String[data.size()/5];
-
-        for (int i=0; i<data.size(); i+=5) {
-            displayData[i/5] = data.get(i);
-        }
-        this.list.setListData(displayData);
     }
 
     public void setData (String[] data) {
         this.data = data;
 
-        String[] displayData = new String[data.length/5];
+        String[] displayData = new String[data.length/6];
 
-        for (int i=0; i<data.length; i+=5) {
-            displayData[i/5] = data[i];
+        for (int i=0; i<data.length; i+=6) {
+            displayData[i/6] = data[i];
         }
         this.list.setListData(displayData);
+    }
+
+    public void setData (ArrayList<String> sessions) {
+        this.sessions = sessions;
+
+        String[] data = new String[sessions.size()/6];
+
+        for (int i=0; i<sessions.size(); i+=6) {
+            data[i/6] = sessions.get(i);
+        }
+        this.list.setListData(data);
     }
 
     public int getSelectedNumber() {                          //send selected field of List
         return chosenSession;
     }
-
 
     public String[] getData() {                          //send selected field of List
         return data;

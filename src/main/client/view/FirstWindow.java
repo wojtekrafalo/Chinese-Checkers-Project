@@ -6,6 +6,7 @@ import javax.swing.*;
 
 
 public class FirstWindow extends JFrame {
+    private String errorMessage = "Please, insert correct nickName";
     private JLabel additionLabel = new JLabel("Please, insert your nickname");
     private JTextField nickName = new JTextField(30);
     private JButton OK = new JButton("OK");
@@ -35,7 +36,7 @@ public class FirstWindow extends JFrame {
     void addListener(ActionListener listener){
         OK.addActionListener(listener);
     }
-    void displayErrorMessage(String errorMessage){
+    public void displayErrorMessage(){
         JOptionPane.showMessageDialog(this, errorMessage);
     }
 }

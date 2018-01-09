@@ -37,7 +37,7 @@ public class Controller {
     }
 
 
-    public void start(Model model) {
+    public void setModel(Model model) {
         this.theModel = model;
     }
 
@@ -70,11 +70,15 @@ public class Controller {
 
                 theView.hideShow1();
 
-                try {
-                    initializeServerHandler(nick);
-                } catch (IOException ex) {}
+                if (nick!="") {
+                    try {
+                        initializeServerHandler(nick);
+                    } catch (IOException ex) {}
+                }
+                else first.displayErrorMessage();
 
                 theModel = new Model(nick, serverHandle);
+                serverHandle.write(new Command(Instruction.REQUIRE_SESSIONS));
             }
 
             if (e.getSource().equals(newGame.getOK())) {                    //CREATE NEW GAME, send it to model
@@ -103,16 +107,12 @@ public class Controller {
 
             if (e.getSource().equals(joinGame.getOK())) {                    //JOIN TO NEW GAME, send it to model
                 int selected = joinGame.getSelectedNumber();
-                String[] data = joinGame.getData();
-                String[] sessionData = new String[5];
-                for (int i=0; i<5; i++) {
-                    sessionData[i] = data[selected*5 + i];
-                }
+                String hostID = theModel.getSessions().get(6*selected + 2);
+
                 theView.hideShow2();
 
-                serverHandle.write(new Command(Instruction.SESSION_CHOSEN, sessionData));
+                serverHandle.write(new Command(Instruction.JOIN_GAME, hostID));
             }
-
 
             if (e.getSource().equals(newGame.getMenuJoin()) || e.getSource().equals(joinGame.getMenuNew())) {
                 theView.hideShowChange();
@@ -137,7 +137,7 @@ public class Controller {
         serverHandle = new ServerHandle("0.0.0.0", 5001);
         serverHandle.setController(this);
         serverHandle.setModel(theModel);
-        serverHandle.send(new Command(Instruction.NICK_INSERTED, nick));
+        serverHandle.send(new Command(Instruction.NICK_ADD, nick));
     }
 
     public void setLocalSession (LocalSession localSession) {
@@ -157,7 +157,7 @@ public class Controller {
 
     class MouseListListener implements MouseInputListener{
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mouseClicked(MouseEvent e) {                                            //do poprawy, zeby nie wyrzucal wyjatku jak klikne puste pole
             if (theView.getJoinGameWindow().getList() != null) {
                 int index = theView.getJoinGameWindow().getList().locationToIndex(e.getPoint());
                 System.out.println("Clicked on Item " + index);

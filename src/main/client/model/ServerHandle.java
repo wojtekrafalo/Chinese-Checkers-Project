@@ -55,8 +55,6 @@ public class ServerHandle extends Thread{
         this.socket = new Socket(host, port);
         System.out.println("next step");
 
-//        this.model = model;
-//        this.controller = controller;
         this.isOnline = true;
 
         System.out.println("Connection between Game and Server established.");
@@ -111,6 +109,7 @@ public class ServerHandle extends Thread{
                 switch (command.getName()) {
 
                     case CREATED:
+                        System.out.println(this.model.getGame());
                         this.model.createNewGame(
                                 command.getParameters().get(0),
                                 command.getParameters().get(1),
@@ -121,7 +120,7 @@ public class ServerHandle extends Thread{
                                 17
                         );
 
-                        LocalSession localSession = new LocalSession(command.getParameters().get(0), command.getParameters().get(1), command.getParameters().get(2), command.getParameters().get(3), nick, id);
+                        LocalSession localSession = new LocalSession(command.getParameters().get(0), command.getParameters().get(1), command.getParameters().get(2), command.getParameters().get(3), nick, id, this.model.getGame());
                         this.model.setLocalSession(localSession);
 
                         controller.createGameView();
@@ -131,11 +130,12 @@ public class ServerHandle extends Thread{
                         break;
 
                     case NICK_INSERTED:
+                        this.nick = command.getParameters().get(0);
+                        this.id = Integer.parseInt(command.getParameters().get(1));
                         this.model = new Model(command.getParameters().get(0), this);
-                        controller.start(this.model);
+                        controller.setModel(this.model);
 
-                        nick = command.getParameters().get(0);
-                        System.out.println("New nick added.");
+                        System.out.println("New nick added:" + command.getParameters().get(0));
 
 //                        write(new Command(Instruction.NICK_ADD));
 //                        write(new Command(Instruction.START_GAME));
@@ -156,6 +156,7 @@ public class ServerHandle extends Thread{
                         break;
 
                     case SEND_SESSIONS:
+                        this.model.setSessions(command.getParameters());
 //                        controller.setSessions(command.getParameters().get(0));
                         break;
 
