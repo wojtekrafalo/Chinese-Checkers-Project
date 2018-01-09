@@ -152,18 +152,24 @@ class Client extends Thread {
         Thread.currentThread().interrupt();
     }
 
-    private static List<String> sessionsToList(List<Session> sessions) {
-        List<String> sessionsList = new ArrayList<>();
+    private static String sessionsToList(List<Session> sessions) {
+        StringBuilder sessionsList = new StringBuilder();
         for (Session s :
                 sessions) {
-            sessionsList.add(s.getSessionName());
-            sessionsList.add(s.getHost().getName());
-            sessionsList.add(Integer.toString(s.getHost().getClientID()));
-            sessionsList.add(Integer.toString(s.getPlayers().size()));
-            sessionsList.add(Integer.toString(s.getNrBoots()));
-            sessionsList.add(Integer.toString(s.getNrPlayers()));
+            sessionsList.append(s.getSessionName())
+                    .append(",")
+                    .append(s.getHost().getNickname())
+                    .append(",")
+                    .append(s.getHost().getClientID())
+                    .append(",")
+                    .append(s.getPlayers().size())
+                    .append(",")
+                    .append(s.getNrBoots())
+                    .append(",")
+                    .append(s.getNrPlayers())
+                    .append(",");
         }
-        return sessionsList;
+        return sessionsList.toString();
 
     }
 

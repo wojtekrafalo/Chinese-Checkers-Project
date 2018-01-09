@@ -330,7 +330,12 @@ public class Session {
     public String getClientsInfo(){
         StringBuilder info = new StringBuilder();
         for ( Client client : players){
-            info.append(client.getClientID()).append(" ").append(client.getNickname()).append(" ").append(client.getColor()).append(" ");
+            info.append(client.getClientID())
+                    .append(",")
+                    .append(client.getNickname())
+                    .append(",")
+                    .append(client.getColor())
+                    .append(",");
         }
         return info.toString();
     }
