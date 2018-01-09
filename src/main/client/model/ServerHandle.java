@@ -137,8 +137,8 @@ public class ServerHandle extends Thread{
                         break;
 
                     case START_GAME:
-                        this.localSession.setTurn(Converter.parseColor(command.getParameters().get(0)));
-                        this.localSession.setStarted(true);
+                        this.model.getLocalSession().setTurn(Converter.parseColor(command.getParameters().get(0)));
+                        this.model.getLocalSession().setStarted(true);
 
                         System.out.println("Game started");
                         break;
@@ -156,9 +156,12 @@ public class ServerHandle extends Thread{
                         for (int i=0; i<lista.size(); i+=3) {
                             localSession1.addPlayer(Integer.parseInt(lista.get(i)), lista.get(i+1), Converter.parseColor(lista.get(i+2)));
                         }
+                        this.model.setLocalSession(localSession1);
+
+                        controller.createGameView();
 
 
-                        write(new Command(Instruction.PLAYER_JOINED, lista.get(lista.size()-3), lista.get(lista.size()-2), lista.get(lista.size()-1)));
+                        //write(new Command(Instruction.PLAYER_JOINED, lista.get(lista.size()-3), lista.get(lista.size()-2), lista.get(lista.size()-1)));
                         break;
 
                     case SEND_SESSIONS:
