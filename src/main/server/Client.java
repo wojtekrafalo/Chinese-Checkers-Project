@@ -61,9 +61,9 @@ class Client extends Thread {
             } else {
 
                 switch (command.getName()) {
-                    case NICK_INSERTED:
+                    case NICK_ADD:
                         nickname = command.getParameters().get(0);
-                        write(new Command(Instruction.NICK_INSERTED,String.valueOf(clientID)));
+                        write(new Command(Instruction.NICK_INSERTED,nickname,String.valueOf(clientID)));
                         break;
 
                     case CREATE_GAME:
@@ -97,7 +97,6 @@ class Client extends Thread {
                                     this.session = session;
                                     this.session.join(this);
                                     exists = true;
-                                    this.write(new Command(Instruction.JOINED));
                                 }
                             }
                         }
@@ -112,6 +111,7 @@ class Client extends Thread {
 
                     case LEAVE_GAME:
                         this.session.leave(this);
+                        this.session = null;
                         this.write(new Command(Instruction.LEAVED));
                         break;
 
@@ -126,12 +126,15 @@ class Client extends Thread {
                         break;
 
                     case PASS:
-                        session.pass(this);
+                        this.session.pass(this);
                         break;
 
+                    case IF_CONTINUE:
+                        this.session.continuer(Boolean.parseBoolean(command.getParameters().get(0)));
+                        break;
                     case CLIENT_ENDS:
                         if (this.session != null) {
-                            Server.getSessionsList().remove(session);
+                            this.session.leave(this);
                             this.session = null;
                         }
                             Server.getClientsList().remove(this);
@@ -154,9 +157,10 @@ class Client extends Thread {
                 sessions) {
             sessionsList.add(s.getSessionName());
             sessionsList.add(s.getHost().getName());
-            sessionsList.add(Integer.toString(s.getPlayers().size()));
-            sessionsList.add(Integer.toString(s.getNrPlayers()));
             sessionsList.add(Integer.toString(s.getHost().getClientID()));
+            sessionsList.add(Integer.toString(s.getPlayers().size()));
+            sessionsList.add(Integer.toString(s.getNrBoots()));
+            sessionsList.add(Integer.toString(s.getNrPlayers()));
         }
         return sessionsList;
 

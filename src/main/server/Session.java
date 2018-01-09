@@ -31,11 +31,15 @@ public class Session {
     private Color turn;
 
     private List<Color> colors;
+
     private List<Color> colorsTemporary;
+
+    private List<Boolean> continues;
 
     Session(String name, String nrPlayers, String nrBoots, Client host) {
         players = new ArrayList<>();
         boots = new ArrayList<>();
+        continues = new ArrayList<>();
         this.name = name;
         this.nrPlayers = Integer.parseInt(nrPlayers);
         this.nrBoots = Integer.parseInt(nrBoots);
@@ -103,9 +107,20 @@ public class Session {
             this.players.add(client);
             client.setColor(colors.get(players.size() - 1));
             for (Client receiver : receivers) {
-                receiver.write(new Command(Instruction.PLAYER_JOINED));
+                receiver.write(new Command(
+                        Instruction.PLAYER_JOINED,
+                        String.valueOf(client.getClientID()),
+                        String.valueOf(client.getNickname()),
+                        String.valueOf(client.getColor())
+                        ));
             }
-            client.write(new Command(Instruction.JOINED));
+            client.write(new Command(
+                    Instruction.JOINED,
+                    getSessionName(),
+                    String.valueOf(getHost().getClientID()),
+                    String.valueOf(client.getColor()),
+                    getClientsInfo())
+            );
             if (this.players.size() + nrBoots == this.nrPlayers) {
               start();
             }
@@ -131,13 +146,13 @@ public class Session {
                     colorsTemporary.remove(client.getColor());
                     colorsTemporary.add(client.getColor());
                     for (Client clients : players) {
-                        clients.write(new Command(Instruction.HOST_LEAVED));
+                        clients.write(new Command(Instruction.HOST_LEAVED, String.valueOf(host.getClientID())));
                     }
                 }
             } else {
                 if(boots.size() + players.size() == 1){
                     for(Client client1 : players){
-                        client1.write(new Command(Instruction.WIN));
+                        client1.write(new Command(Instruction.INSTANT_WIN));
                     }
                     endGame();
 
@@ -175,7 +190,7 @@ public class Session {
                 colorsTemporary.remove(client.getColor());
                 colorsTemporary.add(client.getColor());
                 for (Client clients : players) {
-                    clients.write(new Command(Instruction.PLAYER_LEAVED));
+                    clients.write(new Command(Instruction.PLAYER_LEAVED, String.valueOf(client.getClientID())));
                 }
             }
         }
@@ -187,29 +202,96 @@ public class Session {
         turn = Color.randomColor(colors);
         game.setTurn(turn);
         for ( int i = 0 ; i < nrBoots; i++){
-            Boot boot = new Boot(this.game, colors.get(players.size() + i));
+            Boot boot = new Boot(this, colors.get(players.size() + i),"Boot" + i + 1);
             boots.add(boot);
+            for (Client receiver : players) {
+                receiver.write(new Command(Instruction.BOOT_ADD,boot.getNick(),String.valueOf(boot.getColor())));
+            }
         }
         for (Client receiver : players) {
-            receiver.write(new Command(Instruction.START_GAME));
+            receiver.write(new Command(Instruction.START_GAME,String.valueOf(turn)));
+        }
+        for (Boot boot : boots){
+            boot.run();
         }
         System.out.println("Session: " + name + " - Game Started , Turn: " + turn);
     }
 
-    void move(int prevX, int prevY, int nextX, int nextY,Client movingPlayer) {
+    void move(int prevX, int prevY, int nextX, int nextY, Client movingPlayer) {
         if(turn == movingPlayer.getColor()) {
             if(game.canMove(prevX,prevY,nextX,nextY,movingPlayer.getColor())) {
                 game.makeMove(prevX,prevY,nextX,nextY, movingPlayer.getColor());
                 setTurn();
                 game.setTurn(turn);
                 for (Client client : players) {
-                    client.write(new Command(Instruction.MOVE_MADE));
+                    client.write(new Command(
+                            Instruction.MOVE_MADE,
+                            String.valueOf(prevX),
+                            String.valueOf(prevY),
+                            String.valueOf(nextX),
+                            String.valueOf(nextY),
+                            String.valueOf(turn)
+                    ));
+                }
+                if (!game.isWinner(movingPlayer.getColor())) {
+                    return;
+                }
+                movingPlayer.write(new Command(Instruction.WIN));
+                players.remove(movingPlayer);
+                game.deleteMarbles(movingPlayer.getColor());
+                colors.remove(movingPlayer.getColor());
+                if(boots.size() + players.size() == 1) {
+                    for(Client client1 : players){
+                        client1.write(new Command(Instruction.LOST,String.valueOf(movingPlayer.getClientID())));
+                    }
+                    endGame();
+
+                } else if(players.isEmpty()) {
+                    for (Boot boot : boots) {
+                        boots.remove(boot);
+                        boot = null;
+                    }
+                    endGame();
+                } else {
+                    for (Client receiver : players) {
+                        receiver.write(new Command(Instruction.LOST_CONTINUE,String.valueOf(movingPlayer.getClientID())));
+                    }
                 }
             }
             else if (game.canJump(prevX,prevY,nextX,nextY,movingPlayer.getColor())) {
                 game.makeMove(prevX,prevY,nextX,nextY, movingPlayer.getColor());
                 for (Client client : players) {
-                    client.write(new Command(Instruction.MOVE_MADE));
+                    client.write(new Command(
+                            Instruction.MOVE_MADE,
+                            String.valueOf(prevX),
+                            String.valueOf(prevY),
+                            String.valueOf(nextX),
+                            String.valueOf(nextY),
+                            String.valueOf(turn)
+                    ));
+                }
+                if (game.isWinner(movingPlayer.getColor())){
+                    movingPlayer.write(new Command(Instruction.WIN));
+                    players.remove(movingPlayer);
+                    game.deleteMarbles(movingPlayer.getColor());
+                    colors.remove(movingPlayer.getColor());
+                    if(boots.size() + players.size() == 1) {
+                        for(Client client1 : players){
+                            client1.write(new Command(Instruction.LOST,String.valueOf(movingPlayer.getClientID())));
+                        }
+                        endGame();
+
+                    } else if(players.isEmpty()) {
+                        for (Boot boot : boots) {
+                            boots.remove(boot);
+                            boot = null;
+                        }
+                        endGame();
+                    } else {
+                        for (Client receiver : players) {
+                            receiver.write(new Command(Instruction.LOST_CONTINUE,String.valueOf(movingPlayer.getClientID())));
+                        }
+                    }
                 }
             }
             else {
@@ -222,12 +304,39 @@ public class Session {
         setTurn();
         game.setTurn(turn);
         for (Client clients : players) {
-            clients.write(new Command(Instruction.PASS));
+            clients.write(new Command(Instruction.PASSED, String.valueOf(turn)));
+        }
+    }
+
+    public void continuer(boolean decision){
+        if(decision) {
+            continues.add(true);
+            if(continues.size() == players.size()) {
+                for (Client client : players) {
+                    client.write(new Command(Instruction.CONTINUE,String.valueOf(turn)));
+                }
+            }
+        } else {
+            for (Client client : players) {
+                client.write(new Command(Instruction.NOT_CONTINUE));
+            }
         }
     }
 
     private void endGame() {
 
+    }
+
+    public String getClientsInfo(){
+        StringBuilder info = new StringBuilder();
+        for ( Client client : players){
+            info.append(client.getClientID()).append(" ").append(client.getNickname()).append(" ").append(client.getColor()).append(" ");
+        }
+        return info.toString();
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     Client getHost() {
@@ -242,5 +351,8 @@ public class Session {
         return nrPlayers;
     }
 
-    //todo determine winner and continue class
+    public int getNrBoots(){
+        return nrBoots;
+    }
+
 }

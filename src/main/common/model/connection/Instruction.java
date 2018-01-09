@@ -2,63 +2,73 @@ package common.model.connection;
 
 public enum Instruction {
 
-    ERROR(1),
+    NICK_ADD(1), // client -> server param nick
 
-    CREATE_GAME(4),
+    NICK_INSERTED(2), // server -> client param nick, id
 
-    BOOT_ADD(2),
+    CREATE_GAME(3), // client -> server param name,nrplayers,nrboots
 
-    BOOT_ADDED(2),
+    CREATED(4), // server -> client param name, nrplayers, nrboots,color hosta
 
-    JOIN_GAME(1),
+    START_GAME(1), // server -> client param turn
 
-    SESSION_CHOSEN(1),
+    BOOT_ADD(2), // server -> client param nickbota, kolor
 
-    REQUIRE_SESSIONS(0),
+    JOIN_GAME(1), // client -> server param idhosta
 
-    MAKE_MOVE(6),
+    JOINED(4), // server -> client param name, idhosta, kolor, info o graczach jako string!!!
 
-    LEAVE_GAME(2),
+    PLAYER_JOINED(3), // server -> client param id,nick,kolor
 
-    PLAYER_JOINED(),
+    REQUIRE_SESSIONS(0), // client -> server
 
-    PASS(1),
+    SEND_SESSIONS(1), // server -> client sesje jako lista ( zobacz sobie co do niej wchodzi
 
-    CLIENT_ENDS(0),
+    SESSION_CHOSEN(1), // nie wiem po co to
 
-    START_GAME(),
+    MAKE_MOVE(4), // client -> server param prevx prevy nextx nexty
 
-    CREATED(3),
+    MOVE_MADE(5), // server -> client param prevx prevy nextx nexty turn
 
-    JOINED(1),
+    CANT_MOVE(0), // server -> client
 
-    CANT_MOVE(),
+    LEAVE_GAME(0), // client -> server
 
-    NICK_INSERTED(1),
+    LEAVED(0), // server -> client
 
-    NICK_ADD(1),
+    HOST_LEAVED(1), // server -> client param id nowego hosta
 
-    MOVE_MADE(4),
+    PLAYER_LEAVED(1), // server -> client param id gracza ktory wyszedl
 
-    SEND_SESSIONS(1),
+    HOST_LEAVED_IN_GAME(1), // server -> client param id nowego hosta
 
-    SESSION_UNAVAILABLE(0),
+    PLAYER_LEAVED_IN_GAME(1), // server -> client param id gracza ktory wyszedl
 
-    WRONG_NUM_OF_PARAMS(0),
+    PASS(0), // client -> server
 
-    WRONG_NUM_OF_PLAYERS(0),
+    PASSED(1), //  server -> client param nowa tura
 
-    LEAVED(0),
+    CLIENT_ENDS(0), // client -> server
 
-    HOST_LEAVED(1),
+    SESSION_UNAVAILABLE(0), // server -> client
 
-    WIN(),
+    WRONG_NUM_OF_PARAMS(0), // server -> client (chociaz u ciebie tez to poki co jest)
 
-    PLAYER_LEAVED(),
+    WRONG_NUM_OF_PLAYERS(0), // server -> client
 
-    HOST_LEAVED_IN_GAME(1),
+    WIN(0), // server -> client
 
-    PLAYER_LEAVED_IN_GAME(1);
+    INSTANT_WIN(0), // server -> client
+
+    LOST(1), // server -> client param id zwyciezcy
+
+    LOST_CONTINUE(1), // server -> client param id zwyciezcy
+
+    CONTINUE(1), // server -> client param kolejna kolejka
+
+    NOT_CONTINUE(0), // server -> client
+
+    IF_CONTINUE(1); // client -> server param boolean czy kontynuowac
 
     private int nrParams;
 

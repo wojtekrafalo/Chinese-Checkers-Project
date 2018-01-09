@@ -620,7 +620,76 @@ public class Game {
      * @return boolean
      */
     public boolean isWinner(final Color color) {
-        return true;
+        switch (color){
+            case AZURE:
+                return board[16][12].getColor() == color
+                        && board[15][11].getColor() == color
+                        && board[15][12].getColor() == color
+                        && board[14][10].getColor() == color
+                        && board[14][11].getColor() == color
+                        && board[14][12].getColor() == color
+                        && board[13][9].getColor() == color
+                        && board[13][10].getColor() == color
+                        && board[13][11].getColor() == color
+                        && board[13][12].getColor() == color;
+            case BLUE:
+                return board[0][4].getColor() == color
+                        && board[1][4].getColor() == color
+                        && board[1][5].getColor() == color
+                        && board[2][4].getColor() == color
+                        && board[2][5].getColor() == color
+                        && board[2][6].getColor() == color
+                        && board[3][4].getColor() == color
+                        && board[3][5].getColor() == color
+                        && board[3][6].getColor() == color
+                        && board[3][7].getColor() == color;
+            case RED:
+                return board[9][4].getColor() == color
+                        && board[10][4].getColor() == color
+                        && board[10][5].getColor() == color
+                        && board[11][4].getColor() == color
+                        && board[11][5].getColor() == color
+                        && board[11][6].getColor() == color
+                        && board[12][4].getColor() == color
+                        && board[12][5].getColor() == color
+                        && board[12][6].getColor() == color
+                        && board[12][7].getColor() == color;
+            case PINK:
+                return board[7][12].getColor() == color
+                        && board[6][11].getColor() == color
+                        && board[6][12].getColor() == color
+                        && board[5][10].getColor() == color
+                        && board[5][11].getColor() == color
+                        && board[5][12].getColor() == color
+                        && board[4][9].getColor() == color
+                        && board[4][10].getColor() == color
+                        && board[4][11].getColor() == color
+                        && board[4][12].getColor() == color;
+            case GREEN:
+                return board[9][13].getColor() == color
+                        && board[10][13].getColor() == color
+                        && board[10][14].getColor() == color
+                        && board[11][13].getColor() == color
+                        && board[11][14].getColor() == color
+                        && board[11][15].getColor() == color
+                        && board[12][13].getColor() == color
+                        && board[12][14].getColor() == color
+                        && board[12][15].getColor() == color
+                        && board[12][16].getColor() == color;
+            case YELLOW:
+                return board[7][3].getColor() == color
+                        && board[6][3].getColor() == color
+                        && board[6][2].getColor() == color
+                        && board[5][3].getColor() == color
+                        && board[5][2].getColor() == color
+                        && board[5][1].getColor() == color
+                        && board[4][3].getColor() == color
+                        && board[4][2].getColor() == color
+                        && board[4][1].getColor() == color
+                        && board[4][0].getColor() == color;
+            default:
+                return false;
+        }
     }
 
     /**

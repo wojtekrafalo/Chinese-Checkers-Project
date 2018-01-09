@@ -4,16 +4,16 @@ import common.model.game.Boot;
 import common.model.game.Color;
 import common.model.game.Game;
 import common.model.game.Marble;
-import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import server.Session;
 
 public class BootTest {
-    Game game;
     Boot boot;
-    Session session;
+
+    Game game;
 
     @Before
     public void setUp() throws Exception {

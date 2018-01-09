@@ -1,5 +1,8 @@
 package common.model.game;
 
+import common.model.game.Color;
+import common.model.game.Game;
+import common.model.game.Marble;
 import server.Session;
 
 import java.util.ArrayList;
@@ -11,20 +14,22 @@ import static java.awt.geom.Point2D.distance;
 public class Boot extends Thread{
     private Game game;
     private Color color;
-    private boolean started = false;
+    private String nick;
     private Session session;
     private Marble[] listOfMarbles = new Marble[10];
     private double[][] distance = new double[10][6];
 
-    public Boot (Game game, Color color) {
-        this.game = game;
+    public Boot (Session session, Color color, String nick) {
+        this.session = session;
+        this.game = session.getGame();
         this.color = color;
+        this.nick = nick;
 //        for (int i=0; i<10; i++) System.out.println((listOfMarbles[i]!=null) + " " + listOfMarbles[i].getX() + " " + listOfMarbles[i].getY());
     }
 
-    public Boot (Game game, Session session) {
+    public Boot (Game game, Color color) {
         this.game = game;
-        this.session = session;
+        this.color = color;
 //        for (int i=0; i<10; i++) System.out.println((listOfMarbles[i]!=null) + " " + listOfMarbles[i].getX() + " " + listOfMarbles[i].getY());
     }
 
@@ -33,8 +38,10 @@ public class Boot extends Thread{
 
     public void run() {
         while (true) {
-            if (session.getTurn() == color)
+            if (session.getTurn() == color){
+                game = session.getGame();
                 makeMove();
+            }
             else try {
                 sleep(1000);
             } catch (InterruptedException e) {
@@ -149,5 +156,9 @@ public class Boot extends Thread{
     }
     public Color getColor () {
         return color;
+    }
+
+    public String getNick() {
+        return nick;
     }
 }

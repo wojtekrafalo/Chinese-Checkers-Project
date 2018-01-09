@@ -13,5 +13,4 @@ public enum Direction {
 
     SOUTH_EAST;
 
-
 }
