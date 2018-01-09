@@ -160,6 +160,7 @@ public class ServerHandle extends Thread{
                             localSession1.addPlayer(Integer.parseInt(command.getParameters().get(i+0)), command.getParameters().get(i+1), Converter.parseColor(command.getParameters().get(i+2)));
                         }
 
+
                         write(new Command(Instruction.PLAYER_JOINED, lista.get(lista.size()-3), lista.get(lista.size()-2), lista.get(lista.size()-1)));
                         break;
 

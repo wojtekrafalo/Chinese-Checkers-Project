@@ -51,6 +51,7 @@ public class Model {
         this.sessions = sessions;
     }
 
+
     public List<String>  getSessions() {
         return sessions;
     }

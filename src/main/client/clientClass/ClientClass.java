@@ -12,6 +12,7 @@ public class ClientClass {
         System.out.println(integ);
         Controller theController;
         try {
+
             theController = new Controller();
 //            ArrayList<String> sessions = new ArrayList<>();
 //            sessions.add("session");

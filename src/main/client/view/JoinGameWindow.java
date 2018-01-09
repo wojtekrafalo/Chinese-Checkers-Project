@@ -47,6 +47,7 @@ public class JoinGameWindow extends JFrame {
         list.setVisibleRowCount(4);
         list.setLayoutOrientation(JList.VERTICAL);
 
+
         rightPanel.setLayout(null);
         infoAboutSession.setBounds(0,0,300,50);
         rightPanel.add(infoAboutSession);

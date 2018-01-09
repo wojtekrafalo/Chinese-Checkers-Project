@@ -41,6 +41,7 @@ public class Controller {
         this.theModel = model;
     }
 
+
     public void addPlayer(String nick, String color, String ID) {
 //        localSession.addPlayer(Converter.parseColor(color));
     }

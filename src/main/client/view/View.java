@@ -57,6 +57,7 @@ public class View {
         joinGameWindow.setVisible(false);
         gameWindow.setVisible(true);
     }
+
     public void hideShowChange () {
         newGameWindow.setVisible(!newGameWindow.isVisible());
         joinGameWindow.setVisible(!joinGameWindow.isVisible());

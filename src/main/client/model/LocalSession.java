@@ -41,6 +41,7 @@ public class LocalSession {
         this.nrBoots = Integer.parseInt(nrBoots);
         this.color = Converter.parseColor(color);
 
+
         this.hostId = id;
         this.players = new ArrayList<>();
         addPlayer(id, nick, Converter.parseColor(color));
