@@ -127,7 +127,7 @@ public class ServerHandle extends Thread{
                         controller.createGameView();
 
                         System.out.println("New game created");
-                        write(new Command(Instruction.START_GAME));
+                        //write(new Command(Instruction.START_GAME));
                         break;
 
                     case NICK_INSERTED:
@@ -153,11 +153,11 @@ public class ServerHandle extends Thread{
                         break;
 
                     case JOINED:
-                        ArrayList<String> lista = new ArrayList<String>(Arrays.asList(command.getParameters().get(3).split(",")));
+                        ArrayList<String> lista = new ArrayList<String>(Arrays.asList(command.getParameters().get(5).split(",")));
                         int nrPlayers = lista.size()/3;
                         LocalSession localSession1 = new LocalSession(command.getParameters().get(0), String.valueOf(nrPlayers),command.getParameters().get(2), nick, Integer.parseInt(command.getParameters().get(1)), lista.get(lista.size()-1), null);
                         for (int i=0; i<lista.size(); i+=3) {
-                            localSession1.addPlayer(Integer.parseInt(command.getParameters().get(i+0)), command.getParameters().get(i+1), Converter.parseColor(command.getParameters().get(i+2)));
+                            localSession1.addPlayer(Integer.parseInt(lista.get(i)), lista.get(i+1), Converter.parseColor(lista.get(i+2)));
                         }
 
 

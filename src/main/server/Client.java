@@ -10,24 +10,56 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class instance is being generated after every new client connects to the server
+ */
 class Client extends Thread {
 
+    /**
+     * This client input stream
+     */
     private ObjectInputStream input;
 
+    /**
+     * This client output stream
+     */
     private ObjectOutputStream output;
 
+    /**
+     * This client current session (if host, player)
+     */
     private Session session;
 
+    /**
+     * This client's socket
+     */
     private Socket socket;
 
+    /**
+     * This client name (player name)
+     */
     private String nickname;
 
+    /**
+     * This client status if is online
+     */
     private boolean isOnline;
 
+    /**
+     * This client color if is in session
+     */
     private Color color;
 
+    /**
+     * Specific client ID (for new client nextID is stored in <code>server.Server</code> class
+     */
     private int clientID;
 
+    /**
+     * Creation of new Client instance
+     *
+     * @param socket Socket on which client class (on <code>server.Server</code>) communicates with client game
+     */
     Client(Socket socket) {
         this.clientID = Server.getNextClientID();
         this.socket = socket;
@@ -50,6 +82,13 @@ class Client extends Thread {
 
     }
 
+    /**
+     * Method for listening for input from client, run as another thread
+     *
+     * @throws IOException            Any of the usual Input/Output related exceptions.
+     * @throws ClassNotFoundException Class of a serialized object cannot be
+     *                                found.
+     */
     private void listen() throws IOException, ClassNotFoundException {
         while (isOnline && Server.isRunning()) {
             Command command = (Command) input.readObject();
@@ -152,6 +191,11 @@ class Client extends Thread {
         Thread.currentThread().interrupt();
     }
 
+    /**
+     * Method for parsing information about sessions from list to string
+     * @param sessions List of sessions
+     * @return String with information about sessions
+     */
     private static String sessionsToList(List<Session> sessions) {
         StringBuilder sessionsList = new StringBuilder();
         for (Session s :
@@ -173,6 +217,10 @@ class Client extends Thread {
 
     }
 
+    /**
+     * Writes to the client
+     * @param command Command to be written
+     */
     void write(Command command) {
         try {
             output.writeObject(command);
@@ -181,18 +229,34 @@ class Client extends Thread {
         }
     }
 
+    /**
+     * Setter for client color in session
+     * @param color color we want to set
+     */
     public void setColor(Color color) {
         this.color = color;
     }
 
+    /**
+     * Getter for client color in session
+     * @return color
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     * Getter for clientId
+     * @return id
+     */
     public int getClientID() {
         return clientID;
     }
 
+    /**
+     * Getter for client nickname
+     * @return Returns name of client
+     */
     public String getNickname() {
         return nickname;
     }

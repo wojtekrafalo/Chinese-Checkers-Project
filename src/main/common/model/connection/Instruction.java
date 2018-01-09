@@ -1,5 +1,8 @@
 package common.model.connection;
 
+/**
+ *
+ */
 public enum Instruction {
 
     NICK_ADD(1), // client -> server param nick

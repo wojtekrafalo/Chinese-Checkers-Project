@@ -118,29 +118,31 @@ public class Server {
     }
 
     /**
-     *
-     * @return
+     * Getter for list of sessions
+     * @return list
      */
     public static List<Session> getSessionsList() {
         return sessionsList;
     }
 
     /**
-     * @return
+     * Get next clientID to assign fo client
+     * @return ClientID
      */
     public static int getNextClientID() {
         return nextClientID++;
     }
 
     /**
-     * @return
+     * Boolean that checks if server is running
+     * @return boolean
      */
     static boolean isRunning() {
         return running;
     }
 
     /**
-     *
+     * Method for interrupting all the clients
      */
     static void interrupt() {
         running = false;
@@ -150,7 +152,8 @@ public class Server {
     }
 
     /**
-     * @param args
+     * Main method of Server
+     * @param args args
      */
     public static void main(String[] args) {
         try {

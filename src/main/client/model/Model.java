@@ -1,8 +1,6 @@
 package client.model;
-import com.sun.scenario.effect.LockableResource;
 import common.model.game.*;
 import common.utils.Converter;
-import server.Session;
 
 import java.net.Socket;
 import java.util.ArrayList;
