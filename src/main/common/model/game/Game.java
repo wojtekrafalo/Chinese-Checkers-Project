@@ -45,6 +45,7 @@ public class Game {
             {{0, 4}, {4, 0}, {4, 12}, {12, 4}, {12, 16}, {16, 12}};
 
     /**
+     * Constructor of Game object
      * @param numberPlayers Number of players in game
      * @param boardSize Size of board
      */

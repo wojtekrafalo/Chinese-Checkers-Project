@@ -6,28 +6,61 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Basic server logic class with listener for new client attempting to connect to socket.
+ */
 public class Server {
 
+    /**
+     * Instance of the server.
+     */
     private static volatile Server server;
 
+    /**
+     * Auxiliary variable for server to grant Client's IDs.
+     */
     private static int nextClientID;
 
+    /**
+     * Port for socket.
+     */
     private int port;
 
+    /**
+     * Variable for storing ServerSocket.
+     */
     private ServerSocket serverSocket;
 
+    /**
+     * Variable for breaking infinite socket interception loop.
+     */
     private static boolean running;
 
+    /**
+     * List of current sessions.
+     */
     private static List<Session> sessionsList;
 
+    /**
+     * Variable for storing thread for listening for new clients
+     */
     private Thread listeningThread;
 
+    /**
+     * List of connected clients.
+     */
     private static List<Client> clientsList;
 
+    /**
+     * Constructor for Server object.
+     *
+     * @param port Port on which server works
+     * @throws IOException When something goes wrong with ServerSocket
+     */
     private Server(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
         this.port = port;
-        nextClientID = 0;
+        nextClientID = 1;
         running = true;
         sessionsList = new ArrayList<>();
         clientsList = new ArrayList<>();
@@ -35,6 +68,12 @@ public class Server {
         listeningThread.start();
     }
 
+    /**
+     * Singleton method for getting an instance of a Server.
+     * @param port Port on which server works
+     * @return Instance of <code>Server</code>
+     * @throws IOException When something goes wrong with ServerSocket
+     */
     public static Server getServer(int port) throws IOException {
         if (server == null) {
             synchronized (Server.class) {
@@ -46,6 +85,9 @@ public class Server {
         return server;
     }
 
+    /**
+     * Listens for sockets, have to be run as thread.
+     */
     private void listen() {
         while(Server.running) {
             try {
@@ -59,26 +101,47 @@ public class Server {
         }
     }
 
+    /**
+     * Getter for socket port.
+     * @return port
+     */
     public int getPort() {
         return port;
     }
 
+    /**
+     * Getter for list of connected clients
+     * @return list
+     */
     public static List<Client> getClientsList() {
         return clientsList;
     }
 
+    /**
+     *
+     * @return
+     */
     public static List<Session> getSessionsList() {
         return sessionsList;
     }
 
+    /**
+     * @return
+     */
     public static int getNextClientID() {
         return nextClientID++;
     }
 
+    /**
+     * @return
+     */
     static boolean isRunning() {
         return running;
     }
 
+    /**
+     *
+     */
     static void interrupt() {
         running = false;
         for (Client client: clientsList) {
@@ -86,6 +149,9 @@ public class Server {
         }
     }
 
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         try {
             Server.getServer(5001);
