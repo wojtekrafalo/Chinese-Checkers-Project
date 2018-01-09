@@ -118,6 +118,8 @@ public class Session {
                     Instruction.JOINED,
                     getSessionName(),
                     String.valueOf(getHost().getClientID()),
+                    String.valueOf(nrPlayers),
+                    String.valueOf(nrBoots),
                     String.valueOf(client.getColor()),
                     getClientsInfo())
             );

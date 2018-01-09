@@ -16,7 +16,7 @@ public enum Instruction {
 
     JOIN_GAME(1), // client -> server param idhosta
 
-    JOINED(4), // server -> client param name, idhosta, kolor, info o graczach jako string!!!
+    JOINED(6), // server -> client param name, idhosta, kolor, info o graczach jako string!!!
 
     PLAYER_JOINED(3), // server -> client param id,nick,kolor
 
