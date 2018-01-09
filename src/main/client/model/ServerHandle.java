@@ -117,6 +117,7 @@ public class ServerHandle extends Thread{
                         LocalSession localSession = new LocalSession(command.getParameters().get(0), command.getParameters().get(1), command.getParameters().get(2), nick, id, command.getParameters().get(3), game);
                         localSession.addPlayer(id, nick, Converter.parseColor(command.getParameters().get(3)));
                         this.model.setLocalSession(localSession);
+                        this.controller.setLocalSession(localSession);
 
                         controller.createGameView();
 
@@ -137,28 +138,31 @@ public class ServerHandle extends Thread{
                         break;
 
                     case START_GAME:
-                        this.localSession.setTurn(Converter.parseColor(command.getParameters().get(0)));
-                        this.localSession.setStarted(true);
+                        this.model.getLocalSession().setTurn(Converter.parseColor(command.getParameters().get(0)));
+                        this.model.getLocalSession().setStarted(true);
 
                         System.out.println("Game started");
                         break;
 
                     case MOVE_MADE:
-                        controller.repaint();
-                        model.getLocalSession().getGame().makeMove(Integer.parseInt(command.getParameters().get(0)), Integer.parseInt(command.getParameters().get(1)), Integer.parseInt(command.getParameters().get(2)), Integer.parseInt(command.getParameters().get(3)), Converter.parseColor(command.getParameters().get(4)));
+//                        controller.repaint();
+                        model.getLocalSession().getGame().makeMove(Integer.parseInt(command.getParameters().get(0)), Integer.parseInt(command.getParameters().get(1)), Integer.parseInt(command.getParameters().get(2)), Integer.parseInt(command.getParameters().get(3)), model.getLocalSession().getTurn());
+                        model.getLocalSession().setTurn(Converter.parseColor(command.getParameters().get(4)));
+
                         System.out.println("Move made from: (" + command.getParameters().get(0) + ", " + command.getParameters().get(1) + ") to: (" + command.getParameters().get(2) + ", " + command.getParameters().get(3) + ") by " + command.getParameters().get(4) +".");
                         break;
 
                     case JOINED:
                         ArrayList<String> lista = new ArrayList<String>(Arrays.asList(command.getParameters().get(5).split(",")));
                         int nrPlayers = lista.size()/3;
-                        LocalSession localSession1 = new LocalSession(command.getParameters().get(0), String.valueOf(nrPlayers),command.getParameters().get(2), nick, Integer.parseInt(command.getParameters().get(1)), lista.get(lista.size()-1), null);
+                        LocalSession localSession1 = new LocalSession(command.getParameters().get(0), String.valueOf(nrPlayers),command.getParameters().get(2), nick, Integer.parseInt(command.getParameters().get(1)), lista.get(lista.size()-1), new Game(nrPlayers, 17));
                         for (int i=0; i<lista.size(); i+=3) {
                             localSession1.addPlayer(Integer.parseInt(lista.get(i)), lista.get(i+1), Converter.parseColor(lista.get(i+2)));
                         }
 
-
-                        write(new Command(Instruction.PLAYER_JOINED, lista.get(lista.size()-3), lista.get(lista.size()-2), lista.get(lista.size()-1)));
+                        this.model.setLocalSession(localSession1);
+                        this.controller.setLocalSession(localSession1);
+//                        write(new Command(Instruction.PLAYER_JOINED, lista.get(lista.size()-3), lista.get(lista.size()-2), lista.get(lista.size()-1)));
                         break;
 
                     case SEND_SESSIONS:

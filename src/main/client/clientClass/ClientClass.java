@@ -1,6 +1,7 @@
 package client.clientClass;
 
 import client.controller.Controller;
+import common.model.game.Color;
 
 import java.io.IOException;
 import java.util.ArrayList;

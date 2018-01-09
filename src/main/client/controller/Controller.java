@@ -184,7 +184,7 @@ public class Controller {
         GamePanel gamePanel = theView.getGameWindow().getGamePanel();
         Marble firstMarble = null;
         Marble secondMarble= null;
-        Game game = theModel.getGame();
+        Game game = localSession.getGame();
 
         @Override
         public void mouseClicked(MouseEvent e) {
