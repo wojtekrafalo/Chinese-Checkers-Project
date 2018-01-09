@@ -47,6 +47,7 @@ class Client extends Thread {
                 System.out.println("(in listen thread) Lost connection with Client: " + clientID + "!");
             }
         }).start();
+
     }
 
     private void listen() throws IOException, ClassNotFoundException {

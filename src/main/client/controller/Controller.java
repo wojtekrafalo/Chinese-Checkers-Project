@@ -8,20 +8,12 @@ import client.view.*;
 import common.model.connection.Command;
 import common.model.connection.Instruction;
 import common.model.game.Game;
-import common.model.game.LocalSession;
+import client.model.LocalSession;
 import common.model.game.Marble;
-import common.utils.Converter;
-import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import server.Server;
-import server.Session;
 
-import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MouseInputListener;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -43,6 +35,7 @@ public class Controller {
         this.theView = new View();
         this.theView.addListener(new MenuListener(), new SelectionListener(), new MouseListListener());
     }
+
 
     public void start(Model model) {
         this.theModel = model;
@@ -101,7 +94,6 @@ public class Controller {
                                 String.valueOf(numberOfPlayers),
                                 String.valueOf(numberOfBoots)
                         ));
-
                     }
                     else theView.getNewGameWindow().displayErrorMessage();
                 } catch (NumberFormatException exe) {
@@ -135,7 +127,7 @@ public class Controller {
     }
 
     public void createGameView() {
-        theView.initializeGameWindow(theModel.getGame());
+        theView.initializeGameWindow(theModel.getLocalSession());
         theView.addGameWindowListener(new MenuGameWindowListener(), new MouseListener(), theModel.getGame());
         theView.hideShow2();
     }

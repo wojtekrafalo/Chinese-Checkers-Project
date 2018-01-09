@@ -1,8 +1,6 @@
 package client.view;
 
 import common.model.game.Game;
-import common.model.game.LocalSession;
-import sun.awt.Graphics2Delegate;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
@@ -43,6 +41,7 @@ public class GameWindow extends JFrame {
         gamePanel.setBounds(new Rectangle(60,60,WIDTH,HEIGHT));
         add(gamePanel);
     }
+
 
     public void addListener(ActionListener actionListener, MouseInputListener mouseListener) {
         menuInfo.addActionListener(actionListener);

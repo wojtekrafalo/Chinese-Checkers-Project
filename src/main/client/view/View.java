@@ -1,15 +1,9 @@
 package client.view;
 
 import common.model.game.Game;
-import common.model.game.LocalSession;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import client.model.LocalSession;
 
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MouseInputListener;
 
@@ -51,6 +45,7 @@ public class View {
         newGameWindow.addListener(listener);
         joinGameWindow.addListener(listener, listListener, mouseListener);
     }
+
 
 
     public void addGameWindowListener(ActionListener listener, MouseInputListener mouseListener, Game game){

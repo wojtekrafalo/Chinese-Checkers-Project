@@ -1,6 +1,7 @@
 package client.view;
 
 import common.model.game.Game;
+import client.model.LocalSession;
 import common.model.game.Marble;
 
 import javax.swing.*;
@@ -27,6 +28,7 @@ public class GamePanel extends JPanel {
      */
     private static int size = 4;
     private Game game;
+    private LocalSession localSession;
 
     /**
      * @param defWIDTH default WIDTH of Panel
@@ -40,6 +42,16 @@ public class GamePanel extends JPanel {
         setBackground(Color.LIGHT_GRAY);
 
         this.game = game;
+        this.size = size;
+    }
+
+    public GamePanel (int defWIDTH, int defHEIGHT, LocalSession localSession, int size){
+        setBounds(0, 0, defWIDTH, defHEIGHT);
+        setLayout(null);
+        setBackground(Color.LIGHT_GRAY);
+
+        this.localSession = localSession;
+        this.game = localSession.getGame();                                         //jak sie zacznie wysypywac, to skomentowac ta linijke
         this.size = size;
     }
 
@@ -76,7 +88,7 @@ public class GamePanel extends JPanel {
      * Changes Table Coords, which are saved at board table at Game class, to Panel Coords of circles. It returns 2D Point on Panel
      * @param marble marble, which coords you want to change
      */
-    public static Point changeTableCoordsToPanelCoords (Marble marble) {                //do poprawy
+    private static Point changeTableCoordsToPanelCoords (Marble marble) {
         int y = marble.getY();
         int x = marble.getX() + tabAdd[y];
 
@@ -96,7 +108,7 @@ public class GamePanel extends JPanel {
      * Changes Panel Coords of Circle to Table Coords of marbles. It returns Point on Table
      * @param point 2D point, which coords you want to change
      */
-    public static Point changePanelCoordsToTableCoords (Point point) {
+    private static Point changePanelCoordsToTableCoords (Point point) {
         double X = point.getX();
         double Y = point.getY();
         if (GamePanel.size%2==1) X = X - R;
