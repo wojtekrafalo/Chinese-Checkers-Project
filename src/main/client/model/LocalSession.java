@@ -1,4 +1,4 @@
-package common.model.game;
+package client.model;
 
 import common.model.connection.Command;
 import common.model.connection.Instruction;
@@ -70,7 +70,6 @@ public class LocalSession {
 //        return players;
 //    }
 
-
     private void start() {
 
     }
@@ -89,5 +88,9 @@ public class LocalSession {
 
     public int getNrBoots() {
         return nrBoots;
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

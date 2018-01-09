@@ -4,18 +4,13 @@ package client.model;
 import client.controller.Controller;
 import common.model.connection.Command;
 import common.model.connection.Instruction;
-import common.model.game.LocalSession;
 import common.utils.Converter;
-import server.Server;
-import server.Session;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ServerHandle extends Thread{
 
@@ -100,24 +95,14 @@ public class ServerHandle extends Thread{
         this.write(command);
     }
 
-    public static ServerHandle getServerHandle() throws IOException {
-        ServerHandle.setHost("0.0.0.0");
-        //Default port
-        ServerHandle.setPort(5001);
-        //Singleton
-        if (serverHandle == null) {
-            serverHandle = new ServerHandle(host, port);
-        }
-        return serverHandle;
-    }
-
     private void listen() throws IOException, ClassNotFoundException {
         System.out.println("listen().");
         while (isOnline) {
             Command command = (Command) input.readObject();
+
             System.out.println(command.getName().toString() +
-                    "\nwith params: " + command.getParameters().toString() +
-                    "\nfrom: " + this.clientID);
+                    "\nwith params: " + command.getParameters().toString());
+
             if (command.getName().getNrParams() != command.getParameters().size() && command.getParameters().size() != -1) {
                 System.out.println("But parameters were wrong!");
                 write(new Command(Instruction.WRONG_NUM_OF_PARAMS));
@@ -129,11 +114,17 @@ public class ServerHandle extends Thread{
                         this.model.createNewGame(
                                 command.getParameters().get(0),
                                 command.getParameters().get(1),
-                                command.getParameters().get(2)
+                                command.getParameters().get(2),
+                                command.getParameters().get(3),
+                                nick,
+                                id,
+                                17
                         );
 
-                        controller.createGameView();
                         LocalSession localSession = new LocalSession(command.getParameters().get(0), command.getParameters().get(1), command.getParameters().get(2), command.getParameters().get(3), nick, id);
+                        this.model.setLocalSession(localSession);
+
+                        controller.createGameView();
 
                         System.out.println("New game created");
                         write(new Command(Instruction.START_GAME));
@@ -146,7 +137,7 @@ public class ServerHandle extends Thread{
                         nick = command.getParameters().get(0);
                         System.out.println("New nick added.");
 
-                        write(new Command(Instruction.NICK_ADD));
+//                        write(new Command(Instruction.NICK_ADD));
 //                        write(new Command(Instruction.START_GAME));
                         break;
 
@@ -156,6 +147,7 @@ public class ServerHandle extends Thread{
 
                     case MOVE_MADE:
                         controller.repaint();
+                        model.getLocalSession().getGame().makeMove(Integer.parseInt(command.getParameters().get(0)), Integer.parseInt(command.getParameters().get(1)), Integer.parseInt(command.getParameters().get(2)), Integer.parseInt(command.getParameters().get(3)), Converter.parseColor(command.getParameters().get(4)));
                         System.out.println("Move made from: (" + command.getParameters().get(0) + ", " + command.getParameters().get(1) + ") to: (" + command.getParameters().get(2) + ", " + command.getParameters().get(3) + ") by " + command.getParameters().get(4) +".");
                         break;
 
@@ -206,4 +198,15 @@ public class ServerHandle extends Thread{
     public static void setPort (int port) {
         ServerHandle.port = port;
     }
+
+//    public static ServerHandle getServerHandle() throws IOException {
+//        ServerHandle.setHost("0.0.0.0");
+//        //Default port
+//        ServerHandle.setPort(5001);
+//        //Singleton
+//        if (serverHandle == null) {
+//            serverHandle = new ServerHandle(host, port);
+//        }
+//        return serverHandle;
+//    }
 }

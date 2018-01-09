@@ -1,8 +1,6 @@
 package client.view;
 
 import common.model.game.Game;
-import common.model.game.LocalSession;
-import sun.awt.Graphics2Delegate;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
