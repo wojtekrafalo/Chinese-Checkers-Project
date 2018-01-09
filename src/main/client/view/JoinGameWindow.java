@@ -60,6 +60,7 @@ public class JoinGameWindow extends JFrame {
         rightPanel.add(infoAboutBoots);
         infoAboutID.setBounds(0,250,300,50);
         rightPanel.add(infoAboutID);
+        OK.setBounds(100,300,70,70);
         rightPanel.add(OK);
 //        we add all information about sessions to rightPanel
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(list), new JScrollPane(rightPanel));
@@ -143,6 +144,16 @@ public class JoinGameWindow extends JFrame {
             data[i/6] = sessions.get(i);
         }
         this.list.setListData(data);
+
+        System.out.println("\n\n\n\n\n");
+        for (String s : sessions) {
+            System.out.println(s);
+        }
+        System.out.println("\n\n\n\n\n");
+        for (String s : data) {
+            System.out.println(s);
+        }
+        System.out.println("\n\n\n\n\n");
     }
 
     public int getSelectedNumber() {                          //send selected field of List

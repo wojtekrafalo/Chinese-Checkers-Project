@@ -109,8 +109,6 @@ public class Controller {
                 int selected = joinGame.getSelectedNumber();
                 String hostID = theModel.getSessions().get(6*selected + 2);
 
-                theView.hideShow2();
-
                 serverHandle.write(new Command(Instruction.JOIN_GAME, hostID));
             }
 
@@ -134,7 +132,7 @@ public class Controller {
 
     private void initializeServerHandler(String nick) throws IOException{
         System.out.println("iNItialization of serverHadler");
-        serverHandle = new ServerHandle("0.0.0.0", 5001);
+        serverHandle = ServerHandle.getServerHandle();
         serverHandle.setController(this);
         serverHandle.setModel(theModel);
         serverHandle.send(new Command(Instruction.NICK_ADD, nick));
@@ -236,5 +234,12 @@ public class Controller {
 
     public void setSessions(ArrayList<String> sessions) {
         theView.getJoinGameWindow().setData(sessions);
+    }
+    public View getView() {
+        return theView;
+    }
+
+    public void showGameWindowAfterJoining(){
+        theView.hideShow2();
     }
 }

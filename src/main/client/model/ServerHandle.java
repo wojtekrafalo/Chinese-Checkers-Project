@@ -11,6 +11,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ServerHandle extends Thread{
 
@@ -48,7 +50,7 @@ public class ServerHandle extends Thread{
 
     private Controller controller;
 
-    public ServerHandle(String host, int port) throws IOException {
+    private ServerHandle(String host, int port) throws IOException {
         ServerHandle.host = host;
         ServerHandle.port = port;
 
@@ -56,8 +58,6 @@ public class ServerHandle extends Thread{
         System.out.println("next step");
 
         this.isOnline = true;
-
-        System.out.println("Connection between Game and Server established.");
 
         try {
             System.out.println("Connection .");
@@ -70,7 +70,7 @@ public class ServerHandle extends Thread{
         }
         new Thread(() -> {
             try {
-                System.out.println("Connection between  established.");
+                System.out.println("Connection between Game and Server established.");
                 listen();
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("(in listen thread) Lost connection with Server.");
@@ -120,7 +120,8 @@ public class ServerHandle extends Thread{
                                 17
                         );
 
-                        LocalSession localSession = new LocalSession(command.getParameters().get(0), command.getParameters().get(1), command.getParameters().get(2), command.getParameters().get(3), nick, id, this.model.getGame());
+                        LocalSession localSession = new LocalSession(command.getParameters().get(0), command.getParameters().get(1), command.getParameters().get(2), nick, id, command.getParameters().get(3), this.model.getGame());
+                        localSession.addPlayer(id, nick, Converter.parseColor(command.getParameters().get(3)));
                         this.model.setLocalSession(localSession);
 
                         controller.createGameView();
@@ -152,12 +153,20 @@ public class ServerHandle extends Thread{
                         break;
 
                     case JOINED:
-                        controller.addPlayer(command.getParameters().get(0), command.getParameters().get(1), command.getParameters().get(2));
+                        ArrayList<String> lista = new ArrayList<String>(Arrays.asList(command.getParameters().get(3).split(",")));
+                        int nrPlayers = lista.size()/3;
+                        LocalSession localSession1 = new LocalSession(command.getParameters().get(0), String.valueOf(nrPlayers),command.getParameters().get(2), nick, Integer.parseInt(command.getParameters().get(1)), lista.get(lista.size()-1), null);
+                        for (int i=0; i<lista.size(); i+=3) {
+                            localSession1.addPlayer(Integer.parseInt(command.getParameters().get(i+0)), command.getParameters().get(i+1), Converter.parseColor(command.getParameters().get(i+2)));
+                        }
+
+                        write(new Command(Instruction.PLAYER_JOINED, lista.get(lista.size()-3), lista.get(lista.size()-2), lista.get(lista.size()-1)));
                         break;
 
                     case SEND_SESSIONS:
-                        this.model.setSessions(command.getParameters());
-//                        controller.setSessions(command.getParameters().get(0));
+                        ArrayList<String> list = new ArrayList<String>(Arrays.asList(command.getParameters().get(0).split(",")));
+                        this.model.setSessions(list);
+                        this.controller.getView().getJoinGameWindow().setData(list);
                         break;
 
                     case SESSION_CHOSEN:
@@ -201,14 +210,14 @@ public class ServerHandle extends Thread{
         ServerHandle.port = port;
     }
 
-//    public static ServerHandle getServerHandle() throws IOException {
-//        ServerHandle.setHost("0.0.0.0");
-//        //Default port
-//        ServerHandle.setPort(5001);
-//        //Singleton
-//        if (serverHandle == null) {
-//            serverHandle = new ServerHandle(host, port);
-//        }
-//        return serverHandle;
-//    }
+    public static ServerHandle getServerHandle() throws IOException {
+        ServerHandle.setHost("0.0.0.0");
+        //Default port
+        ServerHandle.setPort(5001);
+        //Singleton
+        if (serverHandle == null) {
+            serverHandle = new ServerHandle(host, port);
+        }
+        return serverHandle;
+    }
 }

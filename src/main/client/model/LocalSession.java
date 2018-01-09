@@ -30,23 +30,22 @@ public class LocalSession {
 
     private Color turn;
 
-    private Color hostColor;
+    private Color color;
 
     private List<Pair<Pair<Integer, String>, Color>> players;
 
 //    private List<Color> colorsTemporary;
-
-    public LocalSession(String name, String nrPlayers, String nrBoots, String hostColor, String nick, int id, Game game) {
+    public LocalSession(String name, String nrPlayers, String nrBoots, String nick, int id, String color, Game game) {
         this.name = name;
         this.nrPlayers = Integer.parseInt(nrPlayers);
         this.nrBoots = Integer.parseInt(nrBoots);
-        this.hostColor = Converter.parseColor(hostColor);
-//        this.started = false;
-        this.hostName =nick;
+        this.color = Converter.parseColor(color);
+
         this.hostId = id;
-        this.players = new ArrayList<Pair<Pair<Integer, String>, Color>>();
-        this.players.add(new Pair(new Pair(new Integer(id), nick), Converter.parseColor(hostColor)));
-        this.game = game;
+        this.players = new ArrayList<>();
+        addPlayer(id, nick, Converter.parseColor(color));
+        if (game == null) this.game = new Game(this.nrPlayers, 17);
+        else this.game = game;
     }
 
     public void addPlayer(int id, String nick, Color color) {
@@ -76,8 +75,8 @@ public class LocalSession {
 
     }
 
-    Color getHost() {
-        return hostColor;
+    Color getColor() {
+        return color;
     }
 
     public Color getTurn() {
@@ -95,8 +94,4 @@ public class LocalSession {
     public Game getGame() {
         return game;
     }
-
-//    public void setGame(Game game) {
-//        this.game = game;
-//    }
 }
