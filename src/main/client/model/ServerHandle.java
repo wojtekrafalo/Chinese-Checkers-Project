@@ -163,6 +163,7 @@ public class ServerHandle extends Thread{
                         this.write(new Command(Instruction.JOIN_GAME));
                         break;
 
+
                     default:
                         break;
                 }

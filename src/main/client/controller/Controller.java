@@ -36,6 +36,7 @@ public class Controller {
         this.theView.addListener(new MenuListener(), new SelectionListener(), new MouseListListener());
     }
 
+
     public void start(Model model) {
         this.theModel = model;
     }

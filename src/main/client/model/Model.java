@@ -14,6 +14,7 @@ public class Model {
     private int numberOfPlayers;
     private int numberOfBoots;
     private int id;
+
     private int size;
     private Socket socket;
     private ServerHandle serverHandle;

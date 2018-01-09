@@ -42,6 +42,7 @@ public class GameWindow extends JFrame {
         add(gamePanel);
     }
 
+
     public void addListener(ActionListener actionListener, MouseInputListener mouseListener) {
         menuInfo.addActionListener(actionListener);
         menuReset.addActionListener(actionListener);
