@@ -203,7 +203,7 @@ public class Controller {
                             if (GamePanel.contains(marble, e.getX(), e.getY())) secondMarble = marble;
                         }
                     }
-                    if (firstMarble != null && secondMarble != null) {
+                    if (firstMarble != null && secondMarble != null && localSession.getStarted()) {
                         serverHandle.write(new Command(Instruction.MAKE_MOVE, String.valueOf(firstMarble.getX()), String.valueOf(firstMarble.getY()), String.valueOf(secondMarble.getX()), String.valueOf(secondMarble.getY())));
 //                        game.makeMove(firstMarble.getX(), firstMarble.getY(), secondMarble.getX(), secondMarble.getY(), firstMarble.getColor());
                     }

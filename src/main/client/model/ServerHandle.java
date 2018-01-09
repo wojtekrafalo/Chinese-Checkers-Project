@@ -137,6 +137,9 @@ public class ServerHandle extends Thread{
                         break;
 
                     case START_GAME:
+                        this.localSession.setTurn(Converter.parseColor(command.getParameters().get(0)));
+                        this.localSession.setStarted(true);
+
                         System.out.println("Game started");
                         break;
 

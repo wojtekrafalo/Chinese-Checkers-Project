@@ -82,6 +82,10 @@ public class LocalSession {
         return turn;
     }
 
+    public void setTurn(Color color) {
+        this.turn = color;
+    }
+
     public int getNrPlayers() {
         return nrPlayers;
     }
@@ -92,5 +96,13 @@ public class LocalSession {
 
     public Game getGame() {
         return game;
+    }
+
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
+
+    public boolean getStarted() {
+        return started;
     }
 }
