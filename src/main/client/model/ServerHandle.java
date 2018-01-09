@@ -117,7 +117,6 @@ public class ServerHandle extends Thread{
                         LocalSession localSession = new LocalSession(command.getParameters().get(0), command.getParameters().get(1), command.getParameters().get(2), nick, id, command.getParameters().get(3), game);
                         localSession.addPlayer(id, nick, Converter.parseColor(command.getParameters().get(3)));
                         this.model.setLocalSession(localSession);
-                        this.controller.setLocalSession(localSession);
 
                         controller.createGameView();
 
