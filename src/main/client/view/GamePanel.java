@@ -7,7 +7,8 @@ import common.model.game.Marble;
 import javax.swing.*;
 import java.awt.*;
 
-import static com.sun.javafx.geom.Point2D.distance;
+
+import static java.awt.geom.Point2D.distance;
 import static java.lang.StrictMath.sqrt;
 
 /**

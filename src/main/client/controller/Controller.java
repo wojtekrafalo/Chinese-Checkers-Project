@@ -127,7 +127,7 @@ public class Controller {
 
     public void createGameView() {
         theView.initializeGameWindow(theModel.getLocalSession());
-        theView.addGameWindowListener(new MenuGameWindowListener(), new MouseListener(), theModel.getGame());
+        theView.addGameWindowListener(new MenuGameWindowListener(), new MouseListener(), theModel.getLocalSession().getGame());
         theView.hideShow2();
     }
 
@@ -184,7 +184,7 @@ public class Controller {
         GamePanel gamePanel = theView.getGameWindow().getGamePanel();
         Marble firstMarble = null;
         Marble secondMarble= null;
-        Game game = localSession.getGame();
+        Game game = theModel.getLocalSession().getGame();
 
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -203,12 +203,12 @@ public class Controller {
                             if (GamePanel.contains(marble, e.getX(), e.getY())) secondMarble = marble;
                         }
                     }
-                    if (firstMarble != null && secondMarble != null && localSession.getStarted()) {
+                    if (firstMarble != null && secondMarble != null && theModel.getLocalSession().getStarted()) {
                         serverHandle.write(new Command(Instruction.MAKE_MOVE, String.valueOf(firstMarble.getX()), String.valueOf(firstMarble.getY()), String.valueOf(secondMarble.getX()), String.valueOf(secondMarble.getY())));
 //                        game.makeMove(firstMarble.getX(), firstMarble.getY(), secondMarble.getX(), secondMarble.getY(), firstMarble.getColor());
                     }
 
-                    gamePanel.repaint();
+                    //gamePanel.repaint();
                     firstMarble = null;
                     secondMarble= null;
                 }
