@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * This class instance is being generated after every new client connects to the server
  */
-class Client extends Thread {
+public class Client extends Thread {
 
     /**
      * This client input stream

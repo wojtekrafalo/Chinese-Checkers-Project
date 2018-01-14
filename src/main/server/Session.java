@@ -2,7 +2,6 @@ package server;
 
 import common.model.connection.Command;
 import common.model.connection.Instruction;
-import common.model.game.Boot;
 import common.model.game.Color;
 import common.model.game.Game;
 
@@ -205,6 +204,8 @@ public class Session {
         game.setTurn(turn);
         for ( int i = 0 ; i < nrBoots; i++){
             Boot boot = new Boot(this, colors.get(players.size() + i),"Boot" + i + 1);
+            boot.setSession(this);
+            boot.setGame(this.game);
             boots.add(boot);
             for (Client receiver : players) {
                 receiver.write(new Command(Instruction.BOOT_ADD,boot.getNick(),String.valueOf(boot.getColor())));
@@ -214,7 +215,7 @@ public class Session {
             receiver.write(new Command(Instruction.START_GAME,String.valueOf(turn)));
         }
         for (Boot boot : boots){
-            boot.run();
+            boot.start();
         }
         System.out.println("Session: " + name + " - Game Started , Turn: " + turn);
     }
@@ -299,6 +300,9 @@ public class Session {
             else {
                 movingPlayer.write(new Command(Instruction.CANT_MOVE));
             }
+        }
+        else {
+            System.out.println("Ruch?");
         }
     }
 

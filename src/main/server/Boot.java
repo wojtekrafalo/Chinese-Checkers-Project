@@ -1,9 +1,12 @@
-package common.model.game;
+package server;
 
+import common.model.connection.Command;
+import common.model.connection.Instruction;
 import common.model.game.Color;
 import common.model.game.Game;
 import common.model.game.Marble;
 import server.Session;
+import server.Client;
 
 import java.util.ArrayList;
 import java.awt.Point;
@@ -20,8 +23,6 @@ public class Boot extends Thread{
     private double[][] distance = new double[10][6];
 
     public Boot (Session session, Color color, String nick) {
-        this.session = session;
-        this.game = session.getGame();
         this.color = color;
         this.nick = nick;
 //        for (int i=0; i<10; i++) System.out.println((listOfMarbles[i]!=null) + " " + listOfMarbles[i].getX() + " " + listOfMarbles[i].getY());
@@ -38,6 +39,7 @@ public class Boot extends Thread{
 
     public void run() {
         while (true) {
+
             if (session.getTurn() == color){
                 game = session.getGame();
                 makeMove();
@@ -141,7 +143,20 @@ public class Boot extends Thread{
                             helpPrevY + tabMove[j][1],
                             color);
                     isMadeMove = (game.getBoard()[helpPrevX][helpPrevY].getColor() == Color.NONE && game.getBoard()[helpPrevX + tabMove[j][0]][helpPrevY + tabMove[j][1]].getColor() != Color.NONE);
-                    if (isMadeMove) break;
+                    if (isMadeMove){
+                        session.setTurn();
+                        session.getGame().setTurn(session.getTurn());
+                        for(Client client : session.getPlayers()){
+                            client.write(new Command(Instruction.MOVE_MADE,
+                                    String.valueOf(helpPrevX),
+                                    String.valueOf(helpPrevY),
+                                    String.valueOf(helpPrevX + tabMove[j][0]),
+                                    String.valueOf(helpPrevY + tabMove[j][1]),
+                                    String.valueOf(session.getTurn())
+                            ));
+                        }
+                        break;
+                    }
                 }
 
                 i++;
@@ -156,6 +171,13 @@ public class Boot extends Thread{
     }
     public Color getColor () {
         return color;
+    }
+
+    public void setSession(Session session){
+        this.session = session;
+
+    } public void setGame(Game game){
+        this.game = game;
     }
 
     public String getNick() {

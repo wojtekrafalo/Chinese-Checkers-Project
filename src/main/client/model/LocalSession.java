@@ -1,8 +1,5 @@
 package client.model;
 
-import common.model.connection.Command;
-import common.model.connection.Instruction;
-import common.model.game.Boot;
 import common.model.game.Color;
 import common.model.game.Game;
 import common.utils.Converter;

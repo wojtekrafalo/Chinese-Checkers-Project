@@ -77,7 +77,7 @@ public class Controller {
                 else first.displayErrorMessage();
 
                 serverHandle.write(new Command(Instruction.REQUIRE_SESSIONS));
-                serverHandle.write(new Command(Instruction.NICK_ADD, nick));
+                //serverHandle.write(new Command(Instruction.NICK_ADD, nick));
             }
 
             if (e.getSource().equals(newGame.getOK())) {                    //CREATE NEW GAME, send it to model
@@ -133,6 +133,7 @@ public class Controller {
         System.out.println("iNItialization of serverHadler");
         serverHandle = ServerHandle.getServerHandle();
         serverHandle.setController(this);
+        serverHandle.setModel(theModel);
         serverHandle.send(new Command(Instruction.NICK_ADD, nick));
     }
 

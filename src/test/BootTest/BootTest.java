@@ -1,14 +1,12 @@
 package BootTest;
 
-import common.model.game.Boot;
+import server.Boot;
 import common.model.game.Color;
 import common.model.game.Game;
 import common.model.game.Marble;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import server.Session;
 
 public class BootTest {
     Boot boot;

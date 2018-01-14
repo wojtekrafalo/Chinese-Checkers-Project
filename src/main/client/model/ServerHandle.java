@@ -147,8 +147,9 @@ public class ServerHandle extends Thread{
                         break;
 
                     case MOVE_MADE:
-                        controller.repaint();
-                        model.getLocalSession().getGame().makeMove(Integer.parseInt(command.getParameters().get(0)), Integer.parseInt(command.getParameters().get(1)), Integer.parseInt(command.getParameters().get(2)), Integer.parseInt(command.getParameters().get(3)), Converter.parseColor(command.getParameters().get(4)));
+                        model.getLocalSession().getGame().makeMove(Integer.parseInt(command.getParameters().get(0)), Integer.parseInt(command.getParameters().get(1)), Integer.parseInt(command.getParameters().get(2)), Integer.parseInt(command.getParameters().get(3)), model.getLocalSession().getTurn());
+                        model.getLocalSession().setTurn(Converter.parseColor(command.getParameters().get(4)));
+
                         System.out.println("Move made from: (" + command.getParameters().get(0) + ", " + command.getParameters().get(1) + ") to: (" + command.getParameters().get(2) + ", " + command.getParameters().get(3) + ") by " + command.getParameters().get(4) +".");
                         controller.repaint();
                         break;
