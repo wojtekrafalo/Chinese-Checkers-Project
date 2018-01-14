@@ -83,10 +83,9 @@ public class JoinGameWindow extends JFrame {
         System.out.println("JoinGameWindow created");
     }
 
-    void addListener(ActionListener listener, ListSelectionListener listListener, MouseInputListener mouseInputListener){
+    void addListener(ActionListener listener, MouseInputListener mouseInputListener){
         OK.addActionListener(listener);
         refreshButton.addActionListener(listener);
-        list.addListSelectionListener(listListener);
         menuInfo.addActionListener(listener);
         menuNew.addActionListener(listener);
         menuExit.addActionListener(listener);

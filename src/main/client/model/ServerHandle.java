@@ -110,13 +110,14 @@ public class ServerHandle extends Thread{
                 switch (command.getName()) {
 
                     case CREATED:
-                        System.out.println(this.model.getGame());
+//                        System.out.println(this.model.getLocalSession().getGame());
 
                         Game game = new Game(Integer.parseInt(command.getParameters().get(1)), 17);
 
                         LocalSession localSession = new LocalSession(command.getParameters().get(0), command.getParameters().get(1), command.getParameters().get(2), nick, id, command.getParameters().get(3), game);
                         localSession.addPlayer(id, nick, Converter.parseColor(command.getParameters().get(3)));
                         this.model.setLocalSession(localSession);
+                        this.controller.setLocalSession(localSession);
 
                         controller.createGameView();
 
@@ -128,11 +129,13 @@ public class ServerHandle extends Thread{
                         this.nick = command.getParameters().get(0);
                         this.id = Integer.parseInt(command.getParameters().get(1));
                         this.model = new Model(command.getParameters().get(0), this);
+                        System.out.println("theModel created in ServerHandle");
+
                         controller.setModel(this.model);
+//                        this.model.setServerHandle(this);
 
                         System.out.println("New nick added:" + command.getParameters().get(0));
 
-//                        write(new Command(Instruction.NICK_ADD));
 //                        write(new Command(Instruction.START_GAME));
                         break;
 
@@ -144,10 +147,8 @@ public class ServerHandle extends Thread{
                         break;
 
                     case MOVE_MADE:
-//                        controller.repaint();
-                        model.getLocalSession().getGame().makeMove(Integer.parseInt(command.getParameters().get(0)), Integer.parseInt(command.getParameters().get(1)), Integer.parseInt(command.getParameters().get(2)), Integer.parseInt(command.getParameters().get(3)), model.getLocalSession().getTurn());
-                        model.getLocalSession().setTurn(Converter.parseColor(command.getParameters().get(4)));
-
+                        controller.repaint();
+                        model.getLocalSession().getGame().makeMove(Integer.parseInt(command.getParameters().get(0)), Integer.parseInt(command.getParameters().get(1)), Integer.parseInt(command.getParameters().get(2)), Integer.parseInt(command.getParameters().get(3)), Converter.parseColor(command.getParameters().get(4)));
                         System.out.println("Move made from: (" + command.getParameters().get(0) + ", " + command.getParameters().get(1) + ") to: (" + command.getParameters().get(2) + ", " + command.getParameters().get(3) + ") by " + command.getParameters().get(4) +".");
                         controller.repaint();
                         break;
@@ -160,8 +161,9 @@ public class ServerHandle extends Thread{
                             localSession1.addPlayer(Integer.parseInt(lista.get(i)), lista.get(i+1), Converter.parseColor(lista.get(i+2)));
                         }
 
-
                         this.model.setLocalSession(localSession1);
+                        this.controller.setLocalSession(localSession1);
+
                         controller.createGameView();
 //                        write(new Command(Instruction.PLAYER_JOINED, lista.get(lista.size()-3), lista.get(lista.size()-2), lista.get(lista.size()-1)));
                         break;

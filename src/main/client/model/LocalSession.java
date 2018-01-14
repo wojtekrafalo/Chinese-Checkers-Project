@@ -91,6 +91,10 @@ public class LocalSession {
         return nrPlayers;
     }
 
+    public List<Pair<Pair<Integer, String>, Color>> getPlayers() {
+        return players;
+    }
+
     public int getNrBoots() {
         return nrBoots;
     }

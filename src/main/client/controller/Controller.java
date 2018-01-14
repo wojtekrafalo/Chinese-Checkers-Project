@@ -33,18 +33,16 @@ public class Controller {
         System.out.println("theController created");
 
         this.theView = new View();
-        this.theView.addListener(new MenuListener(), new SelectionListener(), new MouseListListener());
+        this.theView.addListener(new MenuListener(), new MouseListListener());
     }
-
 
     public void setModel(Model model) {
         this.theModel = model;
     }
 
-
-    public void addPlayer(String nick, String color, String ID) {
-//        localSession.addPlayer(Converter.parseColor(color));
-    }
+//    public void addPlayer(String nick, String color, String ID) {
+////        localSession.addPlayer(Converter.parseColor(color));
+//    }
 
     class MenuGameWindowListener implements ActionListener {
         GameWindow gameWindow = theView.getGameWindow();
@@ -78,8 +76,8 @@ public class Controller {
                 }
                 else first.displayErrorMessage();
 
-                theModel = new Model(nick, serverHandle);
                 serverHandle.write(new Command(Instruction.REQUIRE_SESSIONS));
+                serverHandle.write(new Command(Instruction.NICK_ADD, nick));
             }
 
             if (e.getSource().equals(newGame.getOK())) {                    //CREATE NEW GAME, send it to model
@@ -135,7 +133,6 @@ public class Controller {
         System.out.println("iNItialization of serverHadler");
         serverHandle = ServerHandle.getServerHandle();
         serverHandle.setController(this);
-        serverHandle.setModel(theModel);
         serverHandle.send(new Command(Instruction.NICK_ADD, nick));
     }
 
@@ -143,16 +140,16 @@ public class Controller {
         this.localSession = localSession;
     }
 
-    class SelectionListener implements ListSelectionListener{                   //probably unnecessary
-
-        @Override
-        public void valueChanged(ListSelectionEvent e) {
-            int first = e.getFirstIndex();
-            int last = e.getLastIndex();
-
-            System.out.println(first + " " + last);
-        }
-    }
+//    class SelectionListener implements ListSelectionListener{                   //probably unnecessary
+//
+//        @Override
+//        public void valueChanged(ListSelectionEvent e) {
+//            int first = e.getFirstIndex();
+//            int last = e.getLastIndex();
+//
+//            System.out.println(first + " " + last);
+//        }
+//    }
 
     class MouseListListener implements MouseInputListener{
         @Override
@@ -161,7 +158,6 @@ public class Controller {
                 int index = theView.getJoinGameWindow().getList().locationToIndex(e.getPoint());
                 System.out.println("Clicked on Item " + index);
                 theView.getJoinGameWindow().setInfoAboutSession(index);
-
             }
         }
 

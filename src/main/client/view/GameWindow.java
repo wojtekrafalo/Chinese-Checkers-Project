@@ -10,18 +10,19 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class GameWindow extends JFrame {
-    private static int WIDTH = 600, HEIGHT = 600;
+    private static int WIDTH = 700, HEIGHT = 700;
     private static String infoMessage = "INFO\n" +
             "INFO";
 
     private GamePanel gamePanel;
+    private SessionPanel sessionPanel;
 //    private LocalSession localSession;
 
     private MenuBar myMenu = new MenuBar();
     private Menu menu1 = new Menu("Menu");
     private MenuItem menuInfo = new MenuItem("INFO"), menuReset=new MenuItem("RESET"), menuSurrender=new MenuItem("SURRENDER");
 
-    public GameWindow (LocalSession localSession) {
+    GameWindow(LocalSession localSession) {
         super("Chinese_Checkers");
         menu1.add(menuInfo);
         menu1.addSeparator();
@@ -32,12 +33,17 @@ public class GameWindow extends JFrame {
         this.setMenuBar(myMenu);
 //        setResizable(false);
         setResizable(true);
+        this.setLayout(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setBounds(60,60,WIDTH,HEIGHT);
+        this.setBounds(0,0,WIDTH+300,HEIGHT+300);
 
         gamePanel = new GamePanel(WIDTH, HEIGHT, localSession, 4);
-        gamePanel.setBounds(new Rectangle(60,60,WIDTH,HEIGHT));
+        gamePanel.setBounds(new Rectangle(0,0,WIDTH,HEIGHT));
         add(gamePanel);
+
+        sessionPanel = new SessionPanel(localSession);
+        sessionPanel.setBounds(new Rectangle(700, 0, 3*60, 6*40));
+        add(sessionPanel);
 //        pack();
     }
 

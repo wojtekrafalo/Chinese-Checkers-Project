@@ -137,7 +137,7 @@ public class GamePanel extends JPanel {
      * Changes Enum Color from Game class to awt Color
      * @param color color, which you want to change
      */
-    private static java.awt.Color switchColor (common.model.game.Color color) {
+    public static java.awt.Color switchColor (common.model.game.Color color) {
         switch (color) {
             case AZURE: return Color.CYAN;
             case BLUE: return Color.BLUE;

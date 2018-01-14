@@ -24,24 +24,14 @@ public class View {
         firstWindow.setVisible(true);
     }
 
-//    public View(Game game) {
-//        firstWindow.setVisible(true);
-//        gameWindow   = new GameWindow(DEF_WIDTH, DEF_HEIGHT, game);
-//    }
-
-//    public void initializeGameWindow (Game game) {
-//        gameWindow = new GameWindow(game);                                //wrong constructor of GameWindow class
-//        gameWindow.setLocalSession(game);
-//    }
-
     public void initializeGameWindow (LocalSession localSession) {
         gameWindow = new GameWindow(localSession);
     }
 
-    public void addListener(ActionListener listener, ListSelectionListener listListener, MouseInputListener mouseListener){
+    public void addListener(ActionListener listener, MouseInputListener mouseListener){
         firstWindow.addListener(listener);
         newGameWindow.addListener(listener);
-        joinGameWindow.addListener(listener, listListener, mouseListener);
+        joinGameWindow.addListener(listener, mouseListener);
     }
 
     public void addGameWindowListener(ActionListener listener, MouseInputListener mouseListener, Game game){
