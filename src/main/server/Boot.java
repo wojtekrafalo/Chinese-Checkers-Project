@@ -22,7 +22,7 @@ public class Boot extends Thread{
     private Marble[] listOfMarbles = new Marble[10];
     private double[][] distance = new double[10][6];
 
-    public Boot (Session session, Color color, String nick) {
+    public Boot (Color color, String nick) {
         this.color = color;
         this.nick = nick;
 //        for (int i=0; i<10; i++) System.out.println((listOfMarbles[i]!=null) + " " + listOfMarbles[i].getX() + " " + listOfMarbles[i].getY());
@@ -114,15 +114,29 @@ public class Boot extends Thread{
                     helpPrevY,
                     helpPrevX + tabMove[whichMove[i]][0],
                     helpPrevY + tabMove[whichMove[i]][1],
-                    color))
+                    color)) {
                 game.makeMove(helpPrevX,
                         helpPrevY,
                         helpPrevX + tabMove[whichMove[i]][0],
                         helpPrevY + tabMove[whichMove[i]][1],
                         color);
-            isMadeMove = (game.getBoard()[helpPrevX][helpPrevY].getColor() == Color.NONE && game.getBoard()[helpPrevX + tabMove[whichMove[i]][0]][helpPrevY + tabMove[whichMove[i]][1]].getColor() != Color.NONE);
+            }
+            isMadeMove = (game.getBoard()[helpPrevX][helpPrevY].getColor() == Color.NONE && game.getBoard()[helpPrevX + tabMove[whichMove[i]][0]][helpPrevY + tabMove[whichMove[i]][1]].getColor() == color);
+            if (isMadeMove){  session.setTurn();
+                session.getGame().setTurn(session.getTurn());
+                for(Client client : session.getPlayers()){
+                    client.write(new Command(Instruction.MOVE_MADE,
+                            String.valueOf(helpPrevX),
+                            String.valueOf(helpPrevY),
+                            String.valueOf(helpPrevX + tabMove[whichMove[i]][0]),
+                            String.valueOf(helpPrevY + tabMove[whichMove[i]][1]),
+                            String.valueOf(session.getTurn())
+                    ));
+                }
+                break;
+
+            }
             i++;
-            if (isMadeMove) break;
         }
         if (!isMadeMove) {
             i=0;
@@ -132,17 +146,24 @@ public class Boot extends Thread{
                 helpPrevY = marble.getY();
 
                 for (int j=0; j<6; j++) {
-                    if (game.canMove(helpPrevX,
+                    if (game.canMove(
+                            helpPrevX,
                             helpPrevY,
                             helpPrevX + tabMove[j][0],
                             helpPrevY + tabMove[j][1],
-                            color))
-                    game.makeMove(helpPrevX,
-                            helpPrevY,
-                            helpPrevX + tabMove[j][0],
-                            helpPrevY + tabMove[j][1],
-                            color);
-                    isMadeMove = (game.getBoard()[helpPrevX][helpPrevY].getColor() == Color.NONE && game.getBoard()[helpPrevX + tabMove[j][0]][helpPrevY + tabMove[j][1]].getColor() != Color.NONE);
+                            color
+                    )) {
+                        //System.out.println(game.getBoard()[helpPrevX][helpPrevY].getColor());
+                        //System.out.println(game.getBoard()[helpPrevX + tabMove[j][0]][helpPrevY + tabMove[j][1]].getColor());
+                        game.makeMove(
+                                helpPrevX,
+                                helpPrevY,
+                                helpPrevX + tabMove[j][0],
+                                helpPrevY + tabMove[j][1],
+                                color
+                        );
+                    }
+                    isMadeMove = (game.getBoard()[helpPrevX][helpPrevY].getColor() == Color.NONE && game.getBoard()[helpPrevX + tabMove[j][0]][helpPrevY + tabMove[j][1]].getColor() == this.color);
                     if (isMadeMove){
                         session.setTurn();
                         session.getGame().setTurn(session.getTurn());

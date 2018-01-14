@@ -583,8 +583,10 @@ public class Game {
             final int nextY,
             final Color color
     ) {
-        board[prevX][prevY].setColor(Color.NONE);
-        board[nextX][nextY].setColor(color);
+        if (validateCords(nextX,nextY)){
+            board[prevX][prevY].setColor(Color.NONE);
+            board[nextX][nextY].setColor(color);
+        }
     }
 
 

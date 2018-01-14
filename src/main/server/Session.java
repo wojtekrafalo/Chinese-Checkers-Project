@@ -203,7 +203,7 @@ public class Session {
         turn = Color.randomColor(colors);
         game.setTurn(turn);
         for ( int i = 0 ; i < nrBoots; i++){
-            Boot boot = new Boot(this, colors.get(players.size() + i),"Boot" + i + 1);
+            Boot boot = new Boot(colors.get(players.size() + i),"Boot" + i + 1);
             boot.setSession(this);
             boot.setGame(this.game);
             boots.add(boot);
@@ -224,6 +224,7 @@ public class Session {
         if(turn == movingPlayer.getColor()) {
             if(game.canMove(prevX,prevY,nextX,nextY,movingPlayer.getColor())) {
                 game.makeMove(prevX,prevY,nextX,nextY, movingPlayer.getColor());
+
                 setTurn();
                 game.setTurn(turn);
                 for (Client client : players) {
@@ -300,9 +301,6 @@ public class Session {
             else {
                 movingPlayer.write(new Command(Instruction.CANT_MOVE));
             }
-        }
-        else {
-            System.out.println("Ruch?");
         }
     }
 
