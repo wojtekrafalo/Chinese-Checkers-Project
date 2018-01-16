@@ -14,6 +14,8 @@ public class GameWindow extends JFrame {
     private static String infoMessage = "INFO\n" +
             "INFO";
 
+    private static String errorMessage = "MOVE INCORRECT";
+
     private GamePanel gamePanel;
     private SessionPanel sessionPanel;
 //    private LocalSession localSession;
@@ -66,8 +68,14 @@ public class GameWindow extends JFrame {
     public GamePanel getGamePanel() {
         return gamePanel;
     }
+    public SessionPanel getSessionPanel() {
+        return sessionPanel;
+    }
 
     public void displayInfo(){
         JOptionPane.showMessageDialog(this, infoMessage);
+    }
+    public void displayError(){
+        JOptionPane.showMessageDialog(this, errorMessage);
     }
 }

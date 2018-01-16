@@ -10,8 +10,11 @@ public class Model {
     private ServerHandle serverHandle;
     private LocalSession localSession;
     private List<String> sessions;
+    private String nick;
+    private int id;
 
     public Model (String nick, ServerHandle serverHandle) {
+        this.nick = nick;
         this.serverHandle = serverHandle;
     }
 

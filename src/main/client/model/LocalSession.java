@@ -27,17 +27,15 @@ public class LocalSession {
 
     private Color turn;
 
-    private Color color;
+    private Color hostColor;
 
     private List<Pair<Pair<Integer, String>, Color>> players;
 
-
-//    private List<Color> colorsTemporary;
     public LocalSession(String name, String nrPlayers, String nrBoots, String nick, int id, String color, Game game) {
         this.name = name;
         this.nrPlayers = Integer.parseInt(nrPlayers);
         this.nrBoots = Integer.parseInt(nrBoots);
-        this.color = Converter.parseColor(color);
+        this.hostColor = Converter.parseColor(color);
 
         this.hostId = id;
         this.players = new ArrayList<>();
@@ -46,6 +44,9 @@ public class LocalSession {
     }
 
     public void addPlayer(int id, String nick, Color color) {
+        if (players == null) {
+            players = new ArrayList();
+        }
         players.add(new Pair(new Pair(new Integer(id), nick), color));
     }
 
@@ -67,13 +68,8 @@ public class LocalSession {
 //        return players;
 //    }
 
-
-    private void start() {
-
-    }
-
-    Color getColor() {
-        return color;
+    Color getHostColor() {
+        return hostColor;
     }
 
     public Color getTurn() {

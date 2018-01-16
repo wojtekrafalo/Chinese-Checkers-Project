@@ -76,6 +76,8 @@ public class Controller {
                 }
                 else first.displayErrorMessage();
 
+                System.out.println("NICK_INSERTED_REQUIRE_SESSIONS_SENT");
+
                 serverHandle.write(new Command(Instruction.REQUIRE_SESSIONS));
                 //serverHandle.write(new Command(Instruction.NICK_ADD, nick));
             }
@@ -132,6 +134,7 @@ public class Controller {
     private void initializeServerHandler(String nick) throws IOException{
         System.out.println("iNItialization of serverHadler");
         serverHandle = ServerHandle.getServerHandle();
+//        theModel = new Model(nick, serverHandle);
         serverHandle.setController(this);
         serverHandle.setModel(theModel);
         serverHandle.send(new Command(Instruction.NICK_ADD, nick));
@@ -139,6 +142,10 @@ public class Controller {
 
     public void setLocalSession (LocalSession localSession) {
         this.localSession = localSession;
+    }
+
+    public LocalSession getLocalSession () {
+        return localSession;
     }
 
 //    class SelectionListener implements ListSelectionListener{                   //probably unnecessary
@@ -233,6 +240,7 @@ public class Controller {
 
     public void repaint() {
         theView.getGameWindow().getGamePanel().repaint();
+        theView.getGameWindow().getSessionPanel().repaintLabels();
     }
 
     public void setSessions(ArrayList<String> sessions) {

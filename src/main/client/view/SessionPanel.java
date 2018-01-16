@@ -1,6 +1,7 @@
 package client.view;
 
 import client.model.LocalSession;
+import common.utils.Converter;
 import javafx.util.Pair;
 
 import javax.swing.*;
@@ -10,7 +11,9 @@ import java.util.List;
 public class SessionPanel extends JPanel{
     private LocalSession localSession;
 
+    private int nrPlayers;
     private JLabel[][] playersLabel;
+    private int labelWidth = 60, labelHeight = 40;
 
     /**
      * @param localSession Session, which state would be painted at Panel
@@ -25,13 +28,15 @@ public class SessionPanel extends JPanel{
         drawLabels();
     }
 
-    public void drawLabels() {
+    private void drawLabels() {
         List<Pair<Pair<Integer, String>, common.model.game.Color>> players = localSession.getPlayers();
-        int nrPlayers = localSession.getNrPlayers();
-        int labelWidth = 60, labelHeight = 40;
-        playersLabel = new JLabel[localSession.getNrPlayers()][3];
 
-        for (int i=0; i<localSession.getNrPlayers(); i++) {
+//        System.out.println("Players: " + players);
+
+        nrPlayers = players.size() - 1;
+        playersLabel = new JLabel[nrPlayers][3];
+
+        for (int i=0; i<nrPlayers; i++) {
             Pair <Pair<Integer, String>, common.model.game.Color> pair = players.get(i);
 
             playersLabel[i][0] = new JLabel("ACTIVE");
@@ -47,5 +52,17 @@ public class SessionPanel extends JPanel{
                 this.add(playersLabel[i][j]);
             }
         }
+    }
+
+    public void writeTurn(String turn) {
+        for (int i=0; i<nrPlayers; i++) {
+            if (playersLabel[i][2].getBackground() == GamePanel.switchColor(Converter.parseColor(turn)))
+                playersLabel[i][2].setText("MOVE");
+            else playersLabel[i][2].setText("WAIT");
+        }
+    }
+
+    public void repaintLabels() {
+        drawLabels();
     }
 }

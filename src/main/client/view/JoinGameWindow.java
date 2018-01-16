@@ -35,7 +35,7 @@ public class JoinGameWindow extends JFrame {
     private int chosenSession=0;
     private String[] data = {};
     private ArrayList<String> sessions;
-
+    
 
     JoinGameWindow(){
         super("Join to existing Game");
@@ -167,5 +167,9 @@ public class JoinGameWindow extends JFrame {
 
     public void displayInfo(){
         JOptionPane.showMessageDialog(this, infoMessage);
+    }
+
+    public ArrayList<String> getSessions() {
+        return sessions;
     }
 }

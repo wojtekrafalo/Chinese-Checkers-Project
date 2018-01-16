@@ -119,6 +119,8 @@ public class ServerHandle extends Thread{
                         this.model.setLocalSession(localSession);
                         this.controller.setLocalSession(localSession);
 
+                        System.out.println("Created, players: " + localSession.getPlayers());
+
                         controller.createGameView();
 
                         System.out.println("New game created");
@@ -150,7 +152,9 @@ public class ServerHandle extends Thread{
                         model.getLocalSession().getGame().makeMove(Integer.parseInt(command.getParameters().get(0)), Integer.parseInt(command.getParameters().get(1)), Integer.parseInt(command.getParameters().get(2)), Integer.parseInt(command.getParameters().get(3)), model.getLocalSession().getTurn());
                         model.getLocalSession().setTurn(Converter.parseColor(command.getParameters().get(4)));
 
-                        System.out.println("Move made from: (" + command.getParameters().get(0) + ", " + command.getParameters().get(1) + ") to: (" + command.getParameters().get(2) + ", " + command.getParameters().get(3) + ") by " + command.getParameters().get(4) +".");
+                        controller.getView().getGameWindow().getSessionPanel().writeTurn(command.getParameters().get(4));
+
+                        System.out.println("Move made from: (" + command.getParameters().get(0) + ", " + command.getParameters().get(1) + ") to: (" + command.getParameters().get(2) + ", " + command.getParameters().get(3) + ") by " + model.getLocalSession().getTurn() +".");
                         controller.repaint();
                         break;
 
@@ -161,6 +165,8 @@ public class ServerHandle extends Thread{
                         for (int i=0; i<lista.size(); i+=3) {
                             localSession1.addPlayer(Integer.parseInt(lista.get(i)), lista.get(i+1), Converter.parseColor(lista.get(i+2)));
                         }
+
+                        System.out.println("Jined, players: " + localSession1.getPlayers());
 
                         this.model.setLocalSession(localSession1);
                         this.controller.setLocalSession(localSession1);
@@ -179,6 +185,70 @@ public class ServerHandle extends Thread{
                         this.write(new Command(Instruction.JOIN_GAME));
                         break;
 
+                    case BOOT_ADD:
+
+                        break;
+
+                    case PLAYER_JOINED:
+                        this.controller.getLocalSession().addPlayer(
+                                Integer.parseInt(command.getParameters().get(0)),
+                                command.getParameters().get(1),
+                                Converter.parseColor(command.getParameters().get(2))
+                        );
+                        controller.getView().getGameWindow().getSessionPanel().repaintLabels();
+                        break;
+
+                    case CANT_MOVE:
+                        controller.getView().getGameWindow().displayError();
+                        break;
+
+                    case LEAVED:
+
+                        break;
+
+                    case HOST_LEAVED:
+
+                        break;
+
+                    case PLAYER_LEAVED:
+
+                        break;
+
+                    case PLAYER_LEAVED_IN_GAME:
+
+                        break;
+
+                    case HOST_LEAVED_IN_GAME:
+
+                        break;
+
+                    case PASSED:
+
+                        break;
+
+                    case WIN:
+
+                        break;
+
+                    case INSTANT_WIN:
+
+                        break;
+
+                    case LOST:
+
+                        break;
+
+                    case LOST_CONTINUE:
+
+                        break;
+
+                    case CONTINUE:
+
+                        break;
+
+                    case NOT_CONTINUE:
+
+                        break;
 
                     default:
                         break;
