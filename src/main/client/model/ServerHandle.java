@@ -150,11 +150,12 @@ public class ServerHandle extends Thread{
 
                     case MOVE_MADE:
                         model.getLocalSession().getGame().makeMove(Integer.parseInt(command.getParameters().get(0)), Integer.parseInt(command.getParameters().get(1)), Integer.parseInt(command.getParameters().get(2)), Integer.parseInt(command.getParameters().get(3)), model.getLocalSession().getTurn());
+
+                        System.out.println("Move made from: (" + command.getParameters().get(0) + ", " + command.getParameters().get(1) + ") to: (" + command.getParameters().get(2) + ", " + command.getParameters().get(3) + ") by " + model.getLocalSession().getTurn() +".");
+
                         model.getLocalSession().setTurn(Converter.parseColor(command.getParameters().get(4)));
 
                         controller.getView().getGameWindow().getSessionPanel().writeTurn(command.getParameters().get(4));
-
-                        System.out.println("Move made from: (" + command.getParameters().get(0) + ", " + command.getParameters().get(1) + ") to: (" + command.getParameters().get(2) + ", " + command.getParameters().get(3) + ") by " + model.getLocalSession().getTurn() +".");
                         controller.repaint();
                         break;
 
@@ -203,6 +204,7 @@ public class ServerHandle extends Thread{
                         break;
 
                     case LEAVED:
+                        this.localSession = null;
 
                         break;
 

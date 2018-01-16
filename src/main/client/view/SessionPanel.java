@@ -33,7 +33,7 @@ public class SessionPanel extends JPanel{
 
 //        System.out.println("Players: " + players);
 
-        nrPlayers = players.size() - 1;
+        nrPlayers = players.size();
         playersLabel = new JLabel[nrPlayers][3];
 
         for (int i=0; i<nrPlayers; i++) {
@@ -54,9 +54,13 @@ public class SessionPanel extends JPanel{
         }
     }
 
-    public void writeTurn(String turn) {
+    public void writeTurn() {
+        List<Pair<Pair<Integer, String>, common.model.game.Color>> players = localSession.getPlayers();
+        common.model.game.Color turn = localSession.getTurn();
+
         for (int i=0; i<nrPlayers; i++) {
-            if (playersLabel[i][2].getBackground() == GamePanel.switchColor(Converter.parseColor(turn)))
+            Pair <Pair<Integer, String>, common.model.game.Color> pair = players.get(i);
+            if (playersLabel[i][2].getBackground() == GamePanel.switchColor(turn))
                 playersLabel[i][2].setText("MOVE");
             else playersLabel[i][2].setText("WAIT");
         }
