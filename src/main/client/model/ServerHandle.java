@@ -255,7 +255,9 @@ public class ServerHandle extends Thread{
                         break;
 
                     case WIN:
-
+                        this.controller.getView().hideShow3();
+                        this.localSession = null;
+                        this.controller.displayWinner(command.getParameters().get(0));
                         break;
 
                     case INSTANT_WIN:
@@ -263,11 +265,18 @@ public class ServerHandle extends Thread{
                         break;
 
                     case LOST:
-
+                        this.controller.getView().hideShow3();
+                        this.localSession = null;
+                        this.controller.displayWinner(command.getParameters().get(0));
                         break;
 
                     case LOST_CONTINUE:
-
+                        int n = this.controller.displayLostContinueWindow(command.getParameters().get(0));
+                        if (n==1 || n==2) {
+                            write(new Command(Instruction.NOT_CONTINUE));
+                        }
+//                        else
+//                            write(new Command(Instruction.CONTINUE));
                         break;
 
                     case CONTINUE:
@@ -275,7 +284,9 @@ public class ServerHandle extends Thread{
                         break;
 
                     case NOT_CONTINUE:
-
+                        this.controller.getView().hideShow3();
+                        this.localSession = null;
+                        this.controller.getView().displayNotContinueInfo();
                         break;
 
                     default:

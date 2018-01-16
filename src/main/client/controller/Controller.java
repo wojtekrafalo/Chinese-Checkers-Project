@@ -11,6 +11,7 @@ import common.model.game.Game;
 import client.model.LocalSession;
 import common.model.game.Marble;
 
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MouseInputListener;
@@ -38,6 +39,15 @@ public class Controller {
 
     public void setModel(Model model) {
         this.theModel = model;
+    }
+
+    public void displayWinner(String s) {
+        theView.getJoinGameWindow().displayWinner(s);
+    }
+
+    public int displayLostContinueWindow(String s) {
+        int n = theView.getGameWindow().displayLostContinueWindow(s);
+        return n;
     }
 
 //    public void addPlayer(String nick, String color, String ID) {

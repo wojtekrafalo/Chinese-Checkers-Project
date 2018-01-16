@@ -78,4 +78,19 @@ public class GameWindow extends JFrame {
     public void displayError(){
         JOptionPane.showMessageDialog(this, errorMessage);
     }
+
+    public int displayLostContinueWindow(String s) {
+        Object[] options = {"YES", "NO", "CANCEL"};
+
+        int n = JOptionPane.showOptionDialog(this,
+                "Player " + s
+                        + "won. Would you like to continue?",
+                "A Silly Question",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[2]);
+        return n;
+    }
 }

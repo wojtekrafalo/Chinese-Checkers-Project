@@ -165,11 +165,21 @@ public class JoinGameWindow extends JFrame {
         return data;
     }
 
+    public void displayWinner(String s) {
+        JOptionPane.showMessageDialog(this, "Winner: " + s);
+    }
+
     public void displayInfo(){
         JOptionPane.showMessageDialog(this, infoMessage);
+    }
+
+    public void displayNotContinueInfo() {
+        JOptionPane.showMessageDialog(this, "Not every player want to continue, so\n" +
+                "Session canceled.");
     }
 
     public ArrayList<String> getSessions() {
         return sessions;
     }
+
 }

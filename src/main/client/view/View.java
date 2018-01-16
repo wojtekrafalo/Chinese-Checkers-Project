@@ -4,6 +4,7 @@ import common.model.game.Game;
 import client.model.LocalSession;
 
 import java.awt.event.ActionListener;
+import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MouseInputListener;
 
@@ -16,6 +17,7 @@ public class View {
     private GameWindow gameWindow;
     private NewGameWindow newGameWindow;
     private JoinGameWindow joinGameWindow;
+
 
     public View() {
         System.out.println("theView created");
@@ -68,5 +70,9 @@ public class View {
     }
     public GameWindow getGameWindow () {
         return gameWindow;
+    }
+
+    public void displayNotContinueInfo() {
+        getJoinGameWindow().displayNotContinueInfo();
     }
 }
