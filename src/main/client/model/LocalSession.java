@@ -30,6 +30,7 @@ public class LocalSession {
     private Color hostColor;
 
     private List<Pair<Pair<Integer, String>, Color>> players;
+    private List<Pair<String, Color>> boots = new ArrayList<>();
 
     public LocalSession(String name, String nrPlayers, String nrBoots, String nick, int id, String color, Game game) {
         this.name = name;
@@ -45,6 +46,11 @@ public class LocalSession {
 
     public void addPlayer(int id, String nick, Color color) {
         players.add(new Pair(new Pair(new Integer(id), nick), color));
+    }
+
+    public void addBoot(String nick, String color) {
+        Color color1 = Converter.parseColor(color);
+        boots.add(new Pair(nick, color1));
     }
 
     String getSessionName() {
@@ -83,6 +89,10 @@ public class LocalSession {
 
     public List<Pair<Pair<Integer, String>, Color>> getPlayers() {
         return players;
+    }
+
+    public List<Pair<String, Color>> getBoots() {
+        return boots;
     }
 
     public int getNrBoots() {

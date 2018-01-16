@@ -188,7 +188,7 @@ public class ServerHandle extends Thread{
                         break;
 
                     case BOOT_ADD:
-
+                        this.localSession.addBoot(command.getParameters().get(0), command.getParameters().get(1));
                         break;
 
                     case PLAYER_JOINED:

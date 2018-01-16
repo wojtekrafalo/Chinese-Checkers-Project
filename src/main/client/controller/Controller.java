@@ -64,7 +64,7 @@ public class Controller {
             }
 
             if (e.getSource().equals(gameWindow.getMenuSurrender())) {
-                serverHandle.write(new Command(Instruction.LEAVE_GAME));
+                serverHandle.write(new Command(Instruction.PASS));
                 gameWindow.displayInfo();
 
                 theView.hideShow3();

@@ -12,6 +12,8 @@ public class SessionPanel extends JPanel{
     private LocalSession localSession;
 
     private int nrPlayers;
+    private int nrBoots;
+
     private JLabel[][] playersLabel;
     private int labelWidth = 60, labelHeight = 40;
 
@@ -30,6 +32,7 @@ public class SessionPanel extends JPanel{
 
     private void drawLabels() {
         List<Pair<Pair<Integer, String>, common.model.game.Color>> players = localSession.getPlayers();
+        List<Pair<String, common.model.game.Color>> boots = localSession.getBoots();
 
 //        System.out.println("Players: " + players);
 
