@@ -102,10 +102,8 @@ public class Session {
 
     void join(Client client) {
         if (this.players.size() + nrBoots < this.nrPlayers) {
-            List<Client> receivers = this.players;
-            this.players.add(client);
-            client.setColor(colors.get(players.size() - 1));
-            for (Client receiver : receivers) {
+            client.setColor(colors.get(players.size()));
+            for (Client receiver : players) {
                 receiver.write(new Command(
                         Instruction.PLAYER_JOINED,
                         String.valueOf(client.getClientID()),
@@ -113,6 +111,7 @@ public class Session {
                         String.valueOf(client.getColor())
                         ));
             }
+            this.players.add(client);
             client.write(new Command(
                     Instruction.JOINED,
                     getSessionName(),
@@ -224,7 +223,6 @@ public class Session {
         if(turn == movingPlayer.getColor()) {
             if(game.canMove(prevX,prevY,nextX,nextY,movingPlayer.getColor())) {
                 game.makeMove(prevX,prevY,nextX,nextY, movingPlayer.getColor());
-
                 setTurn();
                 game.setTurn(turn);
                 for (Client client : players) {
