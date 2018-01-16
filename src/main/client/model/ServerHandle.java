@@ -224,9 +224,11 @@ public class ServerHandle extends Thread{
                         break;
 
                     case PLAYER_LEAVED_IN_GAME:
+
                         for(Pair <Pair<Integer, String>, common.model.game.Color> pair : this.localSession.getPlayers()) {
                             if (pair.getKey().getKey().equals(
                                     new Integer(Integer.parseInt(command.getParameters().get(0))))) {
+                                this.localSession.getGame().deleteMarbles(pair.getValue());
                                 this.localSession.getPlayers().remove(pair);
                                 break;
                             }
@@ -236,8 +238,9 @@ public class ServerHandle extends Thread{
 
                     case HOST_LEAVED_IN_GAME:
                         for(Pair <Pair<Integer, String>, common.model.game.Color> pair : this.localSession.getPlayers()) {
-                            if (pair.getKey().getKey().equals(
-                                    new Integer(Integer.parseInt(command.getParameters().get(0))))) {
+                            if (pair.getValue().equals(
+                                    this.localSession.getHostColor())) {
+                                this.localSession.getGame().deleteMarbles(pair.getValue());
                                 this.localSession.getPlayers().remove(pair);
                                 break;
                             }
