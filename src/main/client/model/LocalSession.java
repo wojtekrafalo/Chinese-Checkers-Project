@@ -100,4 +100,8 @@ public class LocalSession {
     public boolean getStarted() {
         return started;
     }
+
+    public void setHostId(int hostId) {
+        this.hostId = hostId;
+    }
 }
