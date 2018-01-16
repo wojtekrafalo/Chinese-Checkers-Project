@@ -39,14 +39,11 @@ public class LocalSession {
 
         this.hostId = id;
         this.players = new ArrayList<>();
-        addPlayer(id, nick, Converter.parseColor(color));
+//        addPlayer(id, nick, Converter.parseColor(color));
         this.game = game;
     }
 
     public void addPlayer(int id, String nick, Color color) {
-        if (players == null) {
-            players = new ArrayList();
-        }
         players.add(new Pair(new Pair(new Integer(id), nick), color));
     }
 
@@ -102,5 +99,9 @@ public class LocalSession {
 
     public boolean getStarted() {
         return started;
+    }
+
+    public void setHostId(int hostId) {
+        this.hostId = hostId;
     }
 }

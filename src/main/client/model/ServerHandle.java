@@ -6,6 +6,7 @@ import common.model.connection.Command;
 import common.model.connection.Instruction;
 import common.model.game.Game;
 import common.utils.Converter;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -150,11 +151,12 @@ public class ServerHandle extends Thread{
 
                     case MOVE_MADE:
                         model.getLocalSession().getGame().makeMove(Integer.parseInt(command.getParameters().get(0)), Integer.parseInt(command.getParameters().get(1)), Integer.parseInt(command.getParameters().get(2)), Integer.parseInt(command.getParameters().get(3)), model.getLocalSession().getTurn());
-                        model.getLocalSession().setTurn(Converter.parseColor(command.getParameters().get(4)));
-
-                        controller.getView().getGameWindow().getSessionPanel().writeTurn(command.getParameters().get(4));
 
                         System.out.println("Move made from: (" + command.getParameters().get(0) + ", " + command.getParameters().get(1) + ") to: (" + command.getParameters().get(2) + ", " + command.getParameters().get(3) + ") by " + model.getLocalSession().getTurn() +".");
+
+                        model.getLocalSession().setTurn(Converter.parseColor(command.getParameters().get(4)));
+
+                        controller.getView().getGameWindow().getSessionPanel().writeTurn();
                         controller.repaint();
                         break;
 
@@ -203,23 +205,46 @@ public class ServerHandle extends Thread{
                         break;
 
                     case LEAVED:
-
+                        this.localSession = null;
                         break;
 
                     case HOST_LEAVED:
-
+                        this.localSession.setHostId(Integer.parseInt(command.getParameters().get(0)));
                         break;
 
                     case PLAYER_LEAVED:
-
+                        for(Pair <Pair<Integer, String>, common.model.game.Color> pair : this.localSession.getPlayers()) {
+                            if (pair.getKey().getKey().equals(
+                                    new Integer(Integer.parseInt(command.getParameters().get(0))))) {
+                                this.localSession.getPlayers().remove(pair);
+                                break;
+                            }
+                        }
+                        controller.getView().getGameWindow().getSessionPanel().repaintLabels();
                         break;
 
                     case PLAYER_LEAVED_IN_GAME:
-
+                        for(Pair <Pair<Integer, String>, common.model.game.Color> pair : this.localSession.getPlayers()) {
+                            if (pair.getKey().getKey().equals(
+                                    new Integer(Integer.parseInt(command.getParameters().get(0))))) {
+                                this.localSession.getPlayers().remove(pair);
+                                break;
+                            }
+                        }
+                        controller.getView().getGameWindow().getSessionPanel().repaintLabels();
                         break;
 
                     case HOST_LEAVED_IN_GAME:
+                        for(Pair <Pair<Integer, String>, common.model.game.Color> pair : this.localSession.getPlayers()) {
+                            if (pair.getKey().getKey().equals(
+                                    new Integer(Integer.parseInt(command.getParameters().get(0))))) {
+                                this.localSession.getPlayers().remove(pair);
+                                break;
+                            }
+                        }
+                        controller.getView().getGameWindow().getSessionPanel().repaintLabels();
 
+                        this.localSession.setHostId(Integer.parseInt(command.getParameters().get(0)));
                         break;
 
                     case PASSED:
