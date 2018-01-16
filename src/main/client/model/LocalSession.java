@@ -30,12 +30,15 @@ public class LocalSession {
     private Color hostColor;
 
     private List<Pair<Pair<Integer, String>, Color>> players;
-    private List<Pair<String, Color>> boots = new ArrayList<>();
+    private List<Pair<String, Color>> boots;
 
     public LocalSession(String name, String nrPlayers, String nrBoots, String nick, int id, String color, Game game) {
         this.name = name;
         this.nrPlayers = Integer.parseInt(nrPlayers);
         this.nrBoots = Integer.parseInt(nrBoots);
+
+        if (this.nrBoots > 0 ) boots = new ArrayList<>();
+
         this.hostColor = Converter.parseColor(color);
 
         this.hostId = id;

@@ -188,7 +188,8 @@ public class ServerHandle extends Thread{
                         break;
 
                     case BOOT_ADD:
-                        this.localSession.addBoot(command.getParameters().get(0), command.getParameters().get(1));
+                        System.out.println(this.controller.getLocalSession());
+                        this.controller.getLocalSession().addBoot(command.getParameters().get(0), command.getParameters().get(1));
                         break;
 
                     case PLAYER_JOINED:
@@ -209,14 +210,14 @@ public class ServerHandle extends Thread{
                         break;
 
                     case HOST_LEAVED:
-                        this.localSession.setHostId(Integer.parseInt(command.getParameters().get(0)));
+                        this.controller.getLocalSession().setHostId(Integer.parseInt(command.getParameters().get(0)));
                         break;
 
                     case PLAYER_LEAVED:
-                        for(Pair <Pair<Integer, String>, common.model.game.Color> pair : this.localSession.getPlayers()) {
+                        for(Pair <Pair<Integer, String>, common.model.game.Color> pair : this.controller.getLocalSession().getPlayers()) {
                             if (pair.getKey().getKey().equals(
                                     new Integer(Integer.parseInt(command.getParameters().get(0))))) {
-                                this.localSession.getPlayers().remove(pair);
+                                this.controller.getLocalSession().getPlayers().remove(pair);
                                 break;
                             }
                         }
@@ -225,11 +226,11 @@ public class ServerHandle extends Thread{
 
                     case PLAYER_LEAVED_IN_GAME:
 
-                        for(Pair <Pair<Integer, String>, common.model.game.Color> pair : this.localSession.getPlayers()) {
+                        for(Pair <Pair<Integer, String>, common.model.game.Color> pair : this.controller.getLocalSession().getPlayers()) {
                             if (pair.getKey().getKey().equals(
                                     new Integer(Integer.parseInt(command.getParameters().get(0))))) {
-                                this.localSession.getGame().deleteMarbles(pair.getValue());
-                                this.localSession.getPlayers().remove(pair);
+                                this.controller.getLocalSession().getGame().deleteMarbles(pair.getValue());
+                                this.controller.getLocalSession().getPlayers().remove(pair);
                                 break;
                             }
                         }
@@ -237,17 +238,17 @@ public class ServerHandle extends Thread{
                         break;
 
                     case HOST_LEAVED_IN_GAME:
-                        for(Pair <Pair<Integer, String>, common.model.game.Color> pair : this.localSession.getPlayers()) {
+                        for(Pair <Pair<Integer, String>, common.model.game.Color> pair : this.controller.getLocalSession().getPlayers()) {
                             if (pair.getValue().equals(
-                                    this.localSession.getHostColor())) {
-                                this.localSession.getGame().deleteMarbles(pair.getValue());
-                                this.localSession.getPlayers().remove(pair);
+                                    this.controller.getLocalSession().getHostColor())) {
+                                this.controller.getLocalSession().getGame().deleteMarbles(pair.getValue());
+                                this.controller.getLocalSession().getPlayers().remove(pair);
                                 break;
                             }
                         }
                         controller.getView().getGameWindow().getSessionPanel().repaintLabels();
 
-                        this.localSession.setHostId(Integer.parseInt(command.getParameters().get(0)));
+                        this.controller.getLocalSession().setHostId(Integer.parseInt(command.getParameters().get(0)));
                         break;
 
                     case PASSED:

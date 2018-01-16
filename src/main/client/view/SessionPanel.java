@@ -37,13 +37,33 @@ public class SessionPanel extends JPanel{
 //        System.out.println("Players: " + players);
 
         nrPlayers = players.size();
-        playersLabel = new JLabel[nrPlayers][3];
+        nrBoots = boots.size();
+//        int nrExistance = nrBoots + nrPlayers;
+
+        playersLabel = new JLabel[nrPlayers + nrBoots][3];
 
         for (int i=0; i<nrPlayers; i++) {
             Pair <Pair<Integer, String>, common.model.game.Color> pair = players.get(i);
 
             playersLabel[i][0] = new JLabel("ACTIVE");
             playersLabel[i][1] = new JLabel(pair.getKey().getValue());
+            if (localSession.getTurn() == pair.getValue())
+                playersLabel[i][2] = new JLabel("MOVE");
+            else playersLabel[i][2] = new JLabel("WAIT");
+
+            for (int j=0; j<3; j++) {
+                playersLabel[i][j].setBackground(GamePanel.switchColor(pair.getValue()));
+                playersLabel[i][j].setBounds(j*labelWidth, i*labelHeight, labelWidth, labelHeight);
+                playersLabel[i][j].setOpaque(true);
+                this.add(playersLabel[i][j]);
+            }
+        }
+
+        for (int i=nrPlayers; i<nrBoots + nrPlayers; i++) {
+            Pair <String, common.model.game.Color> pair = boots.get(i - nrPlayers);
+
+            playersLabel[i][0] = new JLabel("ACTIVE");
+            playersLabel[i][1] = new JLabel(pair.getKey());
             if (localSession.getTurn() == pair.getValue())
                 playersLabel[i][2] = new JLabel("MOVE");
             else playersLabel[i][2] = new JLabel("WAIT");
