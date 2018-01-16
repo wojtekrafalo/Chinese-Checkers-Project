@@ -139,6 +139,7 @@ public class Session {
                 if(players.isEmpty()){
                     Server.getSessionsList().remove(this);
                     for(Boot boot: boots){
+                        boot.interrupt();
                         boots.remove(boot);
                         boot = null;
                     }
@@ -158,6 +159,7 @@ public class Session {
 
                 }else if(players.isEmpty()){
                     for(Boot boot: boots){
+                        boot.interrupt();
                         boots.remove(boot);
                         boot = null;
                     }
@@ -169,7 +171,7 @@ public class Session {
                     game.deleteMarbles(client.getColor());
                     colors.remove(client.getColor());
                     for (Client clients : players) {
-                        clients.write(new Command(Instruction.HOST_LEAVED_IN_GAME));
+                        clients.write(new Command(Instruction.HOST_LEAVED_IN_GAME,String.valueOf(host.getClientID())));
                     }
                 }
             }
@@ -183,7 +185,7 @@ public class Session {
                 game.deleteMarbles(client.getColor());
                 colors.remove(client.getColor());
                 for (Client clients : players) {
-                    clients.write(new Command(Instruction.PLAYER_LEAVED_IN_GAME));
+                    clients.write(new Command(Instruction.PLAYER_LEAVED_IN_GAME,String.valueOf(client.getClientID())));
                 }
             }
             else{
@@ -250,6 +252,7 @@ public class Session {
 
                 } else if(players.isEmpty()) {
                     for (Boot boot : boots) {
+                        boot.interrupt();
                         boots.remove(boot);
                         boot = null;
                     }
@@ -285,6 +288,7 @@ public class Session {
 
                     } else if(players.isEmpty()) {
                         for (Boot boot : boots) {
+                            boot.interrupt();
                             boots.remove(boot);
                             boot = null;
                         }
@@ -322,11 +326,20 @@ public class Session {
             for (Client client : players) {
                 client.write(new Command(Instruction.NOT_CONTINUE));
             }
+            for (Boot boot : boots) {
+                boot.interrupt();
+                boots.remove(boot);
+                boot = null;
+            }
+            endGame();
         }
     }
 
     private void endGame() {
-
+        for (Client client : players){
+            client.setSession(null);
+        }
+        Server.getSessionsList().remove(this);
     }
 
     public String getClientsInfo(){

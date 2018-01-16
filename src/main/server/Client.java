@@ -245,6 +245,10 @@ public class Client extends Thread {
         return color;
     }
 
+    public void setSession(Session session){
+        this.session = session;
+    }
+
     /**
      * Getter for clientId
      * @return id
