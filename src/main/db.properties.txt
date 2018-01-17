@@ -1,0 +1,4 @@
+# MySQL DB parameters
+user=root
+password=W8R10oahi9
+url=jdbc:mysql://localhost:3306/mysqljdbc
