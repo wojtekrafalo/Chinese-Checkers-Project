@@ -1,7 +1,7 @@
-package application.controller;
+package main.application.controller;
 
 import application.model.Model;
-import application.view.*;
+import main.application.view.*;
 import com.sun.org.apache.bcel.internal.generic.Instruction;
 
 import javax.swing.*;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Controller {
-    private View theView;
+    private application.view.View theView;
     private Model theModel;
 
     private String infoMessage = "This is Chinese Checkers Game\n" +
@@ -24,7 +24,7 @@ public class Controller {
     public Controller() {
         System.out.println("theController created");
 
-        this.theView = new View();
+        this.theView = new application.view.View();
         this.theView.addListener(new MyActionListener(), new MouseListListener());
     }
 
@@ -105,7 +105,7 @@ public class Controller {
         public void mouseMoved(MouseEvent e) {}
     }
 
-    public View getView() {
+    public application.view.View getView() {
         return theView;
     }
 }

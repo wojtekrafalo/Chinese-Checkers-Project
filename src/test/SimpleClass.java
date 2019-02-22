@@ -1,8 +1,6 @@
 package test;
 
-import main.MySQLJDBCUtil;
 import main.application.controller.Controller;
-import main.application.view.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
